@@ -5,7 +5,9 @@ import { remainingFreeSpins } from '../bonus';
 import { playNextSpin, startRound, type RoundState } from '../engine';
 import { GameStateError, InsufficientBalanceError } from '../errors';
 import type { SpinOutcome } from '../types';
+import { allowanceStatus, type AllowanceStatus } from './allowance';
 import { Ledger } from './ledger';
+import type { SessionSave } from './persistence';
 
 export interface FeatureView {
   readonly totalAwarded: number;
@@ -82,6 +84,9 @@ export interface SessionStats {
   readonly biggestRoundWin: number;
   readonly biggestRoundMultiplier: number;
   readonly capHits: number;
+  /** Play-money top-ups collected (allowance); never counted as wins. */
+  readonly grants: number;
+  readonly totalGranted: number;
 }
 
 export interface SessionSnapshot {
@@ -98,6 +103,8 @@ export interface SessionSnapshot {
   readonly history: readonly RoundRecord[];
   readonly stats: SessionStats;
   readonly rngKind: RandomSource['kind'];
+  /** Epoch ms of the last allowance collection (or of wallet creation). */
+  readonly lastAllowanceAt: number;
 }
 
 export interface SessionOptions {
@@ -106,6 +113,10 @@ export interface SessionOptions {
   readonly lineBetIndex?: number;
   readonly historyLimit?: number;
   readonly now?: () => number;
+  /** Epoch ms of the last allowance collection; defaults to now (a new wallet). */
+  readonly lastAllowanceAt?: number;
+  /** Validated saved wallet (see persistence.ts); overrides startingBalance and lineBetIndex. */
+  readonly restore?: SessionSave | null;
 }
 
 /** Recursively freezes a settled record so presentation code cannot alter it. */
@@ -129,6 +140,8 @@ const EMPTY_STATS: SessionStats = {
   biggestRoundWin: 0,
   biggestRoundMultiplier: 0,
   capHits: 0,
+  grants: 0,
+  totalGranted: 0,
 };
 
 function featureView(round: RoundState): FeatureView | null {
@@ -187,17 +200,82 @@ export class GameSession {
   private stats: SessionStats = EMPTY_STATS;
   private version = 0;
   private snapshot: SessionSnapshot;
+  private lastAllowanceAt: number;
+  /** Id of a round resumed from a save: its stake was settled before this ledger existed. */
+  private resumedRoundId: string | null = null;
 
   constructor(game: CompiledGame, options: SessionOptions) {
     this.game = game;
     this.rng = options.rng;
-    this.ledger = new Ledger(options.startingBalance ?? game.startingBalance);
+    const save = options.restore ?? null;
+    this.ledger = new Ledger(save ? save.balance : (options.startingBalance ?? game.startingBalance));
     this.historyLimit = options.historyLimit ?? 200;
     this.now = options.now ?? (() => Date.now());
-    const idx = options.lineBetIndex ?? game.defaultLineBetIndex;
+    // A timestamp from the future (clock turned back, edited save) restarts the timer now.
+    this.lastAllowanceAt = Math.min(save?.lastAllowanceAt ?? options.lastAllowanceAt ?? Infinity, this.now());
+    const idx = save?.lineBetIndex ?? options.lineBetIndex ?? game.defaultLineBetIndex;
     this.assertLineBetIndex(idx);
     this.lineBetIndex = idx;
+    if (save) {
+      this.roundNumber = save.roundNumber;
+      if (save.openRound) {
+        this.round = save.openRound.state;
+        this.roundId = save.openRound.roundId;
+        this.roundStartedAt = save.openRound.startedAt;
+        this.roundSpins = [...save.openRound.spins];
+        this.resumedRoundId = save.openRound.roundId;
+      }
+    }
     this.snapshot = this.buildSnapshot();
+  }
+
+  /** Whether the timed play-money allowance can be collected now, and when it can next. */
+  allowanceStatus(now: number = this.now()): AllowanceStatus {
+    return allowanceStatus(
+      this.game.allowance && { amount: this.game.allowance.amount, intervalMs: this.game.allowance.intervalMs },
+      this.lastAllowanceAt,
+      now,
+    );
+  }
+
+  /**
+   * Collects the play-money allowance if it is due. The credits are a top-up, not a
+   * win: they are booked as a ledger "grant" and never enter win statistics or RTP.
+   */
+  collectAllowance(): number {
+    const now = this.now();
+    const status = this.allowanceStatus(now);
+    if (!status.enabled) throw new GameStateError('the play-money allowance is disabled in this configuration');
+    if (!status.available) {
+      throw new GameStateError(`the next allowance is available in ${Math.ceil(status.remainingMs / 1000)} s`);
+    }
+    // One reference per allowance period, so the same period can never be paid twice.
+    this.ledger.creditGrant(`allowance@${status.nextAt}`, status.amount);
+    this.lastAllowanceAt = now;
+    this.stats = {
+      ...this.stats,
+      grants: this.stats.grants + 1,
+      totalGranted: this.stats.totalGranted + status.amount,
+    };
+    this.changed();
+    return status.amount;
+  }
+
+  /** Serialisable wallet state for persistence (see persistence.ts). */
+  save(): SessionSave {
+    return {
+      version: 1,
+      configHash: this.game.hash,
+      savedAt: this.now(),
+      balance: this.ledger.balance,
+      lineBetIndex: this.lineBetIndex,
+      lastAllowanceAt: this.lastAllowanceAt,
+      roundNumber: this.roundNumber,
+      openRound:
+        this.round && this.round.status === 'free-spins'
+          ? { roundId: this.roundId!, startedAt: this.roundStartedAt, state: this.round, spins: this.roundSpins }
+          : null,
+    };
   }
 
   get phase(): 'idle' | 'free-spins' {
@@ -306,17 +384,21 @@ export class GameSession {
     if (!ledgerCheck.ok) problems.push('ledger entries do not reproduce the balance');
     let staked = 0;
     let won = 0;
+    let granted = 0;
     for (const e of this.ledger.entries) {
       if (e.type === 'stake') staked -= e.amount;
-      else won += e.amount;
+      else if (e.type === 'win') won += e.amount;
+      else granted += e.amount;
     }
-    if (staked !== this.stats.totalStaked || won !== this.stats.totalWon) {
+    if (staked !== this.stats.totalStaked || won !== this.stats.totalWon || granted !== this.stats.totalGranted) {
       problems.push('session statistics disagree with the ledger');
     }
     const refs = new Set(this.ledger.entries.map((e) => `${e.type}:${e.reference}`));
     if (refs.size !== this.ledger.entries.length) problems.push('a ledger reference was settled more than once');
     const stakes = this.ledger.entries.filter((e) => e.type === 'stake').length;
-    if (stakes !== this.stats.rounds + (this.round ? 1 : 0)) problems.push('stake count does not match round count');
+    // A round resumed from a save had its stake settled in an earlier session.
+    const expected = this.stats.rounds + (this.round ? 1 : 0) - (this.resumedRoundId ? 1 : 0);
+    if (stakes !== expected) problems.push('stake count does not match round count');
     return { ok: problems.length === 0, problems };
   }
 
@@ -387,6 +469,7 @@ export class GameSession {
       history: this.history,
       stats: this.stats,
       rngKind: this.rng.kind,
+      lastAllowanceAt: this.lastAllowanceAt,
     });
   }
 

@@ -9,7 +9,7 @@ export interface Settings {
   readonly autoFreeSpins: boolean;
 }
 
-const KEY = 'gilded-orbit:settings';
+const KEY = 'pixel-pauker:settings';
 
 function prefersReducedMotion(): boolean {
   try {

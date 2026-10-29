@@ -1,45 +1,45 @@
 {
   "meta": {
-    "id": "gilded-orbit",
-    "name": "Gilded Orbit",
-    "version": "1.0.0",
-    "description": "Original 5x3, 20-line celestial-jewel video slot. Play-money prototype."
+    "id": "pixel-pauker",
+    "name": "Pixel-Pauker",
+    "version": "2.0.0",
+    "description": "Original 5x3, 20-line school-themed pixel-art video slot. Play-money prototype."
   },
   "grid": { "reels": 5, "rows": 3 },
   "symbols": [
-    { "id": "JADE", "name": "Jade Facet", "kind": "regular", "tier": "low" },
-    { "id": "SAPPHIRE", "name": "Sapphire Drop", "kind": "regular", "tier": "low" },
-    { "id": "RUBY", "name": "Ruby Prism", "kind": "regular", "tier": "low" },
-    { "id": "AMETHYST", "name": "Amethyst Spire", "kind": "regular", "tier": "low" },
-    { "id": "COMET", "name": "Comet", "kind": "regular", "tier": "high" },
-    { "id": "MOON", "name": "Crescent Moon", "kind": "regular", "tier": "high" },
-    { "id": "PLANET", "name": "Ringed Planet", "kind": "regular", "tier": "high" },
-    { "id": "SUN", "name": "Sun Crown", "kind": "regular", "tier": "premium" },
+    { "id": "RULER", "name": "Lineal", "kind": "regular", "tier": "low" },
+    { "id": "PENCIL", "name": "Bleistift", "kind": "regular", "tier": "low" },
+    { "id": "ERASER", "name": "Radiergummi", "kind": "regular", "tier": "low" },
+    { "id": "CHALK", "name": "Kreide", "kind": "regular", "tier": "low" },
+    { "id": "BOOK", "name": "Schulbuch", "kind": "regular", "tier": "high" },
+    { "id": "APPLE", "name": "Apfel", "kind": "regular", "tier": "high" },
+    { "id": "GLOBE", "name": "Globus", "kind": "regular", "tier": "high" },
+    { "id": "TEACHER", "name": "Lehrer", "kind": "regular", "tier": "premium" },
     {
       "id": "WILD",
-      "name": "Nova Wild",
+      "name": "Direktorin",
       "kind": "wild",
       "tier": "special",
-      "description": "Substitutes for every symbol except the Orbit Scatter."
+      "description": "Ersetzt alle Symbole außer der Schulglocke."
     },
     {
       "id": "SCATTER",
-      "name": "Orbit Scatter",
+      "name": "Schulglocke",
       "kind": "scatter",
       "tier": "special",
-      "description": "Pays anywhere. 3 or more award free spins."
+      "description": "Zahlt überall. Ab 3 Glocken gibt es Hitzefrei-Freispiele."
     }
   ],
   "paytable": {
     "line": {
-      "JADE": { "3": 5, "4": 15, "5": 50 },
-      "SAPPHIRE": { "3": 5, "4": 20, "5": 75 },
-      "RUBY": { "3": 10, "4": 25, "5": 100 },
-      "AMETHYST": { "3": 10, "4": 30, "5": 125 },
-      "COMET": { "3": 15, "4": 50, "5": 200 },
-      "MOON": { "3": 20, "4": 75, "5": 300 },
-      "PLANET": { "3": 25, "4": 100, "5": 400 },
-      "SUN": { "3": 50, "4": 200, "5": 1000 },
+      "RULER": { "3": 5, "4": 15, "5": 50 },
+      "PENCIL": { "3": 5, "4": 20, "5": 75 },
+      "ERASER": { "3": 10, "4": 25, "5": 100 },
+      "CHALK": { "3": 10, "4": 30, "5": 125 },
+      "BOOK": { "3": 15, "4": 50, "5": 200 },
+      "APPLE": { "3": 20, "4": 75, "5": 300 },
+      "GLOBE": { "3": 25, "4": 100, "5": 400 },
+      "TEACHER": { "3": 50, "4": 200, "5": 1000 },
       "WILD": { "3": 50, "4": 250, "5": 2000 }
     },
     "scatter": { "3": 2, "4": 10, "5": 100 }
@@ -69,36 +69,36 @@
   "reelSets": {
     "base": [
       {
-        "symbols": ["WILD", "PLANET", "SAPPHIRE", "JADE", "RUBY", "SUN", "SAPPHIRE", "AMETHYST", "SAPPHIRE", "JADE", "RUBY", "COMET", "JADE", "COMET", "SAPPHIRE", "SUN", "SAPPHIRE", "AMETHYST", "JADE", "RUBY", "AMETHYST", "MOON", "JADE", "AMETHYST", "SCATTER", "JADE", "AMETHYST", "RUBY", "PLANET", "JADE", "RUBY", "COMET", "AMETHYST", "MOON", "SAPPHIRE", "RUBY", "JADE", "SAPPHIRE", "MOON", "PLANET"]
+        "symbols": ["WILD", "GLOBE", "PENCIL", "RULER", "ERASER", "TEACHER", "PENCIL", "CHALK", "PENCIL", "RULER", "ERASER", "BOOK", "RULER", "BOOK", "PENCIL", "TEACHER", "PENCIL", "CHALK", "RULER", "ERASER", "CHALK", "APPLE", "RULER", "CHALK", "SCATTER", "RULER", "CHALK", "ERASER", "GLOBE", "RULER", "ERASER", "BOOK", "CHALK", "APPLE", "PENCIL", "ERASER", "RULER", "PENCIL", "APPLE", "GLOBE"]
       },
       {
-        "symbols": ["RUBY", "COMET", "PLANET", "SAPPHIRE", "AMETHYST", "SAPPHIRE", "MOON", "WILD", "COMET", "JADE", "SUN", "RUBY", "PLANET", "WILD", "AMETHYST", "RUBY", "COMET", "SCATTER", "RUBY", "JADE", "RUBY", "WILD", "MOON", "SAPPHIRE", "JADE", "COMET", "SAPPHIRE", "MOON", "JADE", "COMET", "PLANET", "SAPPHIRE", "JADE", "AMETHYST", "RUBY", "SAPPHIRE", "AMETHYST", "MOON", "JADE", "AMETHYST"]
+        "symbols": ["ERASER", "BOOK", "GLOBE", "PENCIL", "CHALK", "PENCIL", "APPLE", "WILD", "BOOK", "RULER", "TEACHER", "ERASER", "GLOBE", "WILD", "CHALK", "ERASER", "BOOK", "SCATTER", "ERASER", "RULER", "ERASER", "WILD", "APPLE", "PENCIL", "RULER", "BOOK", "PENCIL", "APPLE", "RULER", "BOOK", "GLOBE", "PENCIL", "RULER", "CHALK", "ERASER", "PENCIL", "CHALK", "APPLE", "RULER", "CHALK"]
       },
       {
-        "symbols": ["JADE", "PLANET", "SAPPHIRE", "WILD", "MOON", "AMETHYST", "SUN", "MOON", "RUBY", "COMET", "SCATTER", "SAPPHIRE", "AMETHYST", "JADE", "AMETHYST", "JADE", "SCATTER", "RUBY", "JADE", "SAPPHIRE", "AMETHYST", "SAPPHIRE", "PLANET", "RUBY", "SAPPHIRE", "JADE", "AMETHYST", "COMET", "PLANET", "JADE", "AMETHYST", "COMET", "MOON", "RUBY", "MOON", "COMET", "RUBY", "SAPPHIRE", "WILD", "RUBY"]
+        "symbols": ["RULER", "GLOBE", "PENCIL", "WILD", "APPLE", "CHALK", "TEACHER", "APPLE", "ERASER", "BOOK", "SCATTER", "PENCIL", "CHALK", "RULER", "CHALK", "RULER", "SCATTER", "ERASER", "RULER", "PENCIL", "CHALK", "PENCIL", "GLOBE", "ERASER", "PENCIL", "RULER", "CHALK", "BOOK", "GLOBE", "RULER", "CHALK", "BOOK", "APPLE", "ERASER", "APPLE", "BOOK", "ERASER", "PENCIL", "WILD", "ERASER"]
       },
       {
-        "symbols": ["SAPPHIRE", "AMETHYST", "SAPPHIRE", "JADE", "RUBY", "SCATTER", "JADE", "SAPPHIRE", "AMETHYST", "COMET", "WILD", "COMET", "AMETHYST", "PLANET", "SUN", "COMET", "MOON", "AMETHYST", "MOON", "PLANET", "RUBY", "COMET", "JADE", "AMETHYST", "SAPPHIRE", "RUBY", "MOON", "SAPPHIRE", "RUBY", "SAPPHIRE", "JADE", "RUBY", "MOON", "RUBY", "PLANET", "JADE", "AMETHYST", "COMET", "JADE", "WILD"]
+        "symbols": ["PENCIL", "CHALK", "PENCIL", "RULER", "ERASER", "SCATTER", "RULER", "PENCIL", "CHALK", "BOOK", "WILD", "BOOK", "CHALK", "GLOBE", "TEACHER", "BOOK", "APPLE", "CHALK", "APPLE", "GLOBE", "ERASER", "BOOK", "RULER", "CHALK", "PENCIL", "ERASER", "APPLE", "PENCIL", "ERASER", "PENCIL", "RULER", "ERASER", "APPLE", "ERASER", "GLOBE", "RULER", "CHALK", "BOOK", "RULER", "WILD"]
       },
       {
-        "symbols": ["COMET", "PLANET", "MOON", "COMET", "SAPPHIRE", "MOON", "SAPPHIRE", "PLANET", "SUN", "RUBY", "JADE", "WILD", "SAPPHIRE", "JADE", "RUBY", "AMETHYST", "RUBY", "AMETHYST", "SAPPHIRE", "JADE", "SAPPHIRE", "JADE", "RUBY", "AMETHYST", "SUN", "RUBY", "JADE", "PLANET", "JADE", "COMET", "SAPPHIRE", "COMET", "JADE", "WILD", "AMETHYST", "SAPPHIRE", "MOON", "SAPPHIRE", "RUBY", "SCATTER"]
+        "symbols": ["BOOK", "GLOBE", "APPLE", "BOOK", "PENCIL", "APPLE", "PENCIL", "GLOBE", "TEACHER", "ERASER", "RULER", "WILD", "PENCIL", "RULER", "ERASER", "CHALK", "ERASER", "CHALK", "PENCIL", "RULER", "PENCIL", "RULER", "ERASER", "CHALK", "TEACHER", "ERASER", "RULER", "GLOBE", "RULER", "BOOK", "PENCIL", "BOOK", "RULER", "WILD", "CHALK", "PENCIL", "APPLE", "PENCIL", "ERASER", "SCATTER"]
       }
     ],
     "free": [
       {
-        "symbols": ["MOON", "JADE", "SCATTER", "PLANET", "MOON", "RUBY", "COMET", "JADE", "WILD", "AMETHYST", "RUBY", "SUN", "SAPPHIRE", "MOON", "SUN", "COMET", "AMETHYST", "COMET", "RUBY", "SAPPHIRE", "RUBY", "COMET", "RUBY", "MOON", "AMETHYST", "PLANET", "JADE", "SAPPHIRE", "AMETHYST", "SAPPHIRE", "PLANET", "AMETHYST", "COMET", "PLANET", "WILD", "JADE", "SAPPHIRE", "JADE"]
+        "symbols": ["APPLE", "RULER", "SCATTER", "GLOBE", "APPLE", "ERASER", "BOOK", "RULER", "WILD", "CHALK", "ERASER", "TEACHER", "PENCIL", "APPLE", "TEACHER", "BOOK", "CHALK", "BOOK", "ERASER", "PENCIL", "ERASER", "BOOK", "ERASER", "APPLE", "CHALK", "GLOBE", "RULER", "PENCIL", "CHALK", "PENCIL", "GLOBE", "CHALK", "BOOK", "GLOBE", "WILD", "RULER", "PENCIL", "RULER"]
       },
       {
-        "symbols": ["SUN", "PLANET", "WILD", "AMETHYST", "SCATTER", "PLANET", "WILD", "RUBY", "SAPPHIRE", "MOON", "AMETHYST", "SAPPHIRE", "MOON", "RUBY", "SAPPHIRE", "SUN", "AMETHYST", "COMET", "JADE", "SAPPHIRE", "JADE", "COMET", "PLANET", "COMET", "MOON", "JADE", "RUBY", "WILD", "AMETHYST", "JADE", "MOON", "COMET", "RUBY", "JADE", "AMETHYST", "RUBY", "SAPPHIRE", "COMET", "PLANET"]
+        "symbols": ["TEACHER", "GLOBE", "WILD", "CHALK", "SCATTER", "GLOBE", "WILD", "ERASER", "PENCIL", "APPLE", "CHALK", "PENCIL", "APPLE", "ERASER", "PENCIL", "TEACHER", "CHALK", "BOOK", "RULER", "PENCIL", "RULER", "BOOK", "GLOBE", "BOOK", "APPLE", "RULER", "ERASER", "WILD", "CHALK", "RULER", "APPLE", "BOOK", "ERASER", "RULER", "CHALK", "ERASER", "PENCIL", "BOOK", "GLOBE"]
       },
       {
-        "symbols": ["COMET", "RUBY", "WILD", "AMETHYST", "SAPPHIRE", "COMET", "SAPPHIRE", "JADE", "MOON", "PLANET", "MOON", "PLANET", "AMETHYST", "COMET", "SUN", "AMETHYST", "RUBY", "WILD", "JADE", "COMET", "AMETHYST", "PLANET", "MOON", "SAPPHIRE", "RUBY", "SUN", "JADE", "RUBY", "PLANET", "SAPPHIRE", "WILD", "SAPPHIRE", "AMETHYST", "COMET", "MOON", "JADE", "SCATTER", "RUBY", "JADE"]
+        "symbols": ["BOOK", "ERASER", "WILD", "CHALK", "PENCIL", "BOOK", "PENCIL", "RULER", "APPLE", "GLOBE", "APPLE", "GLOBE", "CHALK", "BOOK", "TEACHER", "CHALK", "ERASER", "WILD", "RULER", "BOOK", "CHALK", "GLOBE", "APPLE", "PENCIL", "ERASER", "TEACHER", "RULER", "ERASER", "GLOBE", "PENCIL", "WILD", "PENCIL", "CHALK", "BOOK", "APPLE", "RULER", "SCATTER", "ERASER", "RULER"]
       },
       {
-        "symbols": ["WILD", "SAPPHIRE", "COMET", "SAPPHIRE", "RUBY", "SAPPHIRE", "AMETHYST", "PLANET", "COMET", "PLANET", "AMETHYST", "MOON", "AMETHYST", "SUN", "RUBY", "MOON", "COMET", "SCATTER", "PLANET", "RUBY", "JADE", "AMETHYST", "JADE", "MOON", "SAPPHIRE", "COMET", "JADE", "AMETHYST", "JADE", "PLANET", "COMET", "WILD", "RUBY", "MOON", "WILD", "SAPPHIRE", "SUN", "RUBY", "JADE"]
+        "symbols": ["WILD", "PENCIL", "BOOK", "PENCIL", "ERASER", "PENCIL", "CHALK", "GLOBE", "BOOK", "GLOBE", "CHALK", "APPLE", "CHALK", "TEACHER", "ERASER", "APPLE", "BOOK", "SCATTER", "GLOBE", "ERASER", "RULER", "CHALK", "RULER", "APPLE", "PENCIL", "BOOK", "RULER", "CHALK", "RULER", "GLOBE", "BOOK", "WILD", "ERASER", "APPLE", "WILD", "PENCIL", "TEACHER", "ERASER", "RULER"]
       },
       {
-        "symbols": ["RUBY", "SCATTER", "COMET", "SAPPHIRE", "PLANET", "SUN", "PLANET", "AMETHYST", "RUBY", "PLANET", "AMETHYST", "JADE", "AMETHYST", "SAPPHIRE", "COMET", "PLANET", "MOON", "COMET", "WILD", "COMET", "SAPPHIRE", "AMETHYST", "RUBY", "JADE", "SAPPHIRE", "RUBY", "JADE", "SAPPHIRE", "JADE", "RUBY", "MOON", "SUN", "WILD", "COMET", "MOON", "AMETHYST", "MOON", "JADE"]
+        "symbols": ["ERASER", "SCATTER", "BOOK", "PENCIL", "GLOBE", "TEACHER", "GLOBE", "CHALK", "ERASER", "GLOBE", "CHALK", "RULER", "CHALK", "PENCIL", "BOOK", "GLOBE", "APPLE", "BOOK", "WILD", "BOOK", "PENCIL", "CHALK", "ERASER", "RULER", "PENCIL", "ERASER", "RULER", "PENCIL", "RULER", "ERASER", "APPLE", "TEACHER", "WILD", "BOOK", "APPLE", "CHALK", "APPLE", "RULER"]
       }
     ]
   },
@@ -120,6 +120,9 @@
     "defaultLineBetIndex": 0
   },
   "limits": { "maxWinMultiplier": 5000 },
-  "session": { "startingBalance": 100000 },
+  "session": {
+    "startingBalance": 10000,
+    "allowance": { "amount": 1000, "intervalMinutes": 10 }
+  },
   "math": { "targetRtp": 0.96 }
 }

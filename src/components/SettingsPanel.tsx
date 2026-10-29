@@ -18,9 +18,9 @@ export function SettingsPanel({
   );
   return (
     <div className="settings">
-      {toggle('turbo', 'Fast spin', 'Shorter reel animation. Results are calculated exactly the same way.')}
-      {toggle('reducedMotion', 'Reduced motion', 'No spinning reels, particles or pulsing highlights.')}
-      {toggle('autoFreeSpins', 'Play free spins automatically', 'Otherwise press SPIN for each free spin.')}
+      {toggle('turbo', 'Schnelldrehen', 'Kürzere Walzenanimation. Die Ergebnisse werden genau gleich berechnet.')}
+      {toggle('reducedMotion', 'Weniger Bewegung', 'Keine drehenden Walzen, Partikel oder pulsierenden Markierungen.')}
+      {toggle('autoFreeSpins', 'Freispiele automatisch spielen', 'Sonst für jedes Freispiel FREI drücken.')}
     </div>
   );
 }

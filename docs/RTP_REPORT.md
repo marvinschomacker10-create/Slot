@@ -1,12 +1,12 @@
-# RTP and Mathematical Report: Gilded Orbit 1.0.0
+# RTP and Mathematical Report: Pixel-Pauker 2.0.0
 
 > **Status: play-money prototype.** This report documents the mathematical model as configured. It is not a certification, has not been reviewed by an independent test laboratory, and does not establish suitability for real-money use in any jurisdiction.
 
 | Item | Value |
 |---|---|
-| Configuration hash (SHA-256 of canonical JSON) | `8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f` |
-| Exact analysis generated | 2026-10-29T09:11:30.235Z |
-| Report generated | 2026-10-29T09:27:13.983Z |
+| Configuration hash (SHA-256 of canonical JSON) | `4c02cc0a66428bfc140cc19b87b5e2621622b0d807327e85fc55ddee832e47b2` |
+| Exact analysis generated | 2026-10-29T14:59:30.379Z |
+| Report generated | 2026-10-29T15:17:48.272Z |
 | Grid | 5 reels x 3 rows, 20 fixed paylines |
 | Reel strip lengths | base: 40 / 40 / 40 / 40 / 40; free: 38 / 39 / 39 / 39 / 38 |
 | Round win cap | 5,000x total bet |
@@ -60,7 +60,7 @@ Exact. Every reel-stop combination of the base and free-spin reel sets is enumer
 |---|---|
 | Base-game stop combinations enumerated | 102,400,000 |
 | Free-spin stop combinations enumerated | 85,656,636 |
-| Enumeration time (base / free) | 2.0 s / 2.7 s |
+| Enumeration time (base / free) | 1.6 s / 3.0 s |
 | Feature Markov-chain states | 140 |
 | FFT size / transforms | 262,144 / 422 |
 | Payout grid | 0..100,000 line-bet units (= round cap) |
@@ -76,14 +76,14 @@ Free-spin contributions are per unit of base-game stake: per-free-spin RTP x exp
 
 | Symbol | Base game | Free spins | Total |
 |---|---|---|---|
-| JADE | 8.618% | 1.379% | 9.996% |
-| SAPPHIRE | 9.601% | 1.686% | 11.286% |
-| RUBY | 12.478% | 2.618% | 15.096% |
-| AMETHYST | 11.663% | 2.925% | 14.588% |
-| COMET | 7.369% | 4.651% | 12.019% |
-| MOON | 8.326% | 4.028% | 12.354% |
-| PLANET | 7.069% | 5.228% | 12.297% |
-| SUN | 3.241% | 2.856% | 6.097% |
+| RULER | 8.618% | 1.379% | 9.996% |
+| PENCIL | 9.601% | 1.686% | 11.286% |
+| ERASER | 12.478% | 2.618% | 15.096% |
+| CHALK | 11.663% | 2.925% | 14.588% |
+| BOOK | 7.369% | 4.651% | 12.019% |
+| APPLE | 8.326% | 4.028% | 12.354% |
+| GLOBE | 7.069% | 5.228% | 12.297% |
+| TEACHER | 3.241% | 2.856% | 6.097% |
 | WILD | 0.370% | 0.335% | 0.704% |
 | Scatter pays | 1.440% | 0.123% | 1.563% |
 
@@ -93,30 +93,30 @@ Probability that one given payline pays exactly this combination on a paid spin 
 
 | Symbol | Count | Pay (x line bet) | P per line | Odds per line | RTP contribution |
 |---|---|---|---|---|---|
-| JADE | 3 | 5 | 8.025e-3 | 1 in 125 | 4.0125% |
-| JADE | 4 | 15 | 1.555e-3 | 1 in 643 | 2.3323% |
-| JADE | 5 | 50 | 4.546e-4 | 1 in 2,200 | 2.2729% |
-| SAPPHIRE | 3 | 5 | 7.125e-3 | 1 in 140 | 3.5625% |
-| SAPPHIRE | 4 | 20 | 1.336e-3 | 1 in 749 | 2.6719% |
-| SAPPHIRE | 5 | 75 | 4.488e-4 | 1 in 2,228 | 3.3662% |
-| RUBY | 3 | 10 | 6.225e-3 | 1 in 161 | 6.2250% |
-| RUBY | 4 | 25 | 1.245e-3 | 1 in 803 | 3.1125% |
-| RUBY | 5 | 100 | 3.141e-4 | 1 in 3,184 | 3.1406% |
-| AMETHYST | 3 | 10 | 5.525e-3 | 1 in 181 | 5.5250% |
-| AMETHYST | 4 | 30 | 1.174e-3 | 1 in 852 | 3.5222% |
-| AMETHYST | 5 | 125 | 2.093e-4 | 1 in 4,778 | 2.6162% |
-| COMET | 3 | 15 | 2.398e-3 | 1 in 417 | 3.5965% |
-| COMET | 4 | 50 | 4.423e-4 | 1 in 2,261 | 2.2113% |
-| COMET | 5 | 200 | 7.805e-5 | 1 in 12,813 | 1.5609% |
-| MOON | 3 | 20 | 2.152e-3 | 1 in 465 | 4.3031% |
-| MOON | 4 | 75 | 3.404e-4 | 1 in 2,937 | 2.5532% |
-| MOON | 5 | 300 | 4.898e-5 | 1 in 20,415 | 1.4695% |
-| PLANET | 3 | 25 | 1.559e-3 | 1 in 642 | 3.8965% |
-| PLANET | 4 | 100 | 2.010e-4 | 1 in 4,976 | 2.0098% |
-| PLANET | 5 | 400 | 2.906e-5 | 1 in 34,409 | 1.1625% |
-| SUN | 3 | 50 | 4.336e-4 | 1 in 2,306 | 2.1680% |
-| SUN | 4 | 200 | 3.375e-5 | 1 in 29,630 | 0.6750% |
-| SUN | 5 | 1000 | 3.984e-6 | 1 in 250,980 | 0.3984% |
+| RULER | 3 | 5 | 8.025e-3 | 1 in 125 | 4.0125% |
+| RULER | 4 | 15 | 1.555e-3 | 1 in 643 | 2.3323% |
+| RULER | 5 | 50 | 4.546e-4 | 1 in 2,200 | 2.2729% |
+| PENCIL | 3 | 5 | 7.125e-3 | 1 in 140 | 3.5625% |
+| PENCIL | 4 | 20 | 1.336e-3 | 1 in 749 | 2.6719% |
+| PENCIL | 5 | 75 | 4.488e-4 | 1 in 2,228 | 3.3662% |
+| ERASER | 3 | 10 | 6.225e-3 | 1 in 161 | 6.2250% |
+| ERASER | 4 | 25 | 1.245e-3 | 1 in 803 | 3.1125% |
+| ERASER | 5 | 100 | 3.141e-4 | 1 in 3,184 | 3.1406% |
+| CHALK | 3 | 10 | 5.525e-3 | 1 in 181 | 5.5250% |
+| CHALK | 4 | 30 | 1.174e-3 | 1 in 852 | 3.5222% |
+| CHALK | 5 | 125 | 2.093e-4 | 1 in 4,778 | 2.6162% |
+| BOOK | 3 | 15 | 2.398e-3 | 1 in 417 | 3.5965% |
+| BOOK | 4 | 50 | 4.423e-4 | 1 in 2,261 | 2.2113% |
+| BOOK | 5 | 200 | 7.805e-5 | 1 in 12,813 | 1.5609% |
+| APPLE | 3 | 20 | 2.152e-3 | 1 in 465 | 4.3031% |
+| APPLE | 4 | 75 | 3.404e-4 | 1 in 2,937 | 2.5532% |
+| APPLE | 5 | 300 | 4.898e-5 | 1 in 20,415 | 1.4695% |
+| GLOBE | 3 | 25 | 1.559e-3 | 1 in 642 | 3.8965% |
+| GLOBE | 4 | 100 | 2.010e-4 | 1 in 4,976 | 2.0098% |
+| GLOBE | 5 | 400 | 2.906e-5 | 1 in 34,409 | 1.1625% |
+| TEACHER | 3 | 50 | 4.336e-4 | 1 in 2,306 | 2.1680% |
+| TEACHER | 4 | 200 | 3.375e-5 | 1 in 29,630 | 0.6750% |
+| TEACHER | 5 | 1000 | 3.984e-6 | 1 in 250,980 | 0.3984% |
 | WILD | 3 | 50 | 4.699e-5 | 1 in 21,280 | 0.2350% |
 | WILD | 4 | 250 | 3.516e-6 | 1 in 284,444 | 0.0879% |
 | WILD | 5 | 2000 | 2.344e-7 | 1 in 4,266,667 | 0.0469% |
@@ -287,7 +287,7 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 | Observed SD of round return | 4.8054 |
 | Largest round win observed | 293.5x bet |
 | Longest no-win streak observed | 13 |
-| Runtime | 0.8 s on 4 worker thread(s) (126,904 rounds/s) |
+| Runtime | 0.8 s on 4 worker thread(s) (127,877 rounds/s) |
 
 | Metric | Theoretical | Simulated | 95% CI | z | Events | Theory inside CI |
 |---|---|---|---|---|---|---|
@@ -339,7 +339,7 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 | Observed SD of round return | 4.7168 |
 | Largest round win observed | 360x bet |
 | Longest no-win streak observed | 20 |
-| Runtime | 3.3 s on 4 worker thread(s) (307,314 rounds/s) |
+| Runtime | 2.5 s on 4 worker thread(s) (394,477 rounds/s) |
 
 | Metric | Theoretical | Simulated | 95% CI | z | Events | Theory inside CI |
 |---|---|---|---|---|---|---|
@@ -388,7 +388,7 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 | Observed SD of round return | 4.8293 |
 | Largest round win observed | 634.5x bet |
 | Longest no-win streak observed | 19 |
-| Runtime | 24.3 s on 4 worker thread(s) (411,286 rounds/s) |
+| Runtime | 22.8 s on 4 worker thread(s) (437,943 rounds/s) |
 
 | Metric | Theoretical | Simulated | 95% CI | z | Events | Theory inside CI |
 |---|---|---|---|---|---|---|
@@ -429,46 +429,46 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 | Item | Value |
 |---|---|
 | Configuration hash matches analysis | yes |
-| Free spins played | 615,520 |
-| Total stake / total payout (credits at line bet 1) | 200,000,000 / 191,203,945 |
-| Simulated RTP | 95.6020% (95% CI 95.3059% to 95.8980%) |
-| Batch-means 95% CI | 95.3101% to 95.8938% (1000 batches) |
-| Observed SD of round return | 4.7765 |
-| Largest round win observed | 733.25x bet |
-| Longest no-win streak observed | 20 |
-| Runtime | 24.5 s on 4 worker thread(s) (408,898 rounds/s) |
+| Free spins played | 617,750 |
+| Total stake / total payout (credits at line bet 1) | 200,000,000 / 191,414,255 |
+| Simulated RTP | 95.7071% (95% CI 95.4105% to 96.0037%) |
+| Batch-means 95% CI | 95.4125% to 96.0017% (1000 batches) |
+| Observed SD of round return | 4.7855 |
+| Largest round win observed | 555x bet |
+| Longest no-win streak observed | 22 |
+| Runtime | 23.8 s on 4 worker thread(s) (419,340 rounds/s) |
 
 | Metric | Theoretical | Simulated | 95% CI | z | Events | Theory inside CI |
 |---|---|---|---|---|---|---|
-| Total RTP | 0.960022 | 0.95602 | 0.95306 .. 0.95898 | -2.65 | - | no |
-| Base-game RTP | 0.701744 | 0.700908 | 0.69983 .. 0.70199 | -1.52 | - | yes |
-| Free-spins RTP contribution | 0.258278 | 0.255111 | 0.25243 .. 0.2578 | -2.31 | - | no |
-| Hit frequency (round pays > 0) | 0.516807 | 0.516653 | 0.51634 .. 0.51696 | -0.98 | 5166525 | yes |
-| Base spin with a line win | 0.512625 | 0.512515 | 0.5122 .. 0.51282 | -0.70 | 5125146 | yes |
-| Net-positive round | 0.167373 | 0.167346 | 0.16711 .. 0.16758 | -0.23 | 1673462 | yes |
-| Free-spins trigger | 0.005924 | 0.005899 | 0.00585 .. 0.00595 | -1.06 | 58985 | yes |
-| Retrigger per free spin | 0.004166 | 0.00417 | 0.00401 .. 0.00433 | 0.06 | 2567 | yes |
-| Feature with >= 1 retrigger | 0.040886 | 0.04096 | 0.03939 .. 0.04259 | 0.09 | 2416 | yes |
-| Free spins played per trigger | 10.434682 | 10.435195 | 10.41768 .. 10.45271 | 0.06 | - | yes |
-| Feature win per trigger (x bet) | 43.597312 | 43.250225 | 42.95647 .. 43.54398 | -2.32 | - | no |
-| Round pays >= 10x bet | 0.012009 | 0.011937 | 0.01187 .. 0.012 | -2.10 | 119368 | no |
-| Round pays >= 25x bet | 0.004718 | 0.004679 | 0.00464 .. 0.00472 | -1.77 | 46794 | yes |
-| Round pays >= 50x bet | 0.002045 | 0.002014 | 0.00199 .. 0.00204 | -2.14 | 20140 | no |
-| Round pays >= 100x bet | 4.516e-4 | 4.356e-4 | 4.23e-4 .. 4.49e-4 | -2.38 | 4356 | no |
-| Round pays >= 250x bet | 1.801e-5 | 1.730e-5 | 1.49e-5 .. 2.01e-5 | -0.53 | 173 | yes |
-| Round pays >= 500x bet | 6.535e-7 | 7.000e-7 | 3.39e-7 .. 1.45e-6 | 0.18 | 7 | yes (few events) |
+| Total RTP | 0.960022 | 0.957071 | 0.95411 .. 0.96004 | -1.95 | - | yes |
+| Base-game RTP | 0.701744 | 0.701269 | 0.70019 .. 0.70235 | -0.86 | - | yes |
+| Free-spins RTP contribution | 0.258278 | 0.255802 | 0.25311 .. 0.2585 | -1.80 | - | yes |
+| Hit frequency (round pays > 0) | 0.516807 | 0.516936 | 0.51663 .. 0.51725 | 0.82 | 5169363 | yes |
+| Base spin with a line win | 0.512625 | 0.512773 | 0.51246 .. 0.51308 | 0.94 | 5127733 | yes |
+| Net-positive round | 0.167373 | 0.167305 | 0.16707 .. 0.16754 | -0.58 | 1673048 | yes |
+| Free-spins trigger | 0.005924 | 0.005908 | 0.00586 .. 0.00596 | -0.66 | 59082 | yes |
+| Retrigger per free spin | 0.004166 | 0.004359 | 0.0042 .. 0.00453 | 2.36 | 2693 | no |
+| Feature with >= 1 retrigger | 0.040886 | 0.042923 | 0.04132 .. 0.04459 | 2.50 | 2536 | no |
+| Free spins played per trigger | 10.434682 | 10.455807 | 10.43795 .. 10.47367 | 2.32 | - | no |
+| Feature win per trigger (x bet) | 43.597312 | 43.296173 | 43.00198 .. 43.59037 | -2.01 | - | no |
+| Round pays >= 10x bet | 0.012009 | 0.011984 | 0.01192 .. 0.01205 | -0.72 | 119842 | yes |
+| Round pays >= 25x bet | 0.004718 | 0.004678 | 0.00464 .. 0.00472 | -1.82 | 46783 | yes |
+| Round pays >= 50x bet | 0.002045 | 0.002017 | 0.00199 .. 0.00204 | -1.96 | 20165 | no |
+| Round pays >= 100x bet | 4.516e-4 | 4.357e-4 | 4.23e-4 .. 4.49e-4 | -2.36 | 4357 | no |
+| Round pays >= 250x bet | 1.801e-5 | 1.750e-5 | 1.51e-5 .. 2.03e-5 | -0.38 | 175 | yes |
+| Round pays >= 500x bet | 6.535e-7 | 8.000e-7 | 4.05e-7 .. 1.58e-6 | 0.57 | 8 | yes (few events) |
 | Round pays >= 1000x bet | 3.884e-11 | 0 | 0 .. 3.84e-7 | -0.02 | 0 | yes (few events) |
 
-18 metrics compared; 6 theoretical value(s) fall outside the simulated 95% interval (Total RTP; Free-spins RTP contribution; Feature win per trigger (x bet); Round pays >= 10x bet; Round pays >= 50x bet; Round pays >= 100x bet). With 18 correlated comparisons, about 0.9 would be expected outside by chance. No discrepancy exceeds |z| = 3.
+18 metrics compared; 6 theoretical value(s) fall outside the simulated 95% interval (Retrigger per free spin; Feature with >= 1 retrigger; Free spins played per trigger; Feature win per trigger (x bet); Round pays >= 50x bet; Round pays >= 100x bet). With 18 correlated comparisons, about 0.9 would be expected outside by chance. No discrepancy exceeds |z| = 3.
 
 <details><summary>Sample-size warnings</summary>
 
 - Rounds reaching the win cap: no events in 10,000,000 trials; the 95% upper bound is about 3.00e-7 (rule of three).
-- Rounds paying >= 500x bet: only 7 events observed; the estimate is unreliable (relative standard error about 38%). About 5.88e+8 trials are needed for +/-10% precision at the theoretical probability 6.535e-7.
+- Rounds paying >= 500x bet: only 8 events observed; the estimate is unreliable (relative standard error about 35%). About 5.88e+8 trials are needed for +/-10% precision at the theoretical probability 6.535e-7.
 - Rounds paying >= 1000x bet: no events in 10,000,000 trials; the 95% upper bound is about 3.00e-7 (rule of three). About 9.89e+12 trials are needed for +/-10% precision at the theoretical probability 3.884e-11.
 - Rounds paying >= 2500x bet: no events in 10,000,000 trials; the 95% upper bound is about 3.00e-7 (rule of three).
 - Rounds paying >= 5000x bet: no events in 10,000,000 trials; the 95% upper bound is about 3.00e-7 (rule of three).
-- With 10,000,000 rounds the 95% RTP interval is +/-0.30 percentage points. At the observed SD of 4.78 per unit stake, about 9.74e+6 rounds are needed for +/-0.3 points and 8.76e+7 for +/-0.1 points.
+- With 10,000,000 rounds the 95% RTP interval is +/-0.30 percentage points. At the observed SD of 4.79 per unit stake, about 9.77e+6 rounds are needed for +/-0.3 points and 8.80e+7 for +/-0.1 points.
 
 </details>
 
@@ -484,7 +484,7 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 | Observed SD of round return | 4.8223 |
 | Largest round win observed | 531.25x bet |
 | Longest no-win streak observed | 21 |
-| Runtime | 25.6 s on 4 worker thread(s) (390,335 rounds/s) |
+| Runtime | 24.1 s on 4 worker thread(s) (415,007 rounds/s) |
 
 | Metric | Theoretical | Simulated | 95% CI | z | Events | Theory inside CI |
 |---|---|---|---|---|---|---|
@@ -522,16 +522,16 @@ P(no-win round) = 48.319%; expected no-win rounds before a win = 0.935. P(net-lo
 
 ### Pooled over all independent runs
 
-The runs above use different seeds (independent RNG streams), so they can be pooled. Pooled over 31,100,000 paid spins: simulated RTP 96.0032% (95% CI 95.8343% to 96.1721%), exact 96.0022%, z = 0.01.
+The runs above use different seeds (independent RNG streams), so they can be pooled. Pooled over 31,100,000 paid spins: simulated RTP 96.0370% (95% CI 95.8680% to 96.2060%), exact 96.0022%, z = 0.40.
 
 | Round pays at least | Exact | Pooled simulated | Events | z |
 |---|---|---|---|---|
-| 10x bet | 1.201e-2 | 1.203e-2 | 374,148 | 1.10 |
-| 25x bet | 4.718e-3 | 4.722e-3 | 146,858 | 0.36 |
-| 50x bet | 2.045e-3 | 2.051e-3 | 63,795 | 0.84 |
-| 100x bet | 4.516e-4 | 4.512e-4 | 14,031 | -0.11 |
-| 250x bet | 1.801e-5 | 1.598e-5 | 497 | -2.67 |
-| 500x bet | 6.535e-7 | 4.823e-7 | 15 | -1.18 |
+| 10x bet | 1.201e-2 | 1.205e-2 | 374,622 | 1.88 |
+| 25x bet | 4.718e-3 | 4.722e-3 | 146,847 | 0.33 |
+| 50x bet | 2.045e-3 | 2.052e-3 | 63,820 | 0.94 |
+| 100x bet | 4.516e-4 | 4.512e-4 | 14,032 | -0.10 |
+| 250x bet | 1.801e-5 | 1.605e-5 | 499 | -2.59 |
+| 500x bet | 6.535e-7 | 5.145e-7 | 16 | -0.96 |
 | 1,000x bet | 3.884e-11 | 0 | 0 | -0.03 |
 
 ### Discrepancies above |z| = 3
@@ -575,31 +575,31 @@ Current exact (uncapped) RTP 96.0022% vs target 96.00%: deviation 0.0022 points.
 
 | Single reel-stop change | RTP after | Change (pts) |
 |---|---|---|
-| base reel 5: one JADE -> PLANET | 96.0007% | -0.0015 |
-| base reel 2: one PLANET -> MOON | 95.9991% | -0.0031 |
-| free reel 2: one MOON -> COMET | 95.9977% | -0.0045 |
-| free reel 3: one MOON -> COMET | 95.9977% | -0.0045 |
-| free reel 4: one COMET -> MOON | 95.9969% | -0.0054 |
-| base reel 2: one SUN -> COMET | 95.9964% | -0.0059 |
-| base reel 5: one PLANET -> JADE | 96.0038% | 0.0015 |
-| base reel 2: one MOON -> PLANET | 96.0054% | 0.0031 |
-| base reel 3: one SUN -> COMET | 95.9944% | -0.0078 |
-| base reel 4: one AMETHYST -> RUBY | 95.9942% | -0.0080 |
+| base reel 5: one RULER -> GLOBE | 96.0007% | -0.0015 |
+| base reel 2: one GLOBE -> APPLE | 95.9991% | -0.0031 |
+| free reel 2: one APPLE -> BOOK | 95.9977% | -0.0045 |
+| free reel 3: one APPLE -> BOOK | 95.9977% | -0.0045 |
+| free reel 4: one BOOK -> APPLE | 95.9969% | -0.0054 |
+| base reel 2: one TEACHER -> BOOK | 95.9964% | -0.0059 |
+| base reel 5: one GLOBE -> RULER | 96.0038% | 0.0015 |
+| base reel 2: one APPLE -> GLOBE | 96.0054% | 0.0031 |
+| base reel 3: one TEACHER -> BOOK | 95.9944% | -0.0078 |
+| base reel 4: one CHALK -> ERASER | 95.9942% | -0.0080 |
 
 | Paytable change (about +10%) | RTP after | Change (pts) |
 |---|---|---|
-| JADE x3: 5 -> 6 | 96.9297% | 0.9275 |
-| SAPPHIRE x3: 5 -> 6 | 96.8397% | 0.8375 |
-| RUBY x3: 10 -> 11 | 96.7497% | 0.7475 |
-| COMET x3: 15 -> 17 | 96.7317% | 0.7295 |
-| PLANET x3: 25 -> 28 | 96.7268% | 0.7245 |
-| AMETHYST x3: 10 -> 11 | 96.6797% | 0.6775 |
+| RULER x3: 5 -> 6 | 96.9297% | 0.9275 |
+| PENCIL x3: 5 -> 6 | 96.8397% | 0.8375 |
+| ERASER x3: 10 -> 11 | 96.7497% | 0.7475 |
+| BOOK x3: 15 -> 17 | 96.7317% | 0.7295 |
+| GLOBE x3: 25 -> 28 | 96.7268% | 0.7245 |
+| CHALK x3: 10 -> 11 | 96.6797% | 0.6775 |
 | SCATTER x3: 2 -> 3 (x total bet) | 96.6175% | 0.6152 |
-| MOON x3: 20 -> 22 | 96.6039% | 0.6016 |
-| RUBY x4: 25 -> 28 | 96.4597% | 0.4575 |
-| AMETHYST x4: 30 -> 33 | 96.4384% | 0.4362 |
-| SAPPHIRE x5: 75 -> 83 | 96.4148% | 0.4125 |
-| MOON x4: 75 -> 83 | 96.4132% | 0.4110 |
+| APPLE x3: 20 -> 22 | 96.6039% | 0.6016 |
+| ERASER x4: 25 -> 28 | 96.4597% | 0.4575 |
+| CHALK x4: 30 -> 33 | 96.4384% | 0.4362 |
+| PENCIL x5: 75 -> 83 | 96.4148% | 0.4125 |
+| APPLE x4: 75 -> 83 | 96.4132% | 0.4110 |
 
 ## 12. Reproducing these results
 

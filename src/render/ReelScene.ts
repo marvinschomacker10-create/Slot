@@ -12,7 +12,7 @@ import {
   type ReelLayout,
   type TapeSegment,
 } from './layout';
-import { FEATURE_ACCENT, GOLD, paylineColor } from './theme';
+import { paylineColor, PIXEL_FONT, SCHOOL } from './theme';
 
 /** Static description of what the scene draws; built from the compiled configuration. */
 export interface SceneSetup {
@@ -100,6 +100,8 @@ export class ReelScene extends Phaser.Scene {
       // Placeholder for symbols without artwork: a labelled tile, so new symbols still render.
       if (canvas) this.textures.addCanvas(symKey(id), canvas);
       else this.createPlaceholder(id);
+      // Pixel art: sample the nearest texel so sprite edges stay hard when scaled.
+      this.textures.get(symKey(id)).setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     this.layout = this.currentLayout();
     this.frame = this.add.graphics().setDepth(1);
@@ -144,8 +146,8 @@ export class ReelScene extends Phaser.Scene {
       alpha: { start: 1, end: 0 },
       lifespan: { min: 600, max: 1400 },
       gravityY: 260,
-      tint: [0xffe9a3, 0xf5c542, 0xffffff, 0xffb347],
-      blendMode: Phaser.BlendModes.ADD,
+      tint: [0xffffff, SCHOOL.chalkYellow, 0xff8fab, 0x7fd8ff, 0x9be37b, SCHOOL.redPen],
+      rotate: { min: 0, max: 90 },
       emitting: false,
     });
     this.sparks.setDepth(6);
@@ -245,6 +247,15 @@ export class ReelScene extends Phaser.Scene {
     this.drawReels();
   }
 
+  showStops(mode: GameMode, stops: readonly number[]): void {
+    const strips = this.setup.strips[mode];
+    const valid =
+      stops.length === this.reels.length &&
+      stops.every((s, i) => Number.isInteger(s) && s >= 0 && s < strips[i]!.length);
+    if (!valid || !this.isIdle()) return;
+    this.reels.forEach((r, i) => this.snapReel(r, strips[i]!, stops[i]!));
+  }
+
   /** Symbol ids currently shown in each visible cell (used by tests and the dev panel). */
   displayedWindow(): string[][] {
     return this.reels.map((r) =>
@@ -323,7 +334,7 @@ export class ReelScene extends Phaser.Scene {
       r.column.setPosition(l.originX + reel * l.pitch, l.originY);
       r.bg.forEach((tile, row) => {
         const c = cellCenter(l, reel, row);
-        tile.setPosition(c.x, c.y).setDisplaySize(l.cell * 0.98, l.cell * 0.98);
+        tile.setPosition(c.x, c.y).setDisplaySize(l.cell, l.cell);
       });
     });
     if (this.ambient) {
@@ -354,25 +365,68 @@ export class ReelScene extends Phaser.Scene {
     }
   }
 
+  /** Wooden picture frame around a chalkboard backing, drawn in hard-edged "pixels". */
   private drawFrame(time: number): void {
     const l = this.layout;
     const g = this.frame;
-    const accent = this.featureMode ? FEATURE_ACCENT : GOLD;
-    const glow = 0.18 + 0.08 * Math.sin(time / 600);
+    const px = Math.max(2, Math.round(l.cell / 32)); // one art pixel at the current size
+    const { x, y, w, h } = l.frame;
     g.clear();
-    g.fillStyle(0x0a0814, 0.85);
-    g.fillRoundedRect(l.frame.x, l.frame.y, l.frame.w, l.frame.h, l.cell * 0.12);
-    for (let w = 18; w >= 6; w -= 6) {
-      g.lineStyle(w * this.setup.devicePixelRatio * 0.5, accent, glow * (6 / w));
-      g.strokeRoundedRect(l.frame.x, l.frame.y, l.frame.w, l.frame.h, l.cell * 0.12);
+    // Dark outline with notched (pixel) corners, then the wood inside it.
+    g.fillStyle(SCHOOL.outline, 1);
+    g.fillRect(l.outer.x + px, l.outer.y, l.outer.w - 2 * px, l.outer.h);
+    g.fillRect(l.outer.x, l.outer.y + px, l.outer.w, l.outer.h - 2 * px);
+    const ox = l.outer.x + px;
+    const oy = l.outer.y + px;
+    const ow = l.outer.w - 2 * px;
+    const oh = l.outer.h - 2 * px;
+    const wood = x - ox;
+    g.fillStyle(SCHOOL.wood, 1);
+    g.fillRect(ox, oy, ow, oh);
+    // Grain: a few darker horizontal and vertical runs.
+    g.fillStyle(SCHOOL.woodDark, 0.55);
+    for (let k = 1; k <= 2; k++) {
+      const gy = oy + Math.round((wood * k) / 3);
+      g.fillRect(ox + 4 * px, gy, ow * 0.35, px);
+      g.fillRect(ox + ow * 0.55, gy, ow * 0.3, px);
+      g.fillRect(ox + ow * 0.2, oy + oh - Math.round((wood * k) / 3) - px, ow * 0.5, px);
+      const gx = ox + Math.round((wood * k) / 3);
+      g.fillRect(gx, oy + oh * 0.2, px, oh * 0.4);
+      g.fillRect(ox + ow - Math.round((wood * k) / 3) - px, oy + oh * 0.35, px, oh * 0.45);
     }
-    g.lineStyle(3 * this.setup.devicePixelRatio, accent, 0.95);
-    g.strokeRoundedRect(l.frame.x, l.frame.y, l.frame.w, l.frame.h, l.cell * 0.12);
-    // Anticipation glow behind reels that are still spinning for a possible feature.
+    // Bevel: light top/left, dark bottom/right.
+    g.fillStyle(SCHOOL.woodLight, 1);
+    g.fillRect(ox, oy, ow, px);
+    g.fillRect(ox, oy, px, oh);
+    g.fillStyle(SCHOOL.woodDark, 1);
+    g.fillRect(ox, oy + oh - px, ow, px);
+    g.fillRect(ox + ow - px, oy, px, oh);
+    // Chalkboard backing behind the reels.
+    g.fillStyle(SCHOOL.outline, 1);
+    g.fillRect(x - px, y - px, w + 2 * px, h + 2 * px);
+    g.fillStyle(this.featureMode ? 0x3a3a1c : SCHOOL.board, 1);
+    g.fillRect(x, y, w, h);
+    // Free spins ("Hitzefrei"): a pulsing sun-yellow chalk line inside the frame.
+    if (this.featureMode) {
+      const a = 0.65 + 0.35 * Math.sin(time / 300);
+      g.fillStyle(SCHOOL.chalkYellow, a);
+      g.fillRect(x, y, w, px);
+      g.fillRect(x, y + h - px, w, px);
+      g.fillRect(x, y, px, h);
+      g.fillRect(x + w - px, y, px, h);
+    }
+    // Anticipation: red-pen boxes around reels that keep spinning for a possible feature.
     this.reels.forEach((r, reel) => {
       if (r.anticipating && r.state !== 'idle') {
-        g.lineStyle(4 * this.setup.devicePixelRatio, 0x5ff6e0, 0.6 + 0.4 * Math.sin(time / 90));
-        g.strokeRoundedRect(l.originX + reel * l.pitch - 2, l.originY - 2, l.cell + 4, l.cell * this.setup.rows + 4, 8);
+        const on = Math.sin(time / 90) > -0.3;
+        if (!on) return;
+        const rx = l.originX + reel * l.pitch;
+        const t = 2 * px;
+        g.fillStyle(SCHOOL.redPen, 1);
+        g.fillRect(rx - t, l.originY - t, l.cell + 2 * t, t);
+        g.fillRect(rx - t, l.originY + l.cell * this.setup.rows, l.cell + 2 * t, t);
+        g.fillRect(rx - t, l.originY, t, l.cell * this.setup.rows);
+        g.fillRect(rx + l.cell, l.originY, t, l.cell * this.setup.rows);
       }
     });
   }
@@ -399,20 +453,20 @@ export class ReelScene extends Phaser.Scene {
       const last = pts[pts.length - 1]!;
       const ext = l.cell * 0.32;
       const path = [{ x: first.x - ext, y: first.y }, ...pts, { x: last.x + ext, y: last.y }];
-      g.lineStyle(width * 2.6 * dpr, color, 0.22 * alpha);
+      g.lineStyle((width + 3) * dpr, SCHOOL.outline, 0.85 * alpha);
       g.strokePoints(path, false);
       g.lineStyle(width * dpr, color, alpha);
       g.strokePoints(path, false);
       for (const end of [path[0]!, path[path.length - 1]!]) {
-        g.fillStyle(0x0a0814, 0.9 * alpha);
-        g.fillCircle(end.x, end.y, l.cell * 0.14);
-        g.lineStyle(2 * dpr, color, alpha);
-        g.strokeCircle(end.x, end.y, l.cell * 0.14);
+        const r = Math.round(l.cell * 0.13);
+        g.fillStyle(SCHOOL.outline, alpha);
+        g.fillRect(end.x - r - 2 * dpr, end.y - r - 2 * dpr, 2 * r + 4 * dpr, 2 * r + 4 * dpr);
+        g.fillStyle(color, alpha);
+        g.fillRect(end.x - r, end.y - r, 2 * r, 2 * r);
         const label = this.add
-          .text(end.x, end.y, String(lineIndex + 1), {
-            fontFamily: 'system-ui, sans-serif',
-            fontSize: `${Math.round(l.cell * 0.15)}px`,
-            fontStyle: 'bold',
+          .text(end.x, end.y + dpr, String(lineIndex + 1), {
+            fontFamily: PIXEL_FONT,
+            fontSize: `${Math.max(8, Math.round(l.cell * 0.1))}px`,
             color: '#ffffff',
           })
           .setOrigin(0.5)
@@ -462,11 +516,17 @@ export class ReelScene extends Phaser.Scene {
         }
       });
     });
+    // Winning cells are circled in red pen, the way a teacher marks the right answer.
+    const t = Math.max(3, Math.round(l.cell / 28));
     for (const key of winningCells) {
       const [reel, row] = key.split(':').map(Number) as [number, number];
       const c = cellCenter(l, reel, row);
-      h.lineStyle(3 * dpr, GOLD, 0.95);
-      h.strokeRoundedRect(c.x - l.cell * 0.46, c.y - l.cell * 0.46, l.cell * 0.92, l.cell * 0.92, l.cell * 0.12);
+      const half = Math.round(l.cell * 0.47);
+      h.fillStyle(SCHOOL.redPen, 0.95);
+      h.fillRect(c.x - half, c.y - half, 2 * half, t);
+      h.fillRect(c.x - half, c.y + half - t, 2 * half, t);
+      h.fillRect(c.x - half, c.y - half, t, 2 * half);
+      h.fillRect(c.x + half - t, c.y - half, t, 2 * half);
     }
     for (const w of wins.lines) {
       const isFocus = focused.kind === 'line' && focused.lineIndex === w.lineIndex;
@@ -487,57 +547,53 @@ export class ReelScene extends Phaser.Scene {
     this.ambient = this.add.particles(0, 0, 'spark', {
       x: { min: 0, max: l.width },
       y: { min: 0, max: l.height },
-      speedY: { min: -12, max: -4 },
-      speedX: { min: -4, max: 4 },
-      scale: { start: 0.18, end: 0 },
-      alpha: { start: 0.55, end: 0 },
-      lifespan: 4200,
-      frequency: 260,
-      tint: [0xffe9a3, 0xb388ff, 0x5ff6e0],
-      blendMode: Phaser.BlendModes.ADD,
+      // Chalk dust drifting in front of the board.
+      speedY: { min: -10, max: -3 },
+      speedX: { min: -5, max: 5 },
+      scale: { start: 0.35, end: 0.1 },
+      alpha: { start: 0.35, end: 0 },
+      lifespan: 4800,
+      frequency: 320,
+      tint: [0xffffff, 0xf4f1e6, SCHOOL.chalkYellow],
     });
     this.ambient.setDepth(0);
   }
 
   private createGeneratedTextures(): void {
     if (!this.textures.exists('spark')) {
-      const t = this.textures.createCanvas('spark', 32, 32)!;
+      // A square "pixel" of confetti / chalk dust.
+      const t = this.textures.createCanvas('spark', 16, 16)!;
       const ctx = t.getContext();
-      const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-      grad.addColorStop(0, 'rgba(255,255,255,1)');
-      grad.addColorStop(0.35, 'rgba(255,236,170,0.8)');
-      grad.addColorStop(1, 'rgba(255,200,80,0)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 32, 32);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 16, 16);
       t.refresh();
     }
     if (!this.textures.exists('cell-bg')) {
-      const t = this.textures.createCanvas('cell-bg', 128, 128)!;
+      // Squared exercise-book paper ("Karopapier"), 32 x 32 art pixels.
+      const t = this.textures.createCanvas('cell-bg', 32, 32)!;
       const ctx = t.getContext();
-      const grad = ctx.createLinearGradient(0, 0, 0, 128);
-      grad.addColorStop(0, '#2a2142');
-      grad.addColorStop(0.5, '#1a1530');
-      grad.addColorStop(1, '#100c1f');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.roundRect(2, 2, 124, 124, 16);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(233,196,106,0.18)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      ctx.fillStyle = '#fbf8ef';
+      ctx.fillRect(0, 0, 32, 32);
+      ctx.fillStyle = '#cfdff0';
+      for (let k = 3; k < 32; k += 4) {
+        ctx.fillRect(k, 0, 1, 32);
+        ctx.fillRect(0, k, 32, 1);
+      }
+      ctx.fillStyle = '#e9e1cc';
+      ctx.fillRect(0, 31, 32, 1);
+      ctx.fillRect(31, 0, 1, 32);
       t.refresh();
+      t.setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
   }
 
   private createPlaceholder(id: string): void {
     const t = this.textures.createCanvas(symKey(id), 256, 256)!;
     const ctx = t.getContext();
-    ctx.fillStyle = '#3a2f5c';
-    ctx.beginPath();
-    ctx.roundRect(16, 16, 224, 224, 32);
-    ctx.fill();
-    ctx.fillStyle = '#f5d27a';
-    ctx.font = 'bold 40px Georgia, serif';
+    ctx.fillStyle = '#2f4a3a';
+    ctx.fillRect(16, 16, 224, 224);
+    ctx.fillStyle = '#f4f1e6';
+    ctx.font = `28px ${PIXEL_FONT}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(id.slice(0, 7), 128, 128);

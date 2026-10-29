@@ -15,7 +15,7 @@ const wildHeavyArb = fc.array(
     fc.oneof(
       { weight: 3, arbitrary: fc.constant('WILD') },
       { weight: 1, arbitrary: fc.constant('SCATTER') },
-      { weight: 4, arbitrary: fc.constantFrom('SUN', 'MOON', 'JADE') },
+      { weight: 4, arbitrary: fc.constantFrom('TEACHER', 'APPLE', 'RULER') },
     ),
     { minLength: 3, maxLength: 3 },
   ),

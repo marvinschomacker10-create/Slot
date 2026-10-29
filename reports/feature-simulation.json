@@ -1,15 +1,15 @@
 {
-  "schema": "gilded-orbit/feature-simulation@2",
+  "schema": "pixel-pauker/feature-simulation@3",
   "game": {
-    "id": "gilded-orbit",
-    "version": "1.0.0",
-    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+    "id": "pixel-pauker",
+    "version": "2.0.0",
+    "configHash": "4c02cc0a66428bfc140cc19b87b5e2621622b0d807327e85fc55ddee832e47b2"
   },
   "meta": {
     "features": 1000000,
     "seed": "feature-check",
-    "elapsedMs": 299327,
-    "generatedAt": "2026-10-29T09:22:08.797Z"
+    "elapsedMs": 307657,
+    "generatedAt": "2026-10-29T15:17:47.734Z"
   },
   "description": "Complete free-spin features played through the game engine, compared with the exact stand-alone feature distribution (feature win alone, conditional on a trigger).",
   "mean": {
@@ -147,7 +147,7 @@
   "roundsGivenTrigger": {
     "rounds": 1000000,
     "paidSpinsDrawn": 169090533,
-    "elapsedMs": 213627,
+    "elapsedMs": 223455,
     "observedTriggerRate": 0.005913991648485726,
     "mean": {
       "exact": 46.2370689634166,

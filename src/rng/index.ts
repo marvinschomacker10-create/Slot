@@ -113,6 +113,7 @@ export class SeededRandomSource implements RandomSource {
 
   constructor(seed: Seed) {
     this.seed = String(seed);
+    // Historic salt from the project's first theme, kept so that published seeds stay reproducible.
     const [a, b, c, d] = cyrb128(`gilded-orbit:${this.seed}`);
     this.s0 = a;
     this.s1 = b;

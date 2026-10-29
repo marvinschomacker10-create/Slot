@@ -64,6 +64,7 @@ export interface CompiledGame {
   readonly lineBetOptions: readonly number[];
   readonly defaultLineBetIndex: number;
   readonly startingBalance: number;
+  readonly allowance: { readonly amount: number; readonly intervalMs: number } | null;
 }
 
 /**
@@ -205,5 +206,11 @@ export function compileGame(config: GameConfig): CompiledGame {
     lineBetOptions: config.bet.lineBetOptions,
     defaultLineBetIndex: config.bet.defaultLineBetIndex,
     startingBalance: config.session.startingBalance,
+    allowance: config.session.allowance
+      ? {
+          amount: config.session.allowance.amount,
+          intervalMs: Math.round(config.session.allowance.intervalMinutes * 60_000),
+        }
+      : null,
   };
 }

@@ -1,51 +1,73 @@
-export function HelpPanel() {
+import type { CompiledGame } from '../config';
+import { credits } from '../app/format';
+
+export function HelpPanel({ game }: { game: CompiledGame }) {
+  const allowance = game.allowance;
+  const scatter = game.config.symbols.find((s) => s.kind === 'scatter')!;
+  const minTrigger = Math.min(...Object.keys(game.config.freeSpins.triggerAwards).map(Number));
   return (
     <div className="help">
-      <h3>How to play</h3>
+      <h3>So wird gespielt</h3>
       <ol>
-        <li>Choose a line bet with the − and + buttons. The total bet is the line bet times 20 paylines.</li>
         <li>
-          Press SPIN (or the space bar). The stake is deducted and the result is decided immediately by the game engine.
+          Wähle mit − und + den Linieneinsatz. Der Gesamteinsatz ist der Linieneinsatz mal {game.lineCount}{' '}
+          Gewinnlinien.
         </li>
-        <li>The reels then animate to that result. Animation speed never changes what you win.</li>
         <li>
-          Three or more Orbit Scatters start free spins, which play automatically unless you switch that off in
-          Settings.
+          Drücke DREHEN (oder die Leertaste). Der Einsatz wird abgebucht und das Ergebnis sofort von der Spiel-Engine
+          entschieden.
+        </li>
+        <li>Danach laufen die Walzen zu diesem Ergebnis. Die Animationsgeschwindigkeit ändert nie den Gewinn.</li>
+        <li>
+          {minTrigger} oder mehr Symbole „{scatter.name}“ starten Freispiele. Sie laufen automatisch, außer du schaltest
+          das in den Einstellungen ab.
         </li>
       </ol>
-      <h3>Keyboard</h3>
+      <h3>Taschengeld (Spielgeld)</h3>
+      {allowance ? (
+        <p>
+          Alle {Math.round(allowance.intervalMs / 60000)} Minuten kannst du {credits(allowance.amount)}{' '}
+          Spielgeld-Credits als Taschengeld abholen. Nicht abgeholtes Taschengeld sammelt sich nicht an: Du bekommst
+          höchstens eine Auszahlung pro Zeitraum. Dein Kontostand, der Einsatz und der Taschengeld-Timer werden in
+          diesem Browser gespeichert (localStorage), unfertige Freispiele werden nach dem Neuladen fortgesetzt.
+          Spielgeld hat keinen Wert und kann weder gekauft noch ausgezahlt werden.
+        </p>
+      ) : (
+        <p>In dieser Konfiguration ist das Taschengeld abgeschaltet.</p>
+      )}
+      <h3>Tastatur</h3>
       <dl className="shortcuts">
         <div>
-          <dt>Space / Enter</dt>
-          <dd>Spin (press again while spinning to stop the reels quickly)</dd>
+          <dt>Leertaste / Enter</dt>
+          <dd>Drehen (während des Drehens erneut drücken, um schnell zu stoppen)</dd>
         </div>
         <div>
           <dt>+ / −, ↑ / ↓</dt>
-          <dd>Change the bet</dd>
+          <dd>Einsatz ändern</dd>
         </div>
         <div>
           <dt>T</dt>
-          <dd>Toggle fast spin</dd>
+          <dd>Schnelldrehen an/aus</dd>
         </div>
         <div>
-          <dt>P, H, S</dt>
-          <dd>Open paytable, help, statistics</dd>
+          <dt>P, H, S, G</dt>
+          <dd>Gewinntabelle, Hilfe, Statistik öffnen, Taschengeld abholen</dd>
         </div>
         <div>
           <dt>Esc</dt>
-          <dd>Close a dialog</dd>
+          <dd>Dialog schließen</dd>
         </div>
       </dl>
-      <h3>About this prototype</h3>
+      <h3>Über diesen Prototyp</h3>
       <p>
-        Gilded Orbit is an original play-money game prototype for evaluating game rules, mathematics and presentation.
-        It is not certified, not approved by any regulator and not connected to real money. Outcomes are generated in
-        your browser with the Web Crypto random number generator, which is suitable for play money only. See
-        docs/REGULATORY_READINESS.md for what real-money operation would require.
+        {game.config.meta.name} ist ein eigenständiger Spielgeld-Prototyp zum Bewerten von Spielregeln, Mathematik und
+        Darstellung. Er ist nicht zertifiziert, von keiner Behörde zugelassen und nicht mit Echtgeld verbunden. Die
+        Ergebnisse entstehen in deinem Browser mit dem Web-Crypto-Zufallszahlengenerator, der nur für Spielgeld geeignet
+        ist. Was ein Echtgeldbetrieb erfordern würde, steht in docs/REGULATORY_READINESS.md.
       </p>
       <p>
-        Gambling can be harmful. If you or someone you know is struggling with gambling, seek support from a local help
-        service.
+        Glücksspiel kann süchtig machen. Wenn du oder jemand, den du kennst, Probleme mit Glücksspiel hat, such dir
+        Unterstützung, zum Beispiel bei der BZgA (check-dein-spiel.de) oder einer örtlichen Beratungsstelle.
       </p>
     </div>
   );

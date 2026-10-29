@@ -1,40 +1,24 @@
-import amethyst from '../assets/symbols/amethyst.svg';
-import comet from '../assets/symbols/comet.svg';
-import jade from '../assets/symbols/jade.svg';
-import moon from '../assets/symbols/moon.svg';
-import planet from '../assets/symbols/planet.svg';
-import ruby from '../assets/symbols/ruby.svg';
-import sapphire from '../assets/symbols/sapphire.svg';
-import scatter from '../assets/symbols/scatter.svg';
-import sun from '../assets/symbols/sun.svg';
-import wild from '../assets/symbols/wild.svg';
+import { PIXEL_ART } from '../assets/pixel';
 
 /**
  * Presentation-only theme. Gameplay values never live here: the renderer gets
  * symbols, strips and paylines from the compiled configuration. Artwork is
- * looked up by symbol id, so replacing an SVG never touches game logic.
+ * looked up by symbol id, so replacing a sprite never touches game logic.
  */
-export const SYMBOL_ART: Readonly<Record<string, string>> = {
-  JADE: jade,
-  SAPPHIRE: sapphire,
-  RUBY: ruby,
-  AMETHYST: amethyst,
-  COMET: comet,
-  MOON: moon,
-  PLANET: planet,
-  SUN: sun,
-  WILD: wild,
-  SCATTER: scatter,
-};
+export const SYMBOL_ART: Readonly<Record<string, string>> = PIXEL_ART;
 
 /** Fallback art for symbols added to the configuration without artwork. */
 export function symbolArt(id: string): string | undefined {
   return SYMBOL_ART[id];
 }
 
-/** Payline colours; every drawn line also carries its number, so identity never relies on colour alone. */
+/**
+ * Payline colours (felt-tip pens). They are drawn with a dark outline so they stay visible
+ * on the paper cells and on the chalkboard; every drawn line also carries its number, so
+ * identity never relies on colour alone.
+ */
 export const PAYLINE_COLORS = [
-  0xf5c542, 0x4fc3f7, 0xef5350, 0x66bb6a, 0xba68c8, 0xffa726, 0x26c6da, 0xec407a, 0x9ccc65, 0x7e57c2,
+  0xe63946, 0x1d6fe0, 0x2a9d47, 0xf77f00, 0x8e44ad, 0xd81b60, 0x0f8b8d, 0xb5651d, 0x5c6bc0, 0xc9a400,
 ] as const;
 
 export function paylineColor(lineIndex: number): number {
@@ -45,6 +29,19 @@ export function hexColor(c: number): string {
   return `#${c.toString(16).padStart(6, '0')}`;
 }
 
-export const GOLD = 0xe9c46a;
-export const GOLD_DEEP = 0xb8892f;
-export const FEATURE_ACCENT = 0xb388ff;
+/** Classroom palette used by the reel scene. */
+export const SCHOOL = {
+  woodLight: 0xb47a45,
+  wood: 0x8a5530,
+  woodDark: 0x5a3518,
+  woodDeep: 0x2e1a0a,
+  board: 0x2f4a3a,
+  boardDark: 0x1f3428,
+  chalk: 0xf4f1e6,
+  chalkYellow: 0xffd166,
+  redPen: 0xd62828,
+  outline: 0x1c1410,
+} as const;
+
+/** Pixel font used for every text drawn by the renderer and the UI. */
+export const PIXEL_FONT = '"Press Start 2P", ui-monospace, monospace';

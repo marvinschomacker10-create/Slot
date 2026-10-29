@@ -5,7 +5,7 @@ import { computeRoundDistribution, type RoundDistribution } from './distribution
 import type { SpinDistribution } from './enumerate';
 import { analyzeMarginals, type MarginalAnalysis, type ModeMarginals } from './marginal';
 
-export const EXACT_ANALYSIS_SCHEMA = 'gilded-orbit/exact-analysis@3';
+export const EXACT_ANALYSIS_SCHEMA = 'pixel-pauker/exact-analysis@4';
 
 export const DEFINITIONS = {
   rtpDenominator:

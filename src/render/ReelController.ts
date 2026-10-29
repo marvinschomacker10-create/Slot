@@ -49,6 +49,11 @@ export class ReelController {
     clearTimeout(timer);
   }
 
+  /** Shows the given stops without animation (e.g. the last spin of a restored round). */
+  showStops(mode: GameMode, stops: readonly number[]): void {
+    this.scene?.showStops(mode, stops);
+  }
+
   quickStop(): void {
     this.scene?.quickStop();
   }

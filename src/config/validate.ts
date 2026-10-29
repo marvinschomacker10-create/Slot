@@ -104,7 +104,7 @@ export function validateConfig(raw: unknown): ValidationResult {
       }
       if (typeof s.id !== 'string' || !SYMBOL_ID.test(s.id)) {
         {
-          err(`${p}.id`, 'must be an upper-case identifier such as "COMET"');
+          err(`${p}.id`, 'must be an upper-case identifier such as "BOOK"');
           return;
         }
       }
@@ -368,6 +368,23 @@ export function validateConfig(raw: unknown): ValidationResult {
     err('session.startingBalance', 'must be a non-negative integer number of credits');
   } else if (minLineBet > 0 && lines > 0 && raw.session.startingBalance < minLineBet * lines) {
     warn('session.startingBalance', 'is smaller than the minimum total bet; the first spin will be rejected');
+  }
+  if (isObject(raw.session)) {
+    const a = raw.session.allowance;
+    if (a !== null && a !== undefined && !isObject(a)) {
+      err('session.allowance', 'must be null (disabled) or an object with amount and intervalMinutes');
+    } else if (a === undefined) {
+      err('session.allowance', 'must be present: null (disabled) or { "amount": credits, "intervalMinutes": minutes }');
+    } else if (a !== null) {
+      if (!isInt(a.amount) || a.amount < 1)
+        err('session.allowance.amount', 'must be a positive integer number of credits');
+      if (typeof a.intervalMinutes !== 'number' || !(a.intervalMinutes > 0 && a.intervalMinutes <= 10_080)) {
+        err(
+          'session.allowance.intervalMinutes',
+          'must be a number of minutes greater than 0 and at most 10080 (one week)',
+        );
+      }
+    }
   }
 
   // math

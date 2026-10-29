@@ -4,12 +4,14 @@ import { credits, multiple } from '../app/format';
 import { WindowGrid } from './WindowGrid';
 
 export function HistoryPanel({ game, history }: { game: CompiledGame; history: readonly RoundRecord[] }) {
-  if (history.length === 0) return <p className="muted">No rounds played yet in this session.</p>;
+  const symbolName = (id: string) => game.config.symbols.find((s) => s.id === id)?.name ?? id;
+  const scatterId = game.symbolIds[game.scatter]!;
+  if (history.length === 0) return <p className="muted">In dieser Sitzung wurden noch keine Runden gespielt.</p>;
   return (
     <div className="history" data-testid="history">
       <p className="muted">
-        Most recent {history.length} rounds of this session (newest first). Each round is one paid spin plus its free
-        spins.
+        Die letzten {history.length} Runden dieser Sitzung (neueste zuerst). Eine Runde ist ein bezahlter Dreh plus
+        seine Freispiele. Der Verlauf gilt nur für diesen Tab und wird nicht gespeichert.
       </p>
       <ul>
         {history.map((r) => (
@@ -17,15 +19,15 @@ export function HistoryPanel({ game, history }: { game: CompiledGame; history: r
             <details>
               <summary>
                 <span className="history__id">{r.roundId}</span>
-                <span>{new Date(r.startedAt).toLocaleTimeString()}</span>
-                <span>Bet {credits(r.totalBet)}</span>
-                <span className={r.totalWin > 0 ? 'win' : 'muted'}>Win {credits(r.totalWin)}</span>
+                <span>{new Date(r.startedAt).toLocaleTimeString('de-DE')}</span>
+                <span>Einsatz {credits(r.totalBet)}</span>
+                <span className={r.totalWin > 0 ? 'win' : 'muted'}>Gewinn {credits(r.totalWin)}</span>
                 <span className={r.net >= 0 ? 'win' : 'muted'}>
-                  Net {r.net >= 0 ? '+' : ''}
+                  Netto {r.net >= 0 ? '+' : ''}
                   {credits(r.net)}
                 </span>
-                {r.featureTriggered && <span className="tag">{r.freeSpinsPlayed} free spins</span>}
-                {r.capReached && <span className="tag">max win</span>}
+                {r.featureTriggered && <span className="tag">{r.freeSpinsPlayed} Freispiele</span>}
+                {r.capReached && <span className="tag">Maximalgewinn</span>}
               </summary>
               <ol className="history__spins">
                 {r.spins.map((s) => {
@@ -37,25 +39,25 @@ export function HistoryPanel({ game, history }: { game: CompiledGame; history: r
                   return (
                     <li key={s.spinId}>
                       <div className="history__spin-head">
-                        <strong>{s.mode === 'base' ? 'Paid spin' : `Free spin ${s.index}`}</strong>
-                        <span>stops [{s.stops.join(', ')}]</span>
-                        <span>win {credits(s.credited)}</span>
-                        {s.credited > 0 && <span className="muted">({multiple(s.credited / r.totalBet)} bet)</span>}
+                        <strong>{s.mode === 'base' ? 'Bezahlter Dreh' : `Freispiel ${s.index}`}</strong>
+                        <span>Stopps [{s.stops.join(', ')}]</span>
+                        <span>Gewinn {credits(s.credited)}</span>
+                        {s.credited > 0 && <span className="muted">({multiple(s.credited / r.totalBet)} Einsatz)</span>}
                       </div>
                       <WindowGrid window={s.window} highlight={hi} size={22} />
                       {(s.lineWins.length > 0 || s.scatterWin > 0) && (
                         <ul className="history__wins">
                           {s.lineWins.map((w) => (
                             <li key={w.lineIndex}>
-                              Line {w.lineIndex + 1}: {w.count} x {w.symbol} = {credits(w.win)}
+                              Linie {w.lineIndex + 1}: {w.count} × {symbolName(w.symbol)} = {credits(w.win)}
                             </li>
                           ))}
                           {s.scatterWin > 0 && (
                             <li>
-                              {s.scatterCount} scatters = {credits(s.scatterWin)}
+                              {s.scatterCount} × {symbolName(scatterId)} = {credits(s.scatterWin)}
                             </li>
                           )}
-                          {s.freeSpinsGranted > 0 && <li>+{s.freeSpinsGranted} free spins</li>}
+                          {s.freeSpinsGranted > 0 && <li>+{s.freeSpinsGranted} Freispiele</li>}
                         </ul>
                       )}
                     </li>

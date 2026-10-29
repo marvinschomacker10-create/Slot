@@ -8,8 +8,8 @@ export interface BandDatum {
 
 /**
  * Horizontal bar chart: RTP contribution by round-payout band. One series, one
- * validated colour (#b8892f on the dark surface), bars <= 18px with a 4px rounded
- * data end, hairline grid, direct labels on the largest bars only, and a
+ * validated colour (chalk yellow on the board surface), bars <= 18px with square
+ * pixel ends, hairline grid, direct labels on the largest bars only, and a
  * hover/focus tooltip on every bar. The table next to it is the non-visual view.
  */
 export function BandChart({ data, title }: { data: readonly BandDatum[]; title: string }) {
@@ -26,7 +26,8 @@ export function BandChart({ data, title }: { data: readonly BandDatum[]; title: 
       .slice(0, 3)
       .map(([, i]) => i),
   );
-  const fmt = (v: number) => `${(v * 100).toFixed(1)}%`;
+  const fmt = (v: number) => `${(v * 100).toFixed(1).replace('.', ',')} %`;
+  const prob = (p: number) => p.toExponential(2).replace('.', ',');
   return (
     <figure className="chart">
       <figcaption className="chart__title">{title}</figcaption>
@@ -47,17 +48,13 @@ export function BandChart({ data, title }: { data: readonly BandDatum[]; title: 
             const y = i * rowH + 5;
             const h = 16;
             const w = Math.max(0, (d.value / max) * plotW);
-            const r = Math.min(4, w);
-            const path =
-              w > 0
-                ? `M${labelW},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${h - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} z`
-                : '';
+            const path = w > 0 ? `M${labelW},${y} h${w} v${h} h-${w} z` : '';
             return (
               <g
                 key={d.label}
                 tabIndex={0}
                 role="img"
-                aria-label={`${d.label} x bet: ${fmt(d.value)} of stake, probability ${d.probability.toExponential(2)}`}
+                aria-label={`${d.label} × Einsatz: ${fmt(d.value)} des Einsatzes, Wahrscheinlichkeit ${prob(d.probability)}`}
                 onMouseEnter={() => setActive(i)}
                 onMouseLeave={() => setActive(null)}
                 onFocus={() => setActive(i)}
@@ -80,9 +77,9 @@ export function BandChart({ data, title }: { data: readonly BandDatum[]; title: 
         </svg>
         {active !== null && (
           <div className="chart__tooltip" style={{ top: active * rowH }} role="status">
-            <strong>{data[active]!.label} x bet</strong>
-            <span>RTP share {fmt(data[active]!.value)}</span>
-            <span>Probability {data[active]!.probability.toExponential(2)}</span>
+            <strong>{data[active]!.label} × Einsatz</strong>
+            <span>RTP-Anteil {fmt(data[active]!.value)}</span>
+            <span>Wahrscheinlichkeit {prob(data[active]!.probability)}</span>
           </div>
         )}
       </div>

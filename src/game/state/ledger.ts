@@ -1,6 +1,7 @@
 import { DoubleSettlementError, InsufficientBalanceError } from '../errors';
 
-export type LedgerEntryType = 'stake' | 'win';
+/** stake: round stake; win: game win; grant: play-money top-up (not a game win). */
+export type LedgerEntryType = 'stake' | 'win' | 'grant';
 
 export interface LedgerEntry {
   readonly seq: number;
@@ -55,6 +56,14 @@ export class Ledger {
     this.guard('stake', reference);
     if (amount > this.balanceValue) throw new InsufficientBalanceError(this.balanceValue, amount);
     return this.append('stake', reference, -amount);
+  }
+
+  /** Credits a play-money top-up (e.g. the timed allowance). Not a game win. */
+  creditGrant(reference: string, amount: number): LedgerEntry {
+    assertCredits(amount, 'grant');
+    if (amount === 0) throw new RangeError('grant must be positive');
+    this.guard('grant', reference);
+    return this.append('grant', reference, amount);
   }
 
   creditWin(reference: string, amount: number): LedgerEntry {

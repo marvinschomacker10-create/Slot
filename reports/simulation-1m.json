@@ -1,20 +1,20 @@
 {
-  "schema": "gilded-orbit/simulation-report@1",
+  "schema": "pixel-pauker/simulation-report@2",
   "game": {
-    "id": "gilded-orbit",
-    "version": "1.0.0",
-    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+    "id": "pixel-pauker",
+    "version": "2.0.0",
+    "configHash": "4c02cc0a66428bfc140cc19b87b5e2621622b0d807327e85fc55ddee832e47b2"
   },
   "meta": {
     "seed": "preset-1m",
     "rngKind": "seeded",
     "chunkSize": 10000,
     "workers": 4,
-    "elapsedMs": 3254,
+    "elapsedMs": 2535,
     "preset": "1m",
-    "generatedAt": "2026-10-29T09:03:26.206Z",
+    "generatedAt": "2026-10-29T15:11:27.210Z",
     "rounds": 1000000,
-    "roundsPerSecond": 307314,
+    "roundsPerSecond": 394477,
     "lineBet": 1,
     "totalBet": 20
   },
@@ -372,42 +372,42 @@
   ],
   "symbolContributions": [
     {
-      "symbol": "JADE",
+      "symbol": "RULER",
       "base": 0.08575025,
       "free": 0.0132655
     },
     {
-      "symbol": "SAPPHIRE",
+      "symbol": "PENCIL",
       "base": 0.09558725,
       "free": 0.0164685
     },
     {
-      "symbol": "RUBY",
+      "symbol": "ERASER",
       "base": 0.12476325,
       "free": 0.0262225
     },
     {
-      "symbol": "AMETHYST",
+      "symbol": "CHALK",
       "base": 0.1178505,
       "free": 0.0293405
     },
     {
-      "symbol": "COMET",
+      "symbol": "BOOK",
       "base": 0.07434825,
       "free": 0.045027
     },
     {
-      "symbol": "MOON",
+      "symbol": "APPLE",
       "base": 0.0843405,
       "free": 0.040838
     },
     {
-      "symbol": "PLANET",
+      "symbol": "GLOBE",
       "base": 0.070475,
       "free": 0.0523175
     },
     {
-      "symbol": "SUN",
+      "symbol": "TEACHER",
       "base": 0.0325,
       "free": 0.027445
     },

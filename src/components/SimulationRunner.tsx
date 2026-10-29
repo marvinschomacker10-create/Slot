@@ -1,6 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
-import { pct } from '../app/format';
+import { credits, pct } from '../app/format';
+import SimulationWorker from '../math/simulation/sim.worker.ts?worker&inline';
 import type { ComparisonRow, SimulationReport } from '../math/simulation/report';
+
+/** German labels for the metric names produced by the (English) math module. */
+const METRIC_DE: Readonly<Record<string, string>> = {
+  'Total RTP': 'RTP gesamt',
+  'Base-game RTP': 'RTP Grundspiel',
+  'Free-spins RTP contribution': 'RTP-Anteil Freispiele',
+  'Hit frequency (round pays > 0)': 'Trefferquote (Runde zahlt > 0)',
+  'Base spin with a line win': 'Grundspiel-Dreh mit Liniengewinn',
+  'Net-positive round': 'Runde mit Nettogewinn',
+  'Free-spins trigger': 'Freispiele ausgelöst',
+  'Retrigger per free spin': 'Neuauslösung je Freispiel',
+  'Feature with >= 1 retrigger': 'Feature mit ≥ 1 Neuauslösung',
+  'Free spins played per trigger': 'Gespielte Freispiele je Auslösung',
+  'Feature win per trigger (x bet)': 'Feature-Gewinn je Auslösung (× Einsatz)',
+};
+
+function metricName(metric: string): string {
+  const m = /^Round pays >= (\d+)x bet$/.exec(metric);
+  return m ? `Runde zahlt ≥ ${m[1]}× Einsatz` : (METRIC_DE[metric] ?? metric);
+}
+
+const num = (x: number, digits: number) => x.toPrecision(digits).replace('.', ',');
 
 type State =
   | { kind: 'idle' }
@@ -8,7 +31,10 @@ type State =
   | { kind: 'done'; report: SimulationReport; comparison: ComparisonRow[] | null }
   | { kind: 'error'; message: string };
 
-/** Runs a simulation in a Web Worker so the game stays responsive. */
+/**
+ * Runs a simulation in a Web Worker so the game stays responsive. The worker is
+ * inlined into the bundle, so it also works from the standalone index.html.
+ */
 export function SimulationRunner() {
   const [rounds, setRounds] = useState(100_000);
   const [seed, setSeed] = useState('');
@@ -19,7 +45,7 @@ export function SimulationRunner() {
 
   const start = () => {
     worker.current?.terminate();
-    const w = new Worker(new URL('../math/simulation/sim.worker.ts', import.meta.url), { type: 'module' });
+    const w = new SimulationWorker();
     worker.current = w;
     setState({ kind: 'running', done: 0, total: rounds });
     w.onmessage = (e: MessageEvent) => {
@@ -33,7 +59,7 @@ export function SimulationRunner() {
         worker.current = null;
       }
     };
-    w.onerror = (e) => setState({ kind: 'error', message: e.message || 'Simulation worker failed' });
+    w.onerror = (e) => setState({ kind: 'error', message: e.message || 'Der Simulations-Worker ist fehlgeschlagen' });
     w.postMessage({ rounds, seed: seed.trim() === '' ? null : seed.trim(), chunkSize: 10_000 });
   };
 
@@ -45,21 +71,21 @@ export function SimulationRunner() {
 
   return (
     <section className="sim" aria-labelledby="sim-title">
-      <h3 id="sim-title">Run a simulation</h3>
+      <h3 id="sim-title">Simulation starten</h3>
       <p className="muted">
-        Simulates complete rounds through the same game engine in a background worker. Use the command line (
-        <code>npm run simulate:10m</code>) for 10 million rounds or more.
+        Simuliert komplette Runden mit derselben Spiel-Engine in einem Hintergrund-Worker. Für 10 Millionen Runden und
+        mehr die Kommandozeile nutzen (<code>npm run simulate:10m</code>).
       </p>
       <div className="sim__controls">
         <label>
-          Rounds
+          Runden
           <select
             value={rounds}
             onChange={(e) => setRounds(Number(e.target.value))}
             disabled={state.kind === 'running'}
           >
-            <option value={100_000}>100,000</option>
-            <option value={1_000_000}>1,000,000</option>
+            <option value={100_000}>100.000</option>
+            <option value={1_000_000}>1.000.000</option>
           </select>
         </label>
         <label>
@@ -67,17 +93,17 @@ export function SimulationRunner() {
           <input
             value={seed}
             onChange={(e) => setSeed(e.target.value)}
-            placeholder="crypto RNG"
+            placeholder="Krypto-Zufall"
             disabled={state.kind === 'running'}
           />
         </label>
         {state.kind === 'running' ? (
           <button type="button" className="button" onClick={cancel}>
-            Cancel
+            Abbrechen
           </button>
         ) : (
           <button type="button" className="button button--gold" onClick={start} data-testid="run-simulation">
-            Run
+            Starten
           </button>
         )}
       </div>
@@ -88,7 +114,7 @@ export function SimulationRunner() {
           aria-valuemin={0}
           aria-valuemax={state.total}
           aria-valuenow={state.done}
-          aria-label="Simulation progress"
+          aria-label="Simulationsfortschritt"
         >
           <div style={{ width: `${(state.done / state.total) * 100}%` }} />
         </div>
@@ -97,33 +123,33 @@ export function SimulationRunner() {
       {state.kind === 'done' && (
         <div className="sim__result" data-testid="simulation-result">
           <p>
-            <strong>{state.report.totals.rounds.toLocaleString('en-US')}</strong> rounds in{' '}
-            {(state.report.meta.elapsedMs / 1000).toFixed(1)} s: RTP{' '}
-            <strong>{pct(state.report.rtp.estimate, 3)}</strong> (95% CI {pct(state.report.rtp.ci95.low, 2)} to{' '}
-            {pct(state.report.rtp.ci95.high, 2)})
+            <strong>{credits(state.report.totals.rounds)}</strong> Runden in{' '}
+            {(state.report.meta.elapsedMs / 1000).toFixed(1).replace('.', ',')} s: RTP{' '}
+            <strong>{pct(state.report.rtp.estimate, 3)}</strong> (95-%-Konfidenzintervall{' '}
+            {pct(state.report.rtp.ci95.low, 2)} bis {pct(state.report.rtp.ci95.high, 2)})
           </p>
           {state.comparison && (
             <div className="table-scroll">
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th scope="col">Metric</th>
-                    <th scope="col">Exact</th>
-                    <th scope="col">Simulated</th>
-                    <th scope="col">95% CI</th>
+                    <th scope="col">Kennzahl</th>
+                    <th scope="col">Exakt</th>
+                    <th scope="col">Simuliert</th>
+                    <th scope="col">95-%-KI</th>
                     <th scope="col">z</th>
                   </tr>
                 </thead>
                 <tbody>
                   {state.comparison.map((c) => (
                     <tr key={c.metric} className={c.reliable ? undefined : 'muted'}>
-                      <th scope="row">{c.metric}</th>
-                      <td>{c.theoretical.toPrecision(5)}</td>
-                      <td>{c.simulated.toPrecision(5)}</td>
+                      <th scope="row">{metricName(c.metric)}</th>
+                      <td>{num(c.theoretical, 5)}</td>
+                      <td>{num(c.simulated, 5)}</td>
                       <td>
-                        {c.ci95Low.toPrecision(4)} – {c.ci95High.toPrecision(4)}
+                        {num(c.ci95Low, 4)} – {num(c.ci95High, 4)}
                       </td>
-                      <td>{c.z.toFixed(2)}</td>
+                      <td>{c.z.toFixed(2).replace('.', ',')}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -132,7 +158,9 @@ export function SimulationRunner() {
           )}
           {state.report.warnings.length > 0 && (
             <details>
-              <summary>{state.report.warnings.length} sample-size warnings</summary>
+              <summary>
+                {state.report.warnings.length} Hinweise zur Stichprobengröße (englisch, aus dem Mathe-Modul)
+              </summary>
               <ul>
                 {state.report.warnings.map((w) => (
                   <li key={w}>{w}</li>

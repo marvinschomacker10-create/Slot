@@ -13,18 +13,18 @@ export function toyConfig(
   c.meta.id = 'toy';
   c.reelSets = {
     base: [
-      { symbols: ['SUN', 'JADE', 'SCATTER', 'MOON', 'WILD', 'RUBY', 'JADE'] },
-      { symbols: ['JADE', 'WILD', 'MOON', 'SCATTER', 'SUN', 'RUBY'] },
-      { symbols: ['RUBY', 'JADE', 'SUN', 'SCATTER', 'MOON', 'WILD', 'COMET'] },
-      { symbols: ['MOON', 'SUN', 'JADE', 'WILD', 'SCATTER', 'RUBY'] },
-      { symbols: ['JADE', 'SCATTER', 'RUBY', 'SUN', 'MOON', 'PLANET', 'WILD'] },
+      { symbols: ['TEACHER', 'RULER', 'SCATTER', 'APPLE', 'WILD', 'ERASER', 'RULER'] },
+      { symbols: ['RULER', 'WILD', 'APPLE', 'SCATTER', 'TEACHER', 'ERASER'] },
+      { symbols: ['ERASER', 'RULER', 'TEACHER', 'SCATTER', 'APPLE', 'WILD', 'BOOK'] },
+      { symbols: ['APPLE', 'TEACHER', 'RULER', 'WILD', 'SCATTER', 'ERASER'] },
+      { symbols: ['RULER', 'SCATTER', 'ERASER', 'TEACHER', 'APPLE', 'GLOBE', 'WILD'] },
     ],
     free: [
-      { symbols: ['WILD', 'SUN', 'JADE', 'SCATTER', 'MOON', 'RUBY'] },
-      { symbols: ['SUN', 'WILD', 'MOON', 'JADE', 'SCATTER', 'COMET'] },
-      { symbols: ['MOON', 'JADE', 'WILD', 'SUN', 'RUBY', 'SCATTER'] },
-      { symbols: ['JADE', 'SCATTER', 'SUN', 'WILD', 'MOON', 'RUBY'] },
-      { symbols: ['RUBY', 'SUN', 'WILD', 'SCATTER', 'JADE', 'AMETHYST'] },
+      { symbols: ['WILD', 'TEACHER', 'RULER', 'SCATTER', 'APPLE', 'ERASER'] },
+      { symbols: ['TEACHER', 'WILD', 'APPLE', 'RULER', 'SCATTER', 'BOOK'] },
+      { symbols: ['APPLE', 'RULER', 'WILD', 'TEACHER', 'ERASER', 'SCATTER'] },
+      { symbols: ['RULER', 'SCATTER', 'TEACHER', 'WILD', 'APPLE', 'ERASER'] },
+      { symbols: ['ERASER', 'TEACHER', 'WILD', 'SCATTER', 'RULER', 'CHALK'] },
     ],
   };
   if (variant.weights) {

@@ -11,7 +11,7 @@ const run = (script: string, args: string[]) =>
   spawnSync(tsx, [resolve(root, 'scripts', script), ...args], { cwd: root, encoding: 'utf8', timeout: 120_000 });
 
 describe('command-line tools', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'gilded-orbit-cli-'));
+  const dir = mkdtempSync(join(tmpdir(), 'pixel-pauker-cli-'));
 
   it('validate-config accepts the bundled configuration', () => {
     const r = run('validate-config.ts', []);
@@ -23,13 +23,13 @@ describe('command-line tools', () => {
   it('validate-config reports every error with its location and exits non-zero', () => {
     const bad = cloneConfig();
     bad.paylines[2] = [0, 1, 7, 1, 0];
-    bad.paytable.line.SUN = { '3': 50, '4': 10, '5': 1000 };
+    bad.paytable.line.TEACHER = { '3': 50, '4': 10, '5': 1000 };
     const file = join(dir, 'bad.json');
     writeFileSync(file, JSON.stringify(bad));
     const r = run('validate-config.ts', ['--config', file]);
     expect(r.status).toBe(1);
     expect(r.stdout).toMatch(/paylines\[2\]\[2\]: row index/);
-    expect(r.stdout).toMatch(/paytable\.line\.SUN\.4/);
+    expect(r.stdout).toMatch(/paytable\.line\.TEACHER\.4/);
     writeFileSync(join(dir, 'broken.json'), '{ not json');
     const broken = run('validate-config.ts', ['--config', join(dir, 'broken.json')]);
     expect(broken.status).not.toBe(0);

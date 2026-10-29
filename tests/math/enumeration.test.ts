@@ -46,7 +46,7 @@ const variants: [string, CompiledGame][] = [
       c.modes.free.wildMultiplier = 4;
       c.modes.free.winMultiplier = 5;
       c.paytable.line.WILD = { '2': 2, '3': 60, '5': 5000 };
-      c.paytable.line.JADE = { '2': 1, '3': 5, '5': 50 };
+      c.paytable.line.RULER = { '2': 1, '3': 5, '5': 50 };
       c.paytable.scatter = { '2': 1, '3': 3 };
       c.freeSpins.scatterPaysInFeature = false;
       return compileGame(c);

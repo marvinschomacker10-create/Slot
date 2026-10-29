@@ -59,7 +59,7 @@ export function Modal({ title, onClose, children, wide, testId }: Props) {
       >
         <header className="modal__header">
           <h2 id="modal-title">{title}</h2>
-          <button type="button" className="icon-button" onClick={onClose} aria-label="Close">
+          <button type="button" className="icon-button" onClick={onClose} aria-label="Schließen">
             ✕
           </button>
         </header>

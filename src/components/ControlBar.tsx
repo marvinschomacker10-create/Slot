@@ -36,10 +36,10 @@ export function ControlBar({
   const betLocked = lockedBySession || inFeature || phase === 'spinning';
   const spinning = phase === 'spinning';
   return (
-    <div className="controls" role="group" aria-label="Game controls">
+    <div className="controls" role="group" aria-label="Spielsteuerung">
       <div className="controls__bet">
         <span className="label" id="bet-label">
-          Bet
+          Einsatz
         </span>
         <div className="stepper" aria-labelledby="bet-label">
           <button
@@ -47,7 +47,7 @@ export function ControlBar({
             className="icon-button"
             onClick={() => onBet(lineBetIndex - 1)}
             disabled={betLocked || lineBetIndex === 0}
-            aria-label="Decrease bet"
+            aria-label="Einsatz verringern"
           >
             −
           </button>
@@ -59,13 +59,13 @@ export function ControlBar({
             className="icon-button"
             onClick={() => onBet(lineBetIndex + 1)}
             disabled={betLocked || lineBetIndex === game.lineBetOptions.length - 1}
-            aria-label="Increase bet"
+            aria-label="Einsatz erhöhen"
           >
             +
           </button>
         </div>
         <span className="hint">
-          {credits(lineBet)} × {game.lineCount} lines
+          {credits(lineBet)} × {game.lineCount} Linien
         </span>
       </div>
 
@@ -75,15 +75,15 @@ export function ControlBar({
           className={`spin-button${spinning ? ' is-spinning' : ''}${inFeature ? ' is-feature' : ''}`}
           onClick={onSpin}
           disabled={!canSpin && !spinning}
-          aria-label={spinning ? 'Stop reels' : inFeature ? 'Play free spin' : 'Spin'}
+          aria-label={spinning ? 'Walzen stoppen' : inFeature ? 'Freispiel spielen' : 'Drehen'}
           data-testid="spin-button"
         >
-          <span>{spinning ? 'STOP' : inFeature ? 'FREE' : 'SPIN'}</span>
+          <span>{spinning ? 'STOPP' : inFeature ? 'FREI' : 'DREHEN'}</span>
         </button>
       </div>
 
       <div className="controls__win">
-        <span className="label">Win</span>
+        <span className="label">Gewinn</span>
         <output className="value value--win" data-testid="last-win" aria-live="off">
           {win === null ? '–' : credits(win)}
         </output>
@@ -93,9 +93,9 @@ export function ControlBar({
             className={`chip${turbo ? ' is-on' : ''}`}
             aria-pressed={turbo}
             onClick={onTurbo}
-            title="Fast spin (T)"
+            title="Schnelldrehen (T)"
           >
-            ⚡ Fast
+            ⚡ Schnell
           </button>
           <button
             type="button"
@@ -105,9 +105,9 @@ export function ControlBar({
             onFocus={() => onShowLines(true)}
             onBlur={() => onShowLines(false)}
             disabled={spinning}
-            aria-label={`Show all ${game.lineCount} paylines`}
+            aria-label={`Alle ${game.lineCount} Gewinnlinien zeigen`}
           >
-            {game.lineCount} lines
+            {game.lineCount} Linien
           </button>
         </div>
       </div>

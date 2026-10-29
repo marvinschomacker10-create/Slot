@@ -8,3 +8,4 @@ playwright-report/
 .env
 .env.local
 reports/tmp/
+dist-standalone/

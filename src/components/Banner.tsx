@@ -2,17 +2,24 @@ import { useEffect, useState } from 'react';
 import { credits } from '../app/format';
 import type { Banner as BannerState } from '../app/useSlotGame';
 
-const TIER_TEXT = { big: 'Big win', mega: 'Mega win', epic: 'Epic win', small: '', none: '' } as const;
+/** Win tiers as school grades (cosmetic only). */
+const TIER_TEXT = { big: 'Gut gemacht!', mega: 'Sehr gut!', epic: 'Eins mit Sternchen!', small: '', none: '' } as const;
 
 /** Overlay for feature start/end and large wins. The counted-up number ends exactly on the settled amount. */
 export function Banner({
   banner,
   onDismiss,
   reducedMotion,
+  winMultiplier,
+  wildMultiplier,
+  wildName,
 }: {
   banner: BannerState;
   onDismiss: () => void;
   reducedMotion: boolean;
+  winMultiplier: number;
+  wildMultiplier: number;
+  wildName: string;
 }) {
   const target = banner.kind === 'big-win' ? banner.amount : banner.kind === 'feature-end' ? banner.total : 0;
   const [shown, setShown] = useState(reducedMotion ? target : 0);
@@ -47,20 +54,22 @@ export function Banner({
       className={`banner banner--${banner.kind}`}
       onClick={onDismiss}
       data-testid="banner"
-      aria-label="Dismiss announcement"
+      aria-label="Hinweis schließen"
     >
       {banner.kind === 'feature-start' && (
         <>
-          <span className="banner__eyebrow">Orbit aligned</span>
-          <span className="banner__title">{banner.spins} free spins</span>
-          <span className="banner__hint">Wins ×2 · Wild wins ×2 more · press to start</span>
+          <span className="banner__eyebrow">Die Glocke läutet: Hitzefrei!</span>
+          <span className="banner__title">{banner.spins} Freispiele</span>
+          <span className="banner__hint">
+            Gewinne ×{winMultiplier} · {wildName}-Gewinne zusätzlich ×{wildMultiplier} · zum Starten drücken
+          </span>
         </>
       )}
       {banner.kind === 'feature-end' && (
         <>
-          <span className="banner__eyebrow">Free spins complete</span>
+          <span className="banner__eyebrow">Hitzefrei ist vorbei</span>
           <span className="banner__title">{credits(shown)}</span>
-          <span className="banner__hint">won in {banner.spins} free spins</span>
+          <span className="banner__hint">in {banner.spins} Freispielen gewonnen</span>
         </>
       )}
       {banner.kind === 'big-win' && (

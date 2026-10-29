@@ -13,7 +13,7 @@ export function PaylineGrid({ index, rows, reels }: { index: number; rows: reado
         width={reels * cw * 1.6}
         height={h * cw * 1.6}
         role="img"
-        aria-label={`Payline ${index + 1}: rows ${rows.map((r) => r + 1).join(', ')}`}
+        aria-label={`Gewinnlinie ${index + 1}: Reihen ${rows.map((r) => r + 1).join(', ')}`}
       >
         {Array.from({ length: reels * h }, (_, k) => {
           const reel = Math.floor(k / h);
@@ -26,7 +26,6 @@ export function PaylineGrid({ index, rows, reels }: { index: number; rows: reado
               y={row * cw + 1}
               width={cw - 2}
               height={cw - 2}
-              rx={2}
               className={on ? 'payline__cell payline__cell--on' : 'payline__cell'}
             />
           );
@@ -36,8 +35,8 @@ export function PaylineGrid({ index, rows, reels }: { index: number; rows: reado
           fill="none"
           stroke={color}
           strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          strokeLinecap="square"
+          strokeLinejoin="miter"
         />
       </svg>
       <figcaption>{index + 1}</figcaption>

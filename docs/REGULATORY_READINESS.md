@@ -1,6 +1,6 @@
 # Regulatory readiness and certification roadmap
 
-**Current status: play-money prototype.** Gilded Orbit has not been certified, tested by
+**Current status: play-money prototype.** Pixel-Pauker has not been certified, tested by
 an independent laboratory, or approved by any regulator, and it is not suitable for
 real-money gambling in its current form. It contains no deposits, withdrawals, payment
 processing, wagering accounts or production backend, and none should be added to this
@@ -60,7 +60,13 @@ Prototype features that are likely to need per-market configuration or removal:
   retry-safe keys, exactly-once semantics, and reconciliation.
 - Persist in-progress rounds so that a feature resumes after a disconnect exactly where
   it stopped; define the behaviour of an unfinished round (most standards require it to
-  be completed and paid).
+  be completed and paid). The prototype already resumes an unfinished free-spins round
+  from browser storage, but that storage is under the player's control and is not a
+  substitute for server-side persistence.
+- The timed play-money allowance ("Taschengeld") is a play-money mechanic only. Any
+  real-money product must remove it; free credits, bonuses or promotions in a regulated
+  market are subject to their own rules (bonus terms, wagering requirements, advertising
+  restrictions) and must be designed with legal counsel.
 - Game-cycle definition, maximum-win enforcement and session limits on the server.
 
 ## 5. Security, logging and change control

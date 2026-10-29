@@ -1,5 +1,6 @@
 import type { CompiledGame } from '../config';
 import type { SpinRecord } from '../game/state/session';
+import { credits } from './format';
 
 export type WinTier = 'none' | 'small' | 'big' | 'mega' | 'epic';
 
@@ -32,27 +33,27 @@ export function winSteps(game: CompiledGame, record: SpinRecord): PresentationSt
   const steps: PresentationStep[] = [];
   const parts = o.lineWins.length + (o.scatter.win > 0 || o.scatter.freeSpinsAwarded > 0 ? 1 : 0);
   if (parts === 0) return steps;
-  const linesText = o.lineWins.length === 1 ? '1 line' : `${o.lineWins.length} lines`;
+  const linesText = o.lineWins.length === 1 ? '1 Linie' : `${o.lineWins.length} Linien`;
   steps.push({
     kind: 'all',
     text:
       o.lineWins.length > 0
-        ? `Win ${record.credited.toLocaleString('en-US')} on ${linesText}`
-        : `Win ${record.credited.toLocaleString('en-US')}`,
+        ? `Gewinn ${credits(record.credited)} auf ${linesText}`
+        : `Gewinn ${credits(record.credited)}`,
   });
   for (const w of o.lineWins) {
-    const mult = w.wildMultiplier > 1 || w.modeMultiplier > 1 ? ` (x${w.wildMultiplier * w.modeMultiplier})` : '';
+    const mult = w.wildMultiplier > 1 || w.modeMultiplier > 1 ? ` (×${w.wildMultiplier * w.modeMultiplier})` : '';
     steps.push({
       kind: 'line',
       lineIndex: w.lineIndex,
-      text: `Line ${w.lineIndex + 1}: ${w.count} x ${symbolName(game, w.symbol)} pays ${w.win.toLocaleString('en-US')}${mult}`,
+      text: `Linie ${w.lineIndex + 1}: ${w.count} × ${symbolName(game, w.symbol)} zahlt ${credits(w.win)}${mult}`,
     });
   }
   if (o.scatter.count > 0 && (o.scatter.win > 0 || record.freeSpinsGranted > 0)) {
-    const fs = record.freeSpinsGranted > 0 ? ` + ${record.freeSpinsGranted} free spins` : '';
+    const fs = record.freeSpinsGranted > 0 ? ` + ${record.freeSpinsGranted} Freispiele` : '';
     steps.push({
       kind: 'scatter',
-      text: `${o.scatter.count} x ${symbolName(game, o.scatter.symbol)} pays ${o.scatter.win.toLocaleString('en-US')}${fs}`,
+      text: `${o.scatter.count} × ${symbolName(game, o.scatter.symbol)} zahlt ${credits(o.scatter.win)}${fs}`,
     });
   }
   return steps;
@@ -60,10 +61,10 @@ export function winSteps(game: CompiledGame, record: SpinRecord): PresentationSt
 
 /** Plain-language result for the screen-reader live region. */
 export function describeSpin(game: CompiledGame, record: SpinRecord): string {
-  const prefix = record.mode === 'free' ? `Free spin ${record.feature ? record.feature.played : ''}: ` : '';
+  const prefix = record.mode === 'free' ? `Freispiel ${record.feature ? record.feature.played : ''}: ` : '';
   const steps = winSteps(game, record);
-  const body = steps.length === 0 ? 'no win' : steps.map((s) => s.text).join('. ');
-  const feature = record.startedFeature ? ` Free spins triggered: ${record.freeSpinsGranted} spins.` : '';
-  const cap = record.cappedBy > 0 ? ' The maximum win was reached.' : '';
-  return `${prefix}${body}.${feature}${cap} Balance ${record.balanceAfter.toLocaleString('en-US')} credits.`;
+  const body = steps.length === 0 ? 'kein Gewinn' : steps.map((s) => s.text).join('. ');
+  const feature = record.startedFeature ? ` Freispiele ausgelöst: ${record.freeSpinsGranted} Drehs.` : '';
+  const cap = record.cappedBy > 0 ? ' Der Maximalgewinn wurde erreicht.' : '';
+  return `${prefix}${body}.${feature}${cap} Kontostand ${credits(record.balanceAfter)} Credits.`;
 }

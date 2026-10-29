@@ -11,7 +11,7 @@ function lineWin(window: string[][], lineIndex: number, mode = base, g = game) {
 
 /** Middle row (payline 0) gets `middle`; other rows hold blockers that pay nothing. */
 function middle(...symbols: string[]): string[][] {
-  return grid(['COMET MOON PLANET JADE SAPPHIRE', symbols.join(' '), 'RUBY AMETHYST SAPPHIRE PLANET MOON']);
+  return grid(['BOOK APPLE GLOBE RULER PENCIL', symbols.join(' '), 'ERASER CHALK PENCIL GLOBE APPLE']);
 }
 
 describe('symbol payouts', () => {
@@ -33,38 +33,38 @@ describe('symbol payouts', () => {
   });
 
   it('pays nothing for two of a kind or for a broken run', () => {
-    expect(lineWin(middle('SUN', 'SUN', 'JADE', 'SUN', 'SUN'), 0)).toBeNull();
-    expect(lineWin(middle('SUN', 'JADE', 'SUN', 'SUN', 'SUN'), 0)).toBeNull();
+    expect(lineWin(middle('TEACHER', 'TEACHER', 'RULER', 'TEACHER', 'TEACHER'), 0)).toBeNull();
+    expect(lineWin(middle('TEACHER', 'RULER', 'TEACHER', 'TEACHER', 'TEACHER'), 0)).toBeNull();
   });
 
   it('only counts combinations that start on reel 1 (left to right)', () => {
-    expect(lineWin(middle('JADE', 'SUN', 'SUN', 'SUN', 'SUN'), 0)).toBeNull();
+    expect(lineWin(middle('RULER', 'TEACHER', 'TEACHER', 'TEACHER', 'TEACHER'), 0)).toBeNull();
   });
 });
 
 describe('Wild substitution', () => {
   it('substitutes in any position of the combination', () => {
-    expect(lineWin(middle('MOON', 'WILD', 'MOON', 'JADE', 'RUBY'), 0)).toMatchObject({
-      symbol: 'MOON',
+    expect(lineWin(middle('APPLE', 'WILD', 'APPLE', 'RULER', 'ERASER'), 0)).toMatchObject({
+      symbol: 'APPLE',
       count: 3,
       containsWild: true,
       win: 20,
     });
-    expect(lineWin(middle('WILD', 'WILD', 'MOON', 'MOON', 'RUBY'), 0)).toMatchObject({
-      symbol: 'MOON',
+    expect(lineWin(middle('WILD', 'WILD', 'APPLE', 'APPLE', 'ERASER'), 0)).toMatchObject({
+      symbol: 'APPLE',
       count: 4,
       win: 75,
     });
-    expect(lineWin(middle('MOON', 'MOON', 'MOON', 'MOON', 'WILD'), 0)).toMatchObject({
-      symbol: 'MOON',
+    expect(lineWin(middle('APPLE', 'APPLE', 'APPLE', 'APPLE', 'WILD'), 0)).toMatchObject({
+      symbol: 'APPLE',
       count: 5,
       win: 300,
     });
   });
 
   it('pays the Wild-only combination when it is worth more than the substituted one', () => {
-    // WILD x3 = 50 beats JADE x4 = 15.
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'JADE', 'RUBY'), 0)).toMatchObject({
+    // WILD x3 = 50 beats RULER x4 = 15.
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'RULER', 'ERASER'), 0)).toMatchObject({
       symbol: 'WILD',
       count: 3,
       win: 50,
@@ -72,9 +72,9 @@ describe('Wild substitution', () => {
   });
 
   it('pays the substituted combination when it is worth more than the Wild-only one', () => {
-    // SUN x5 = 1000 beats WILD x3 = 50.
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'SUN', 'SUN'), 0)).toMatchObject({
-      symbol: 'SUN',
+    // TEACHER x5 = 1000 beats WILD x3 = 50.
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'TEACHER', 'TEACHER'), 0)).toMatchObject({
+      symbol: 'TEACHER',
       count: 5,
       win: 1000,
     });
@@ -89,22 +89,25 @@ describe('Wild substitution', () => {
   });
 
   it('prefers the regular symbol on an exact tie', () => {
-    const g = compileWith((c) => (c.paytable.line.MOON = { '3': 20, '4': 50, '5': 300 }));
-    const w = lineWin(middle('WILD', 'WILD', 'WILD', 'MOON', 'RUBY'), 0, g.modes.base, g);
-    expect(w).toMatchObject({ symbol: 'MOON', count: 4, units: 50 });
+    const g = compileWith((c) => (c.paytable.line.APPLE = { '3': 20, '4': 50, '5': 300 }));
+    const w = lineWin(middle('WILD', 'WILD', 'WILD', 'APPLE', 'ERASER'), 0, g.modes.base, g);
+    expect(w).toMatchObject({ symbol: 'APPLE', count: 4, units: 50 });
   });
 
   it('never substitutes for Scatter, and Scatter breaks a line', () => {
     expect(lineWin(middle('SCATTER', 'WILD', 'WILD', 'WILD', 'WILD'), 0)).toBeNull();
-    expect(lineWin(middle('WILD', 'SCATTER', 'SUN', 'SUN', 'SUN'), 0)).toBeNull();
-    expect(lineWin(middle('SUN', 'SUN', 'SCATTER', 'SUN', 'SUN'), 0)).toBeNull();
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'SCATTER', 'SUN'), 0)).toMatchObject({ symbol: 'WILD', count: 3 });
+    expect(lineWin(middle('WILD', 'SCATTER', 'TEACHER', 'TEACHER', 'TEACHER'), 0)).toBeNull();
+    expect(lineWin(middle('TEACHER', 'TEACHER', 'SCATTER', 'TEACHER', 'TEACHER'), 0)).toBeNull();
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'SCATTER', 'TEACHER'), 0)).toMatchObject({
+      symbol: 'WILD',
+      count: 3,
+    });
   });
 
   it('applies the free-spins Wild multiplier once per line, not once per Wild', () => {
     const { wildMultiplier, winMultiplier } = game.config.modes.free;
-    const one = lineWin(middle('PLANET', 'WILD', 'PLANET', 'JADE', 'RUBY'), 0, free)!;
-    const three = lineWin(middle('PLANET', 'WILD', 'WILD', 'WILD', 'RUBY'), 0, free)!;
+    const one = lineWin(middle('GLOBE', 'WILD', 'GLOBE', 'RULER', 'ERASER'), 0, free)!;
+    const three = lineWin(middle('GLOBE', 'WILD', 'WILD', 'WILD', 'ERASER'), 0, free)!;
     expect(one).toMatchObject({
       count: 3,
       basePay: 25,
@@ -113,7 +116,7 @@ describe('Wild substitution', () => {
       units: 25 * wildMultiplier * winMultiplier,
     });
     expect(three).toMatchObject({ count: 4, basePay: 100, units: 100 * wildMultiplier * winMultiplier });
-    const plain = lineWin(middle('PLANET', 'PLANET', 'PLANET', 'JADE', 'RUBY'), 0, free)!;
+    const plain = lineWin(middle('GLOBE', 'GLOBE', 'GLOBE', 'RULER', 'ERASER'), 0, free)!;
     expect(plain).toMatchObject({ containsWild: false, wildMultiplier: 1, units: 25 * winMultiplier });
   });
 
@@ -122,8 +125,8 @@ describe('Wild substitution', () => {
       c.modes.free.wildMultiplier = 3;
       c.paytable.line.WILD = { '3': 50, '4': 250, '5': 2000 };
     });
-    // Free mode: WILD x3 = 50*3 = 150 vs SAPPHIRE x4 with wild = 20*3 = 60 -> Wild-only wins.
-    const w = lineWin(middle('WILD', 'WILD', 'WILD', 'SAPPHIRE', 'RUBY'), 0, g.modes.free, g)!;
+    // Free mode: WILD x3 = 50*3 = 150 vs PENCIL x4 with wild = 20*3 = 60 -> Wild-only wins.
+    const w = lineWin(middle('WILD', 'WILD', 'WILD', 'PENCIL', 'ERASER'), 0, g.modes.free, g)!;
     expect(w).toMatchObject({ symbol: 'WILD', units: 150 * g.modes.free.winMultiplier });
   });
 });
@@ -131,9 +134,9 @@ describe('Wild substitution', () => {
 describe('Scatter', () => {
   const scatterWindow = (n: number) => {
     const w = grid([
-      'COMET MOON PLANET JADE SAPPHIRE',
-      'JADE AMETHYST SAPPHIRE RUBY MOON',
-      'RUBY COMET JADE PLANET AMETHYST',
+      'BOOK APPLE GLOBE RULER PENCIL',
+      'RULER CHALK PENCIL ERASER APPLE',
+      'ERASER BOOK RULER GLOBE CHALK',
     ]);
     const spots: [number, number][] = [
       [0, 0],
@@ -189,11 +192,15 @@ describe('Scatter', () => {
 
 describe('combining wins', () => {
   it('adds simultaneous wins on several paylines and the scatter win', () => {
-    const window = grid(['SUN SUN SUN SUN SUN', 'COMET SCATTER SCATTER SCATTER MOON', 'JADE JADE JADE JADE JADE']);
+    const window = grid([
+      'TEACHER TEACHER TEACHER TEACHER TEACHER',
+      'BOOK SCATTER SCATTER SCATTER APPLE',
+      'RULER RULER RULER RULER RULER',
+    ]);
     const r = evaluateSpin(game, base, cellsOf(game, window), 1);
     const byLine = new Map(r.lineWins.map((w) => [w.lineIndex, w]));
-    expect(byLine.get(1)).toMatchObject({ symbol: 'SUN', count: 5, win: 1000 });
-    expect(byLine.get(2)).toMatchObject({ symbol: 'JADE', count: 5, win: 50 });
+    expect(byLine.get(1)).toMatchObject({ symbol: 'TEACHER', count: 5, win: 1000 });
+    expect(byLine.get(2)).toMatchObject({ symbol: 'RULER', count: 5, win: 50 });
     expect(r.scatter).toMatchObject({ count: 3, units: 40 });
     expect(r.lineUnits).toBe(r.lineWins.reduce((a, w) => a + w.units, 0));
     expect(r.totalUnits).toBe(r.lineUnits + r.scatterUnits);
@@ -203,7 +210,7 @@ describe('combining wins', () => {
   });
 
   it('rejects invalid inputs', () => {
-    const cells = cellsOf(game, middle('SUN', 'SUN', 'SUN', 'SUN', 'SUN'));
+    const cells = cellsOf(game, middle('TEACHER', 'TEACHER', 'TEACHER', 'TEACHER', 'TEACHER'));
     expect(() => evaluateSpin(game, base, cells, 0)).toThrow(RangeError);
     expect(() => evaluateSpin(game, base, cells, 1.5)).toThrow(RangeError);
     expect(() => evaluateSpin(game, base, cells.subarray(0, 14), 1)).toThrow(RangeError);

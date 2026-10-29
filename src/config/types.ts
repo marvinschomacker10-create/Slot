@@ -18,7 +18,7 @@ export type SymbolKind = 'regular' | 'wild' | 'scatter';
 export type SymbolTier = 'low' | 'high' | 'premium' | 'special';
 
 export interface SymbolDef {
-  /** Stable identifier used in reel strips and pay tables, e.g. "COMET". */
+  /** Stable identifier used in reel strips and pay tables, e.g. "BOOK". */
   id: string;
   /** Human-readable name shown in the paytable. */
   name: string;
@@ -68,6 +68,13 @@ export interface FreeSpinsDef {
   scatterPaysInFeature: boolean;
 }
 
+export interface AllowanceDef {
+  /** Credits granted per collection (positive integer). */
+  amount: number;
+  /** Waiting time between collections, in minutes (> 0). */
+  intervalMinutes: number;
+}
+
 export interface GameConfig {
   meta: {
     id: string;
@@ -107,8 +114,14 @@ export interface GameConfig {
     maxWinMultiplier: number | null;
   };
   session: {
-    /** Play-money balance in integer credits at the start of a session. */
+    /** Play-money balance in integer credits for a new player (first visit). */
     startingBalance: number;
+    /**
+     * Timed play-money top-up ("Taschengeld"): `amount` credits can be collected once
+     * every `intervalMinutes`. Unclaimed top-ups do not accumulate. `null` disables it.
+     * Top-ups are not game wins and are excluded from RTP and win statistics.
+     */
+    allowance: AllowanceDef | null;
   };
   math: {
     /** Design target for total RTP (per unit of base-game stake). A target, not a guarantee. */

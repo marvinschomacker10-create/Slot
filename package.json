@@ -1,8 +1,8 @@
 {
-  "name": "gilded-orbit-slot",
-  "version": "1.0.0",
+  "name": "pixel-pauker-slot",
+  "version": "2.0.0",
   "private": true,
-  "description": "Gilded Orbit: an original 5x3, 20-line play-money video slot prototype with an exact mathematical analysis engine and Monte Carlo simulator. Not a real-money product.",
+  "description": "Pixel-Pauker: an original 5x3, 20-line play-money video slot prototype with school-themed pixel art, a timed play-money allowance, an exact mathematical analysis engine and a Monte Carlo simulator. Not a real-money product.",
   "type": "module",
   "license": "UNLICENSED",
   "engines": {
@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "vite",
     "start": "vite --open",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && tsx scripts/build-standalone.ts",
+    "build:standalone": "tsx scripts/build-standalone.ts",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty",
     "test": "vitest run",
@@ -30,10 +31,11 @@
     "report": "tsx scripts/export-report.ts",
     "math:all": "npm run analyze && npm run simulate:100k && npm run simulate:1m && npm run simulate:10m && npm run simulate:feature && npm run report",
     "simulate:feature": "tsx scripts/simulate-feature.ts",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.{ts,mjs}\" \"*.ts\" \"docs/*.md\" README.md",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.{ts,mjs}\" \"*.ts\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.{ts,mjs}\" \"*.ts\" \"web/**/*.{ts,html}\" \"docs/*.md\" README.md",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\" \"scripts/**/*.{ts,mjs}\" \"*.ts\" \"web/**/*.{ts,html}\""
   },
   "dependencies": {
+    "@fontsource/press-start-2p": "5.3.0",
     "phaser": "3.90.0",
     "react": "19.2.9",
     "react-dom": "19.2.9"
@@ -49,6 +51,7 @@
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vite": "7.3.7",
+    "vite-plugin-singlefile": "2.3.3",
     "vitest": "4.1.12"
   }
 }

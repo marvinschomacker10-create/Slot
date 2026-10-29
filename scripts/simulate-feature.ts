@@ -201,7 +201,7 @@ const condRows = condThresholds.map((t, j) => {
 });
 
 const report = {
-  schema: 'gilded-orbit/feature-simulation@2',
+  schema: 'pixel-pauker/feature-simulation@3',
   game: { id: game.config.meta.id, version: game.config.meta.version, configHash: game.hash },
   meta: {
     features: n,

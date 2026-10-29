@@ -16,8 +16,8 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
   return (
     <div className="paytable" data-testid="paytable">
       <p className="muted">
-        Values in credits at the current line bet of {credits(lineBet)} (total bet {credits(totalBet)}). Line wins pay
-        the line bet times the value below; the scatter pays the total bet times its value.
+        Werte in Credits beim aktuellen Linieneinsatz von {credits(lineBet)} (Gesamteinsatz {credits(totalBet)}).
+        Liniengewinne zahlen den Linieneinsatz mal Faktor, die {scatter.name} zahlt den Gesamteinsatz mal Faktor.
       </p>
       <div className="paytable__grid">
         {[...regulars].reverse().map((s) => {
@@ -30,7 +30,7 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
                 <dl>
                   {pays.map(([count, v]) => (
                     <div key={count}>
-                      <dt>{count}x</dt>
+                      <dt>{count}×</dt>
                       <dd>{credits(v * lineBet)}</dd>
                     </div>
                   ))}
@@ -48,7 +48,7 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
                 .sort((a, b) => Number(b[0]) - Number(a[0]))
                 .map(([count, v]) => (
                   <div key={count}>
-                    <dt>{count}x</dt>
+                    <dt>{count}×</dt>
                     <dd>{credits(v * totalBet)}</dd>
                   </div>
                 ))}
@@ -57,57 +57,65 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
         </div>
       </div>
 
-      <h3>Rules</h3>
+      <h3>Regeln</h3>
       <ul className="rules">
         <li>
-          {game.lineCount} fixed paylines. Wins pay left to right on consecutive reels starting from the leftmost reel.
+          {game.lineCount} feste Gewinnlinien. Gewinne zählen von links nach rechts auf aufeinanderfolgenden Walzen,
+          beginnend mit der linken Walze.
         </li>
-        <li>Only the highest win on each payline is paid. Wins on different paylines are added together.</li>
+        <li>Pro Linie wird nur der höchste Gewinn gezahlt. Gewinne auf verschiedenen Linien werden addiert.</li>
         <li>
-          {wild.name} substitutes for all symbols except {scatter.name}. Where a run of {wild.name} symbols alone pays
-          more than the substituted combination, the {wild.name} combination is paid instead.
+          Die {wild.name} (Wild) ersetzt alle Symbole außer der {scatter.name}. Zahlt eine Reihe aus {wild.name}
+          -Symbolen allein mehr als die ersetzte Kombination, wird die {wild.name}-Kombination gezahlt.
         </li>
-        <li>{scatter.name} pays in any position, independent of paylines, and is added to line wins.</li>
+        <li>
+          Die {scatter.name} (Scatter) zahlt an jeder Position, unabhängig von den Linien, zusätzlich zu Liniengewinnen.
+        </li>
         <li>
           {Object.entries(fs.triggerAwards)
-            .map(([c, v]) => `${c} or more ${scatter.name} symbols award ${v} free spins`)
+            .map(([c, v]) => `${c} oder mehr Symbole „${scatter.name}“ bringen ${v} Freispiele`)
             .slice(0, 1)}
-          . Free spins are played at the bet of the triggering spin and never cost a stake.
+          . Freispiele laufen mit dem Einsatz des auslösenden Drehs und kosten nie einen Einsatz.
         </li>
         <li>
-          During free spins all wins are multiplied by {free.winMultiplier}; line wins that include a {wild.name} are
-          additionally multiplied by {free.wildMultiplier} (once per line).
+          In den Freispielen werden alle Gewinne mit {free.winMultiplier} multipliziert; Liniengewinne mit einer{' '}
+          {wild.name} zusätzlich mit {free.wildMultiplier} (einmal pro Linie).
         </li>
         <li>
           {fs.retrigger.enabled
-            ? `Free spins can be retriggered: ${Object.entries(fs.retrigger.awards)
-                .map(([c, v]) => `${c}+ scatters award ${v} more`)
+            ? `Freispiele können erneut ausgelöst werden: ${Object.entries(fs.retrigger.awards)
+                .map(([c, v]) => `${c}+ Scatter bringen ${v} weitere`)
                 .join(
                   ', ',
-                )}${fs.retrigger.maxTotalSpins !== null ? `, up to ${fs.retrigger.maxTotalSpins} free spins per feature` : ''}.`
-            : 'Free spins cannot be retriggered.'}
+                )}${fs.retrigger.maxTotalSpins !== null ? `, höchstens ${fs.retrigger.maxTotalSpins} Freispiele pro Feature` : ''}.`
+            : 'Freispiele können nicht erneut ausgelöst werden.'}
         </li>
         {cfg.limits.maxWinMultiplier !== null && (
           <li>
-            The total win of one game round (paid spin plus its free spins) is capped at{' '}
-            {credits(cfg.limits.maxWinMultiplier)}x the total bet ({credits(cfg.limits.maxWinMultiplier * totalBet)}{' '}
-            credits). When the cap is reached the round ends.
+            Der Gesamtgewinn einer Spielrunde (bezahlter Dreh plus Freispiele) ist auf das{' '}
+            {credits(cfg.limits.maxWinMultiplier)}-Fache des Gesamteinsatzes begrenzt (
+            {credits(cfg.limits.maxWinMultiplier * totalBet)} Credits). Wird die Grenze erreicht, endet die Runde.
           </li>
         )}
-        <li>Displayed wins are the credits added to the balance; they do not include the stake.</li>
         <li>
-          Theoretical return to player:{' '}
+          Angezeigte Gewinne sind die Credits, die dem Konto gutgeschrieben werden; der Einsatz ist nicht enthalten.
+        </li>
+        <li>
+          Theoretische Auszahlungsquote (RTP):{' '}
           {exact ? (
             <strong>{pct(exact.rtp.total, 2)}</strong>
           ) : (
-            <em>not available for this configuration (run npm run analyze)</em>
+            <em>für diese Konfiguration nicht verfügbar (npm run analyze ausführen)</em>
           )}
-          , calculated per unit of base-game stake including free spins. Individual sessions vary widely.
+          , berechnet je Einheit Grundspiel-Einsatz inklusive Freispielen. Einzelne Sitzungen schwanken stark.
         </li>
-        <li>This is a play-money prototype. Credits have no monetary value and cannot be bought or cashed out.</li>
+        <li>
+          Dies ist ein Spielgeld-Prototyp. Credits haben keinen Geldwert und können weder gekauft noch ausgezahlt
+          werden.
+        </li>
       </ul>
 
-      <h3>Paylines</h3>
+      <h3>Gewinnlinien</h3>
       <div className="paylines">
         {cfg.paylines.map((rows, i) => (
           <PaylineGrid key={i} index={i} rows={rows} reels={game.reels} />

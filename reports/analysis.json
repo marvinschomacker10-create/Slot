@@ -1,12 +1,12 @@
 {
-  "schema": "gilded-orbit/exact-analysis@3",
+  "schema": "pixel-pauker/exact-analysis@4",
   "game": {
-    "id": "gilded-orbit",
-    "name": "Gilded Orbit",
-    "version": "1.0.0",
-    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+    "id": "pixel-pauker",
+    "name": "Pixel-Pauker",
+    "version": "2.0.0",
+    "configHash": "4c02cc0a66428bfc140cc19b87b5e2621622b0d807327e85fc55ddee832e47b2"
   },
-  "generatedAt": "2026-10-29T09:11:30.235Z",
+  "generatedAt": "2026-10-29T14:59:30.379Z",
   "definitions": {
     "rtpDenominator": "RTP = expected total payout of a game round divided by the base-game stake of that round. A round is one paid base-game spin plus every free spin it triggers, including retriggers. Free spins have no stake and are not part of the denominator.",
     "units": "Internally all wins are integers in line-bet units. Multipliers (\"x bet\") in reports are multiples of the total bet (line bet x 20 paylines).",
@@ -21,10 +21,10 @@
     "baseCombinations": 102400000,
     "freeCombinations": 85656636,
     "enumerationMs": {
-      "base": 1992,
-      "free": 2668
+      "base": 1641,
+      "free": 2962
     },
-    "distributionMs": 13477,
+    "distributionMs": 16981,
     "fftSize": 262144,
     "fftCount": 422,
     "featureStates": 140,
@@ -158,35 +158,35 @@
     ],
     "symbolContributions": [
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "rtp": 0.086176171875
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "rtp": 0.096005859375
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "rtp": 0.12478125
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "rtp": 0.11663398437500001
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "rtp": 0.07368749999999999
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "rtp": 0.0832587890625
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "rtp": 0.0706875
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "rtp": 0.0324140625
       },
       {
@@ -197,7 +197,7 @@
     "scatterContribution": 0.014401757812499999,
     "lineCombinations": [
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 3,
         "pay": 5,
         "probabilityPerLine": 0.008025000000000003,
@@ -205,7 +205,7 @@
         "rtpContribution": 0.04012499999999998
       },
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 4,
         "pay": 15,
         "probabilityPerLine": 0.0015548437499999996,
@@ -213,7 +213,7 @@
         "rtpContribution": 0.02332265624999998
       },
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 5,
         "pay": 50,
         "probabilityPerLine": 0.00045457031250000006,
@@ -221,7 +221,7 @@
         "rtpContribution": 0.022728515625
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 3,
         "pay": 5,
         "probabilityPerLine": 0.007125000000000004,
@@ -229,7 +229,7 @@
         "rtpContribution": 0.03562500000000001
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 4,
         "pay": 20,
         "probabilityPerLine": 0.0013359375000000018,
@@ -237,7 +237,7 @@
         "rtpContribution": 0.026718749999999975
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 5,
         "pay": 75,
         "probabilityPerLine": 0.0004488281249999999,
@@ -245,7 +245,7 @@
         "rtpContribution": 0.03366210937500001
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 3,
         "pay": 10,
         "probabilityPerLine": 0.006225000000000004,
@@ -253,7 +253,7 @@
         "rtpContribution": 0.062249999999999986
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 4,
         "pay": 25,
         "probabilityPerLine": 0.0012449999999999998,
@@ -261,7 +261,7 @@
         "rtpContribution": 0.031124999999999996
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 5,
         "pay": 100,
         "probabilityPerLine": 0.0003140625,
@@ -269,7 +269,7 @@
         "rtpContribution": 0.03140624999999998
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 3,
         "pay": 10,
         "probabilityPerLine": 0.005524999999999999,
@@ -277,7 +277,7 @@
         "rtpContribution": 0.05525
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 4,
         "pay": 30,
         "probabilityPerLine": 0.0011740625,
@@ -285,7 +285,7 @@
         "rtpContribution": 0.035221875000000034
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 5,
         "pay": 125,
         "probabilityPerLine": 0.00020929687499999993,
@@ -293,7 +293,7 @@
         "rtpContribution": 0.02616210937500001
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 3,
         "pay": 15,
         "probabilityPerLine": 0.00239765625,
@@ -301,7 +301,7 @@
         "rtpContribution": 0.03596484375
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 4,
         "pay": 50,
         "probabilityPerLine": 0.0004422656250000003,
@@ -309,7 +309,7 @@
         "rtpContribution": 0.022113281250000002
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 5,
         "pay": 200,
         "probabilityPerLine": 0.00007804687500000002,
@@ -317,7 +317,7 @@
         "rtpContribution": 0.015609375000000003
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 3,
         "pay": 20,
         "probabilityPerLine": 0.0021515625000000016,
@@ -325,7 +325,7 @@
         "rtpContribution": 0.04303124999999999
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 4,
         "pay": 75,
         "probabilityPerLine": 0.0003404296875,
@@ -333,7 +333,7 @@
         "rtpContribution": 0.02553222656249999
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 5,
         "pay": 300,
         "probabilityPerLine": 0.00004898437500000002,
@@ -341,7 +341,7 @@
         "rtpContribution": 0.014695312500000005
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 3,
         "pay": 25,
         "probabilityPerLine": 0.0015585937500000003,
@@ -349,7 +349,7 @@
         "rtpContribution": 0.03896484375000001
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 4,
         "pay": 100,
         "probabilityPerLine": 0.00020097656250000006,
@@ -357,7 +357,7 @@
         "rtpContribution": 0.02009765624999999
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 5,
         "pay": 400,
         "probabilityPerLine": 0.00002906250000000001,
@@ -365,7 +365,7 @@
         "rtpContribution": 0.011625
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 3,
         "pay": 50,
         "probabilityPerLine": 0.0004335937500000002,
@@ -373,7 +373,7 @@
         "rtpContribution": 0.021679687499999992
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 4,
         "pay": 200,
         "probabilityPerLine": 0.000033749999999999967,
@@ -381,7 +381,7 @@
         "rtpContribution": 0.0067499999999999965
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 5,
         "pay": 1000,
         "probabilityPerLine": 0.000003984375000000002,
@@ -525,35 +525,35 @@
     ],
     "symbolContributions": [
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "rtp": 0.22304109631389216
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "rtp": 0.27270216402147757
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "rtp": 0.42344471711450354
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "rtp": 0.473105784822089
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "rtp": 0.7523223302862372
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "rtp": 0.6516660308723774
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "rtp": 0.845795531825462
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "rtp": 0.46199339418372676
       },
       {
@@ -564,7 +564,7 @@
     "scatterContribution": 0.01991257279821262,
     "lineCombinations": [
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 3,
         "pay": 5,
         "probabilityPerLine": 0.005913610709624413,
@@ -572,7 +572,7 @@
         "rtpContribution": 0.10108148538544046
       },
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 4,
         "pay": 15,
         "probabilityPerLine": 0.0012449706757104025,
@@ -580,7 +580,7 @@
         "rtpContribution": 0.0679124265398421
       },
       {
-        "symbol": "JADE",
+        "symbol": "RULER",
         "count": 5,
         "pay": 50,
         "probabilityPerLine": 0.00028847735743439673,
@@ -588,7 +588,7 @@
         "rtpContribution": 0.05404718438860943
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 3,
         "pay": 5,
         "probabilityPerLine": 0.005913610709624413,
@@ -596,7 +596,7 @@
         "rtpContribution": 0.10108148538544046
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 4,
         "pay": 20,
         "probabilityPerLine": 0.0012449706757104025,
@@ -604,7 +604,7 @@
         "rtpContribution": 0.09054990205312283
       },
       {
-        "symbol": "SAPPHIRE",
+        "symbol": "PENCIL",
         "count": 5,
         "pay": 75,
         "probabilityPerLine": 0.00028847735743439673,
@@ -612,7 +612,7 @@
         "rtpContribution": 0.08107077658291416
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 3,
         "pay": 10,
         "probabilityPerLine": 0.005913610709624413,
@@ -620,7 +620,7 @@
         "rtpContribution": 0.2021629707708809
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 4,
         "pay": 25,
         "probabilityPerLine": 0.0012449706757104025,
@@ -628,7 +628,7 @@
         "rtpContribution": 0.11318737756640358
       },
       {
-        "symbol": "RUBY",
+        "symbol": "ERASER",
         "count": 5,
         "pay": 100,
         "probabilityPerLine": 0.00028847735743439673,
@@ -636,7 +636,7 @@
         "rtpContribution": 0.10809436877721885
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 3,
         "pay": 10,
         "probabilityPerLine": 0.005913610709624413,
@@ -644,7 +644,7 @@
         "rtpContribution": 0.2021629707708809
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 4,
         "pay": 30,
         "probabilityPerLine": 0.0012449706757104025,
@@ -652,7 +652,7 @@
         "rtpContribution": 0.1358248530796842
       },
       {
-        "symbol": "AMETHYST",
+        "symbol": "CHALK",
         "count": 5,
         "pay": 125,
         "probabilityPerLine": 0.00028847735743439673,
@@ -660,7 +660,7 @@
         "rtpContribution": 0.13511796097152357
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 3,
         "pay": 15,
         "probabilityPerLine": 0.005913610709624413,
@@ -668,7 +668,7 @@
         "rtpContribution": 0.3032444561563218
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 4,
         "pay": 50,
         "probabilityPerLine": 0.0012775425829237564,
@@ -676,7 +676,7 @@
         "rtpContribution": 0.23288913657547786
       },
       {
-        "symbol": "COMET",
+        "symbol": "BOOK",
         "count": 5,
         "pay": 200,
         "probabilityPerLine": 0.00028847735743439673,
@@ -684,7 +684,7 @@
         "rtpContribution": 0.2161887375544377
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 3,
         "pay": 20,
         "probabilityPerLine": 0.003918155272873429,
@@ -692,7 +692,7 @@
         "rtpContribution": 0.2771101120524975
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 4,
         "pay": 75,
         "probabilityPerLine": 0.0007486635361211237,
@@ -700,7 +700,7 @@
         "rtpContribution": 0.21025341224000454
       },
       {
-        "symbol": "MOON",
+        "symbol": "APPLE",
         "count": 5,
         "pay": 300,
         "probabilityPerLine": 0.00014289610906503494,
@@ -708,7 +708,7 @@
         "rtpContribution": 0.1643025065798755
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 3,
         "pay": 25,
         "probabilityPerLine": 0.003918155272873429,
@@ -716,7 +716,7 @@
         "rtpContribution": 0.3463876400656221
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 4,
         "pay": 100,
         "probabilityPerLine": 0.0007486635361211237,
@@ -724,7 +724,7 @@
         "rtpContribution": 0.28033788298667217
       },
       {
-        "symbol": "PLANET",
+        "symbol": "GLOBE",
         "count": 5,
         "pay": 400,
         "probabilityPerLine": 0.00014289610906503494,
@@ -732,7 +732,7 @@
         "rtpContribution": 0.21907000877316735
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 3,
         "pay": 50,
         "probabilityPerLine": 0.0012368452106851365,
@@ -740,7 +740,7 @@
         "rtpContribution": 0.23530225959375758
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 4,
         "pay": 200,
         "probabilityPerLine": 0.0001770324017861267,
@@ -748,7 +748,7 @@
         "rtpContribution": 0.1390855461566341
       },
       {
-        "symbol": "SUN",
+        "symbol": "TEACHER",
         "count": 5,
         "pay": 1000,
         "probabilityPerLine": 0.00002208818940776521,
@@ -1301,37 +1301,37 @@
     "paytable": [
       {
         "kind": "paytable",
-        "description": "JADE x3: 5 -> 6",
+        "description": "RULER x3: 5 -> 6",
         "rtpAfter": 0.9692971612784866,
         "delta": 0.009274709445523222
       },
       {
         "kind": "paytable",
-        "description": "SAPPHIRE x3: 5 -> 6",
+        "description": "PENCIL x3: 5 -> 6",
         "rtpAfter": 0.9683971612784867,
         "delta": 0.00837470944552332
       },
       {
         "kind": "paytable",
-        "description": "RUBY x3: 10 -> 11",
+        "description": "ERASER x3: 10 -> 11",
         "rtpAfter": 0.9674971612784854,
         "delta": 0.0074747094455219765
       },
       {
         "kind": "paytable",
-        "description": "COMET x3: 15 -> 17",
+        "description": "BOOK x3: 15 -> 17",
         "rtpAfter": 0.9673171832240096,
         "delta": 0.007294731391046194
       },
       {
         "kind": "paytable",
-        "description": "PLANET x3: 25 -> 28",
+        "description": "GLOBE x3: 25 -> 28",
         "rtpAfter": 0.967267747592679,
         "delta": 0.007245295759715553
       },
       {
         "kind": "paytable",
-        "description": "AMETHYST x3: 10 -> 11",
+        "description": "CHALK x3: 10 -> 11",
         "rtpAfter": 0.9667971612784855,
         "delta": 0.0067747094455220536
       },
@@ -1343,109 +1343,109 @@
       },
       {
         "kind": "paytable",
-        "description": "MOON x3: 20 -> 22",
+        "description": "APPLE x3: 20 -> 22",
         "rtpAfter": 0.966038586506107,
         "delta": 0.006016134673143547
       },
       {
         "kind": "paytable",
-        "description": "RUBY x4: 25 -> 28",
+        "description": "ERASER x4: 25 -> 28",
         "rtpAfter": 0.9645970793927652,
         "delta": 0.004574627559801758
       },
       {
         "kind": "paytable",
-        "description": "AMETHYST x4: 30 -> 33",
+        "description": "CHALK x4: 30 -> 33",
         "rtpAfter": 0.9643842668927645,
         "delta": 0.004361815059801044
       },
       {
         "kind": "paytable",
-        "description": "SAPPHIRE x5: 75 -> 83",
+        "description": "PENCIL x5: 75 -> 83",
         "rtpAfter": 0.9641476418055842,
         "delta": 0.004125189972620791
       },
       {
         "kind": "paytable",
-        "description": "MOON x4: 75 -> 83",
+        "description": "APPLE x4: 75 -> 83",
         "rtpAfter": 0.9641322595429802,
         "delta": 0.0041098077100167885
       },
       {
         "kind": "paytable",
-        "description": "RUBY x5: 100 -> 110",
+        "description": "ERASER x5: 100 -> 110",
         "rtpAfter": 0.9638312830487392,
         "delta": 0.0038088312157757986
       },
       {
         "kind": "paytable",
-        "description": "PLANET x4: 100 -> 110",
+        "description": "GLOBE x4: 100 -> 110",
         "rtpAfter": 0.9637651802204847,
         "delta": 0.0037427283875213213
       },
       {
         "kind": "paytable",
-        "description": "JADE x4: 15 -> 17",
+        "description": "RULER x4: 15 -> 17",
         "rtpAfter": 0.9636918910394963,
         "delta": 0.003669439206532843
       },
       {
         "kind": "paytable",
-        "description": "COMET x4: 50 -> 55",
+        "description": "BOOK x4: 50 -> 55",
         "rtpAfter": 0.9636734291312441,
         "delta": 0.0036509772982806776
       },
       {
         "kind": "paytable",
-        "description": "SUN x3: 50 -> 55",
+        "description": "TEACHER x3: 50 -> 55",
         "rtpAfter": 0.9636449869422024,
         "delta": 0.0036225351092389335
       },
       {
         "kind": "paytable",
-        "description": "AMETHYST x5: 125 -> 138",
+        "description": "CHALK x5: 125 -> 138",
         "rtpAfter": 0.9636119792884718,
         "delta": 0.0035895274555083345
       },
       {
         "kind": "paytable",
-        "description": "SAPPHIRE x4: 20 -> 22",
+        "description": "PENCIL x4: 20 -> 22",
         "rtpAfter": 0.9632540785394973,
         "delta": 0.0032316267065338744
       },
       {
         "kind": "paytable",
-        "description": "COMET x5: 200 -> 220",
+        "description": "BOOK x5: 200 -> 220",
         "rtpAfter": 0.9629198017645149,
         "delta": 0.0028973499315514406
       },
       {
         "kind": "paytable",
-        "description": "JADE x5: 50 -> 55",
+        "description": "RULER x5: 50 -> 55",
         "rtpAfter": 0.9626294065033514,
         "delta": 0.002606954670387962
       },
       {
         "kind": "paytable",
-        "description": "PLANET x5: 400 -> 440",
+        "description": "GLOBE x5: 400 -> 440",
         "rtpAfter": 0.9625391753989843,
         "delta": 0.00251672356602084
       },
       {
         "kind": "paytable",
-        "description": "MOON x5: 300 -> 330",
+        "description": "APPLE x5: 300 -> 330",
         "rtpAfter": 0.9625076507574791,
         "delta": 0.002485198924515708
       },
       {
         "kind": "paytable",
-        "description": "SUN x4: 200 -> 220",
+        "description": "TEACHER x4: 200 -> 220",
         "rtpAfter": 0.9615572359967252,
         "delta": 0.0015347841637617377
       },
       {
         "kind": "paytable",
-        "description": "SUN x5: 1000 -> 1100",
+        "description": "TEACHER x5: 1000 -> 1100",
         "rtpAfter": 0.9609624401962507,
         "delta": 0.0009399883632872363
       },
@@ -1483,73 +1483,73 @@
     "closestToTarget": [
       {
         "kind": "reel-stop",
-        "description": "base reel 5: one JADE -> PLANET",
+        "description": "base reel 5: one RULER -> GLOBE",
         "rtpAfter": 0.9600072174579641,
         "delta": -0.000015234374999284483
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 2: one PLANET -> MOON",
+        "description": "base reel 2: one GLOBE -> APPLE",
         "rtpAfter": 0.9599912018329637,
         "delta": -0.000031249999999705125
       },
       {
         "kind": "reel-stop",
-        "description": "free reel 2: one MOON -> COMET",
+        "description": "free reel 2: one APPLE -> BOOK",
         "rtpAfter": 0.9599773899514287,
         "delta": -0.000045061881534746995
       },
       {
         "kind": "reel-stop",
-        "description": "free reel 3: one MOON -> COMET",
+        "description": "free reel 3: one APPLE -> BOOK",
         "rtpAfter": 0.9599773899514287,
         "delta": -0.000045061881534746995
       },
       {
         "kind": "reel-stop",
-        "description": "free reel 4: one COMET -> MOON",
+        "description": "free reel 4: one BOOK -> APPLE",
         "rtpAfter": 0.9599687874910203,
         "delta": -0.000053664341943093774
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 2: one SUN -> COMET",
+        "description": "base reel 2: one TEACHER -> BOOK",
         "rtpAfter": 0.9599638580829639,
         "delta": -0.00005859374999950262
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 5: one PLANET -> JADE",
+        "description": "base reel 5: one GLOBE -> RULER",
         "rtpAfter": 0.9600376862079645,
         "delta": 0.00001523437500106084
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 2: one MOON -> PLANET",
+        "description": "base reel 2: one APPLE -> GLOBE",
         "rtpAfter": 0.9600537018329645,
         "delta": 0.00003125000000103739
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 3: one SUN -> COMET",
+        "description": "base reel 3: one TEACHER -> BOOK",
         "rtpAfter": 0.9599443268329637,
         "delta": -0.0000781249999997069
       },
       {
         "kind": "reel-stop",
-        "description": "base reel 4: one AMETHYST -> RUBY",
+        "description": "base reel 4: one CHALK -> ERASER",
         "rtpAfter": 0.9599419830829623,
         "delta": -0.00008046875000111697
       },
       {
         "kind": "reel-stop",
-        "description": "free reel 2: one COMET -> MOON",
+        "description": "free reel 2: one BOOK -> APPLE",
         "rtpAfter": 0.960067513714498,
         "delta": 0.00004506188153463597
       },
       {
         "kind": "reel-stop",
-        "description": "free reel 3: one COMET -> MOON",
+        "description": "free reel 3: one BOOK -> APPLE",
         "rtpAfter": 0.960067513714498,
         "delta": 0.00004506188153463597
       }

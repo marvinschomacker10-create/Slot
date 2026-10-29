@@ -3,13 +3,13 @@ import { evaluateSpin } from '../../src/game/payouts';
 import { paylineDiagram, paylinePositions } from '../../src/game/paylines';
 import { cellsOf, game } from '../helpers';
 
-/** Blocker columns: no symbol repeats in adjacent columns, and SUN never appears. */
+/** Blocker columns: no symbol repeats in adjacent columns, and TEACHER never appears. */
 const BLOCKERS = [
-  ['JADE', 'SAPPHIRE', 'RUBY'],
-  ['AMETHYST', 'COMET', 'MOON'],
-  ['PLANET', 'JADE', 'SAPPHIRE'],
-  ['RUBY', 'AMETHYST', 'COMET'],
-  ['MOON', 'PLANET', 'JADE'],
+  ['RULER', 'PENCIL', 'ERASER'],
+  ['CHALK', 'BOOK', 'APPLE'],
+  ['GLOBE', 'RULER', 'PENCIL'],
+  ['ERASER', 'CHALK', 'BOOK'],
+  ['APPLE', 'GLOBE', 'RULER'],
 ];
 
 describe('paylines', () => {
@@ -34,11 +34,11 @@ describe('paylines', () => {
     'payline %i %j pays a five-of-a-kind placed on it',
     (lineIndex, line) => {
       const window = BLOCKERS.map((col) => [...col]);
-      line.forEach((row, reel) => (window[reel]![row] = 'SUN'));
+      line.forEach((row, reel) => (window[reel]![row] = 'TEACHER'));
       const result = evaluateSpin(game, game.modes.base, cellsOf(game, window), 1);
 
       const target = result.lineWins.find((w) => w.lineIndex === lineIndex);
-      expect(target).toMatchObject({ symbol: 'SUN', count: 5, basePay: 1000, win: 1000 });
+      expect(target).toMatchObject({ symbol: 'TEACHER', count: 5, basePay: 1000, win: 1000 });
       expect(target!.positions).toEqual(line.map((row, reel) => ({ reel, row })));
 
       // Every other line wins exactly when it shares the first >= 3 cells with this line.
@@ -47,7 +47,7 @@ describe('paylines', () => {
         let agree = 0;
         while (agree < 5 && other[agree] === line[agree]) agree++;
         const w = result.lineWins.find((x) => x.lineIndex === k);
-        if (agree >= 3) expect(w).toMatchObject({ symbol: 'SUN', count: agree });
+        if (agree >= 3) expect(w).toMatchObject({ symbol: 'TEACHER', count: agree });
         else expect(w).toBeUndefined();
       }
     },

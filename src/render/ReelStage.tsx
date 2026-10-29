@@ -4,6 +4,7 @@ import type { SceneSetup } from './ReelScene';
 import { ReelScene } from './ReelScene';
 import type { ReelController } from './ReelController';
 import { rasterizeSymbols } from './textures';
+import { PIXEL_FONT } from './theme';
 
 interface Props {
   readonly controller: ReelController;
@@ -31,7 +32,9 @@ export function ReelStage({ controller, setup, label }: Props) {
       h: Math.max(1, Math.round(el.clientHeight * dpr)),
     });
 
-    void rasterizeSymbols(setup.symbols, Math.round(256 * dpr)).then((symbolCanvases) => {
+    // The pixel font must be loaded before the scene draws its first payline number.
+    const font = document.fonts?.load(`12px ${PIXEL_FONT}`).catch(() => undefined) ?? Promise.resolve();
+    void Promise.all([rasterizeSymbols(setup.symbols, Math.round(256 * dpr)), font]).then(([symbolCanvases]) => {
       if (cancelled) return;
       const { w, h } = size();
       const scene = new ReelScene({ ...setup, devicePixelRatio: dpr, symbolCanvases }, (s) => controller.attach(s));

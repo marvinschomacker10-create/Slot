@@ -66,10 +66,12 @@ describe('reel landing (renderer tape model)', () => {
     fc.assert(
       fc.property(fc.integer({ min: 120, max: 4000 }), fc.integer({ min: 100, max: 3000 }), (w, h) => {
         const l = computeLayout(w, h, 5, 3);
-        expect(l.frame.x).toBeGreaterThanOrEqual(-1);
-        expect(l.frame.y).toBeGreaterThanOrEqual(-1);
-        expect(l.frame.x + l.frame.w).toBeLessThanOrEqual(w + 1);
-        expect(l.frame.y + l.frame.h).toBeLessThanOrEqual(h + 1);
+        expect(l.outer.x).toBeGreaterThanOrEqual(-1);
+        expect(l.outer.y).toBeGreaterThanOrEqual(-1);
+        expect(l.outer.x + l.outer.w).toBeLessThanOrEqual(w + 1);
+        expect(l.outer.y + l.outer.h).toBeLessThanOrEqual(h + 1);
+        expect(l.outer.x).toBeLessThanOrEqual(l.frame.x);
+        expect(l.frame.x).toBeLessThanOrEqual(l.originX);
         expect(l.pitch).toBeGreaterThanOrEqual(l.cell);
       }),
     );
@@ -95,11 +97,11 @@ describe('win presentation', () => {
       const steps = winSteps(game, r);
       if (r.credited > 0) {
         expect(steps[0]!.kind).toBe('all');
-        expect(steps[0]!.text).toContain(r.credited.toLocaleString('en-US'));
+        expect(steps[0]!.text).toContain(r.credited.toLocaleString('de-DE'));
         expect(steps.filter((x) => x.kind === 'line')).toHaveLength(r.outcome.lineWins.length);
         checked++;
       }
-      expect(describeSpin(game, r)).toContain(r.balanceAfter.toLocaleString('en-US'));
+      expect(describeSpin(game, r)).toContain(r.balanceAfter.toLocaleString('de-DE'));
     }
     expect(checked).toBeGreaterThan(50);
   });
@@ -107,7 +109,7 @@ describe('win presentation', () => {
   it('announces free-spin triggers', () => {
     const s = new GameSession(game, { rng: new ScriptedRandom(scatterStops(game, 'base', 3)) });
     const r = s.spin();
-    expect(describeSpin(game, r)).toMatch(/Free spins triggered: 10 spins/);
-    expect(winSteps(game, r).some((x) => x.kind === 'scatter' && /\+ 10 free spins/.test(x.text))).toBe(true);
+    expect(describeSpin(game, r)).toMatch(/Freispiele ausgelöst: 10 Drehs/);
+    expect(winSteps(game, r).some((x) => x.kind === 'scatter' && /\+ 10 Freispiele/.test(x.text))).toBe(true);
   });
 });

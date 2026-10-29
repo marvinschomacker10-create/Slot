@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getDefaultGame } from '../config';
+import { AllowanceWidget } from '../components/AllowanceWidget';
 import { Banner } from '../components/Banner';
 import { ControlBar } from '../components/ControlBar';
 import { DevPanel } from '../components/DevPanel';
@@ -9,6 +10,7 @@ import { Modal } from '../components/Modal';
 import { PaytablePanel } from '../components/PaytablePanel';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { StatsPanel } from '../components/StatsPanel';
+import { SymbolIcon } from '../components/SymbolIcon';
 import { ReelStage } from '../render/ReelStage';
 import { credits } from './format';
 import { createRng, readRuntimeFlags } from './runtime';
@@ -19,7 +21,7 @@ type Panel = 'paytable' | 'help' | 'history' | 'stats' | 'settings' | 'dev' | nu
 
 declare global {
   interface Window {
-    __GILDED_ORBIT__?: Record<string, unknown>;
+    __PIXEL_PAUKER__?: Record<string, unknown>;
   }
 }
 
@@ -39,6 +41,8 @@ export function App() {
   const feature = slot.displayFeature;
   const inFeature = feature !== null;
   const sessionInFeature = snap.phase === 'free-spins';
+  const wild = game.config.symbols.find((s) => s.kind === 'wild')!;
+  const free = game.config.modes.free;
 
   const sceneSetup = useMemo(
     () => ({
@@ -60,9 +64,10 @@ export function App() {
   // Test and diagnostics hook (development builds only).
   useEffect(() => {
     if (!flags.dev) return;
-    window.__GILDED_ORBIT__ = {
+    window.__PIXEL_PAUKER__ = {
       configHash: game.hash,
       snapshot: () => slot.session.getSnapshot(),
+      allowance: () => slot.session.allowanceStatus(),
       displayedWindow: () => slot.controller.displayedWindow(),
       uiPhase: () => slot.phase,
       rendererReady: () => slot.controller.ready,
@@ -95,6 +100,7 @@ export function App() {
       } else if (e.key === '-' || e.key === 'ArrowDown') {
         if (!interactive || e.key !== 'ArrowDown') changeBet(-1);
       } else if (e.key === 't' || e.key === 'T') updateSettings({ turbo: !settings.turbo });
+      else if (e.key === 'g' || e.key === 'G') slot.collectAllowance();
       else if (e.key === 'p' || e.key === 'P') setPanel('paytable');
       else if (e.key === 'h' || e.key === 'H') setPanel('help');
       else if (e.key === 's' || e.key === 'S') setPanel('stats');
@@ -104,44 +110,57 @@ export function App() {
   }, [panel, slot, changeBet, settings.turbo, updateSettings]);
 
   const lowBalance = !sessionInFeature && slot.phase !== 'spinning' && snap.balance < snap.totalBet;
+  const canLowerBet = game.lineBetOptions.some((b) => b * game.lineCount <= snap.balance);
   const close = useCallback(() => setPanel(null), []);
   const displayed = slot.controller.displayedWindow();
 
   return (
     <div className={`app${inFeature ? ' app--feature' : ''}`}>
       <a className="skip-link" href="#spin-area">
-        Skip to game controls
+        Zu den Spielelementen springen
       </a>
       <header className="topbar">
         <div className="brand">
           <span className="brand__mark" aria-hidden="true">
-            ✦
+            <SymbolIcon id="TEACHER" size={40} />
           </span>
           <div>
             <h1>{game.config.meta.name}</h1>
-            <p className="brand__tag">Play-money prototype · not real money</p>
+            <p className="brand__tag">Spielgeld-Prototyp · kein Echtgeld</p>
           </div>
         </div>
-        <div className="balance" aria-label="Balance">
-          <span className="label">Balance</span>
-          <output className="value" data-testid="balance">
-            {credits(slot.displayBalance)}
-          </output>
+        <div className="wallet">
+          <div className="balance" aria-label="Kontostand">
+            <span className="label">Kontostand</span>
+            <output className="value" data-testid="balance">
+              {credits(slot.displayBalance)}
+            </output>
+          </div>
+          <AllowanceWidget
+            session={slot.session}
+            disabled={slot.phase === 'spinning'}
+            onCollect={slot.collectAllowance}
+          />
         </div>
-        <nav className="menu" aria-label="Game information">
+        <nav className="menu" aria-label="Spielinformationen">
           <button type="button" className="chip" onClick={() => setPanel('paytable')}>
-            Paytable
+            Gewinne
           </button>
           <button type="button" className="chip" onClick={() => setPanel('help')}>
-            Help
+            Hilfe
           </button>
           <button type="button" className="chip" onClick={() => setPanel('history')}>
-            History
+            Verlauf
           </button>
           <button type="button" className="chip" onClick={() => setPanel('stats')} data-testid="open-stats">
-            Statistics
+            Statistik
           </button>
-          <button type="button" className="chip" onClick={() => setPanel('settings')} aria-label="Settings">
+          <button
+            type="button"
+            className="chip chip--icon"
+            onClick={() => setPanel('settings')}
+            aria-label="Einstellungen"
+          >
             ⚙
           </button>
           {flags.dev && (
@@ -161,22 +180,29 @@ export function App() {
           {feature && (
             <>
               <span>
-                Free spins played <strong data-testid="free-spins-played">{feature.played}</strong> of{' '}
+                Hitzefrei: Freispiel <strong data-testid="free-spins-played">{feature.played}</strong> von{' '}
                 <strong>{feature.totalAwarded}</strong>
               </span>
               <span>
-                Feature win <strong>{credits(feature.totalWin)}</strong>
+                Feature-Gewinn <strong>{credits(feature.totalWin)}</strong>
               </span>
               <span className="muted">
-                Wins ×{game.config.modes.free.winMultiplier} · Wild wins ×{game.config.modes.free.wildMultiplier}
+                Gewinne ×{free.winMultiplier} · {wild.name}-Gewinne ×{free.wildMultiplier}
               </span>
             </>
           )}
         </div>
         <div className="reels-wrap">
-          <ReelStage controller={slot.controller} setup={sceneSetup} label="Slot reels" />
+          <ReelStage controller={slot.controller} setup={sceneSetup} label="Walzen" />
           {slot.banner && (
-            <Banner banner={slot.banner} onDismiss={slot.dismissBanner} reducedMotion={settings.reducedMotion} />
+            <Banner
+              banner={slot.banner}
+              onDismiss={slot.dismissBanner}
+              reducedMotion={settings.reducedMotion}
+              winMultiplier={free.winMultiplier}
+              wildMultiplier={free.wildMultiplier}
+              wildName={wild.name}
+            />
           )}
         </div>
         <p className="message" data-testid="message">
@@ -187,7 +213,7 @@ export function App() {
         </div>
         {displayed && (
           <div className="sr-only">
-            <table aria-label="Symbols currently shown, top row first">
+            <table aria-label="Aktuell sichtbare Symbole, obere Reihe zuerst">
               <tbody>
                 {Array.from({ length: game.rows }, (_, row) => (
                   <tr key={row}>
@@ -218,42 +244,51 @@ export function App() {
           onShowLines={(on) => slot.previewLines(on ? game.config.paylines.map((_, i) => i) : null)}
         />
         {lowBalance && (
-          <div className="low-balance" role="alert">
-            Not enough play-money credits for this bet.{' '}
-            <button type="button" className="button button--small" onClick={slot.resetSession}>
-              Reset balance to {credits(game.startingBalance)}
-            </button>
+          <div className="low-balance" role="alert" data-testid="low-balance">
+            <span>
+              Nicht genug Spielgeld für diesen Einsatz.
+              {canLowerBet ? ' Senke den Einsatz oder hol dir dein Taschengeld.' : ' Hol dir dein Taschengeld.'}
+            </span>
+            <AllowanceWidget
+              session={slot.session}
+              disabled={false}
+              onCollect={slot.collectAllowance}
+              variant="inline"
+            />
           </div>
         )}
+        <p className="disclaimer">
+          Nur Spielgeld: keine Einzahlung, keine Auszahlung, kein Gewinn mit echtem Wert. Nicht zertifiziert.
+        </p>
       </footer>
 
       {panel === 'paytable' && (
-        <Modal title="Paytable and rules" onClose={close} wide testId="paytable-dialog">
+        <Modal title="Gewinntabelle und Regeln" onClose={close} wide testId="paytable-dialog">
           <PaytablePanel game={game} lineBet={snap.lineBet} />
         </Modal>
       )}
       {panel === 'help' && (
-        <Modal title="Help" onClose={close}>
-          <HelpPanel />
+        <Modal title="Hilfe" onClose={close}>
+          <HelpPanel game={game} />
         </Modal>
       )}
       {panel === 'history' && (
-        <Modal title="Game history" onClose={close} wide>
+        <Modal title="Spielverlauf" onClose={close} wide>
           <HistoryPanel game={game} history={snap.history} />
         </Modal>
       )}
       {panel === 'stats' && (
-        <Modal title="Statistics" onClose={close} wide testId="stats-dialog">
+        <Modal title="Statistik" onClose={close} wide testId="stats-dialog">
           <StatsPanel game={game} stats={snap.stats} />
         </Modal>
       )}
       {panel === 'settings' && (
-        <Modal title="Settings" onClose={close}>
+        <Modal title="Einstellungen" onClose={close}>
           <SettingsPanel settings={settings} onChange={updateSettings} />
         </Modal>
       )}
       {panel === 'dev' && flags.dev && (
-        <Modal title="Developer diagnostics" onClose={close} wide>
+        <Modal title="Entwickler-Diagnose" onClose={close} wide>
           <DevPanel
             game={game}
             session={slot.session}
@@ -261,6 +296,10 @@ export function App() {
             last={slot.lastRevealed}
             seed={flags.seed}
             mismatches={slot.windowMismatches}
+            onResetWallet={() => {
+              slot.resetSession();
+              close();
+            }}
           />
         </Modal>
       )}

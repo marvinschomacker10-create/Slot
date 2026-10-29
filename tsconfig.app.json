@@ -6,5 +6,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
-  "include": ["src", "config", "reports/analysis.json"]
+  "include": ["src", "web", "config", "reports/analysis.json"]
 }

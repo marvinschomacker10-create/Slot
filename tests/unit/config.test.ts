@@ -60,7 +60,7 @@ describe('configuration validation', () => {
   ])('rejects invalid %s', (path, mutate) => expectError(mutate, path));
 
   it('rejects duplicate symbol ids and bad identifiers', () => {
-    expectError((c) => (c.symbols[1]!.id = 'JADE'), 'symbols[1].id', /duplicate/);
+    expectError((c) => (c.symbols[1]!.id = 'RULER'), 'symbols[1].id', /duplicate/);
     expectError((c) => (c.symbols[0]!.id = 'jade'), 'symbols[0].id', /upper-case/);
   });
 
@@ -76,21 +76,21 @@ describe('configuration validation', () => {
       /scatter symbols cannot have line pays/,
     );
     expectError((c) => (c.paytable.line.GHOST = { '3': 1 }), 'paytable.line.GHOST', /unknown symbol/);
-    expectError((c) => delete c.paytable.line.MOON, 'paytable.line', /"MOON" has no line pays/);
+    expectError((c) => delete c.paytable.line.APPLE, 'paytable.line', /"APPLE" has no line pays/);
   });
 
   it('rejects longer combinations paying less than shorter ones', () => {
     expectError(
-      (c) => (c.paytable.line.SUN = { '3': 50, '4': 40, '5': 1000 }),
-      'paytable.line.SUN.4',
+      (c) => (c.paytable.line.TEACHER = { '3': 50, '4': 40, '5': 1000 }),
+      'paytable.line.TEACHER.4',
       /must not pay less/,
     );
   });
 
   it('rejects invalid count keys and pay values', () => {
-    expectError((c) => (c.paytable.line.SUN = { '6': 50 }), 'paytable.line.SUN.6', /between 1 and 5/);
-    expectError((c) => (c.paytable.line.SUN = { '3': -1 }), 'paytable.line.SUN.3', /non-negative integer/);
-    expectError((c) => (c.paytable.line.SUN = { '3': 1.5 }), 'paytable.line.SUN.3', /non-negative integer/);
+    expectError((c) => (c.paytable.line.TEACHER = { '6': 50 }), 'paytable.line.TEACHER.6', /between 1 and 5/);
+    expectError((c) => (c.paytable.line.TEACHER = { '3': -1 }), 'paytable.line.TEACHER.3', /non-negative integer/);
+    expectError((c) => (c.paytable.line.TEACHER = { '3': 1.5 }), 'paytable.line.TEACHER.3', /non-negative integer/);
   });
 
   it('validates every payline has exactly five valid row indices and no duplicates', () => {
@@ -103,7 +103,7 @@ describe('configuration validation', () => {
     expectError((c) => (c.reelSets.base!.length = 4), 'reelSets.base', /exactly 5 strips/);
     expectError((c) => (c.reelSets.base![0]!.symbols[3] = 'GHOST'), 'reelSets.base[0].symbols[3]', /unknown symbol/);
     expectError(
-      (c) => (c.reelSets.base![1]!.symbols = ['JADE', 'RUBY']),
+      (c) => (c.reelSets.base![1]!.symbols = ['RULER', 'ERASER']),
       'reelSets.base[1].symbols',
       /at least 3 stops/,
     );
@@ -172,9 +172,9 @@ describe('configuration validation', () => {
 describe('compiled configuration', () => {
   it('maps count tables with "N or more" semantics', () => {
     const c = cloneConfig();
-    c.paytable.line.SUN = { '3': 50, '4': 200 };
+    c.paytable.line.TEACHER = { '3': 50, '4': 200 };
     const g = compileGame(c);
-    const sun = g.symbolIndex.get('SUN')!;
+    const sun = g.symbolIndex.get('TEACHER')!;
     expect(Array.from(g.linePay[sun]!)).toEqual([0, 0, 0, 50, 200, 200]);
     expect(g.scatterPay[5]).toBe(c.paytable.scatter['5']);
     expect(g.scatterPay[7]).toBe(c.paytable.scatter['5']);
@@ -231,7 +231,7 @@ describe('configuration hash', () => {
     const reordered = reverseKeys(c);
     expect(JSON.stringify(reordered)).not.toBe(JSON.stringify(c));
     expect(configHash(reordered)).toBe(h);
-    c.paytable.line.JADE!['3'] = 6;
+    c.paytable.line.RULER!['3'] = 6;
     expect(configHash(c)).not.toBe(h);
   });
 });

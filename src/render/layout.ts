@@ -15,21 +15,35 @@ export interface ReelLayout {
   readonly originY: number;
   /** Horizontal distance between neighbouring reel columns (cell + gutter). */
   readonly pitch: number;
-  readonly frame: { readonly x: number; readonly y: number; readonly w: number; readonly h: number };
+  /** Board area behind the reels. */
+  readonly frame: Rect;
+  /** Outer edge of the wooden frame around the board; always inside the canvas. */
+  readonly outer: Rect;
+}
+
+export interface Rect {
+  readonly x: number;
+  readonly y: number;
+  readonly w: number;
+  readonly h: number;
 }
 
 export function computeLayout(width: number, height: number, reels: number, rows: number, scale = 1): ReelLayout {
-  const pad = Math.max(10 * scale, Math.min(width, height) * 0.035);
+  const margin = Math.max(2 * scale, Math.min(width, height) * 0.012);
   const gutterRatio = 0.06;
-  const byWidth = (width - 2 * pad) / (reels + (reels - 1) * gutterRatio);
-  const byHeight = (height - 2 * pad) / rows;
+  const boardRatio = 0.08; // board visible around the grid, in cells
+  const woodRatio = 0.1; // wooden frame outside the board, in cells
+  const edge = boardRatio + woodRatio;
+  const byWidth = (width - 2 * margin) / (reels + (reels - 1) * gutterRatio + 2 * edge);
+  const byHeight = (height - 2 * margin) / (rows + 2 * edge);
   const cell = Math.max(8, Math.floor(Math.min(byWidth, byHeight)));
   const pitch = cell * (1 + gutterRatio);
   const gridW = pitch * (reels - 1) + cell;
   const gridH = cell * rows;
   const originX = (width - gridW) / 2;
   const originY = (height - gridH) / 2;
-  const fp = cell * 0.08;
+  const fp = cell * boardRatio;
+  const wood = cell * woodRatio;
   return {
     width,
     height,
@@ -40,6 +54,12 @@ export function computeLayout(width: number, height: number, reels: number, rows
     originY,
     pitch,
     frame: { x: originX - fp, y: originY - fp, w: gridW + 2 * fp, h: gridH + 2 * fp },
+    outer: {
+      x: originX - fp - wood,
+      y: originY - fp - wood,
+      w: gridW + 2 * (fp + wood),
+      h: gridH + 2 * (fp + wood),
+    },
   };
 }
 

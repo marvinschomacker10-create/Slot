@@ -8,3 +8,5 @@ export * from './bonus';
 export * from './engine';
 export * from './state/ledger';
 export * from './state/session';
+export * from './state/allowance';
+export * from './state/persistence';

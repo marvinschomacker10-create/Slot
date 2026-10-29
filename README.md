@@ -1,125 +1,182 @@
-# Gilded Orbit - play-money video slot prototype
+# Pixel-Pauker – Spielgeld-Slot im Schul-Pixel-Look
 
-An original 5-reel, 3-row, 20-payline video slot with free spins, built as a locally
-runnable prototype together with an exact mathematical analysis engine, a Monte Carlo
-simulator, and automated tests.
+Ein eigenständiger Video-Slot mit 5 Walzen, 3 Reihen und 20 Gewinnlinien: Lineale,
+Bleistifte, Kreide, Schulbücher, der Lehrer und die Direktorin – alles in Pixel-Art,
+auf Karopapier vor einer grünen Kreidetafel. Dazu gibt es ein zeitbasiertes
+Spielgeld-System („Taschengeld“), eine exakte mathematische Analyse, einen
+Monte-Carlo-Simulator und automatische Tests.
 
-> **Play money only.** Credits have no monetary value. There are no deposits,
-> withdrawals, payments or wagering accounts. The game is **not certified, not approved
-> by any regulator, and not suitable for real-money use**. See
+> **Nur Spielgeld.** Credits haben keinen Geldwert. Es gibt keine Einzahlung, keine
+> Auszahlung, keine Zahlungen und kein Spielerkonto. Das Spiel ist **nicht zertifiziert,
+> von keiner Behörde zugelassen und nicht für Echtgeld geeignet** – siehe
 > [docs/REGULATORY_READINESS.md](docs/REGULATORY_READINESS.md).
 
-<img src="docs/images/screenshot-desktop.png" alt="Gilded Orbit on desktop: five reels with a winning payline highlighted" width="640"> <img src="docs/images/screenshot-mobile.png" alt="Gilded Orbit on a phone" width="180">
+<img src="docs/images/screenshot-desktop.png" alt="Pixel-Pauker am Desktop: fünf Walzen auf Karopapier mit rot markierten Gewinnen" width="640"> <img src="docs/images/screenshot-mobile.png" alt="Pixel-Pauker auf dem Handy" width="180">
 
-## Quick start
+## Sofort spielen: `index.html`
 
-Requirements: Node.js 20.19+ (tested with Node 22) and npm. No paid services, API keys
-or environment variables are needed.
+Die Datei [`index.html`](index.html) im Hauptverzeichnis ist das **komplette Spiel in
+einer einzigen Datei** (ca. 1,6 MB): Programmcode, Grafiken, Pixel-Schrift und der
+Simulations-Worker sind eingebettet. Herunterladen und per Doppelklick im Browser
+öffnen – es wird kein Server und keine Internetverbindung gebraucht. Die Datei kann
+auch auf jeden statischen Webspace (z. B. GitHub Pages) gelegt werden.
+
+Getestet mit Chromium (Desktop und Handy-Ansicht) direkt über `file://`.
+
+## Taschengeld: Spielgeld in festen Zeitabständen
+
+| Regel                   | Wert (in `config/game.config.json` einstellbar)                                     |
+| ----------------------- | ----------------------------------------------------------------------------------- |
+| Startguthaben           | 10.000 Credits                                                                      |
+| Taschengeld             | **+1.000 Credits alle 10 Minuten** (`session.allowance`)                            |
+| Erstes Taschengeld      | 10 Minuten nach dem Anlegen des Kontos                                              |
+| Ansammeln?              | Nein – nach einer langen Pause gibt es trotzdem nur eine Auszahlung                 |
+| Abholen                 | Knopf „+1.000 abholen“ im gelben Zettel oben oder Taste **G**                       |
+| Zählt als Gewinn / RTP? | Nein – eigene Buchungsart `grant`, in der Statistik separat als „Taschengeld“       |
+| Gespeichert?            | Ja, im Browser (`localStorage`): Kontostand, Einsatz, Taschengeld-Timer, Freispiele |
+
+Ist das Guthaben zu niedrig für den Einsatz, zeigt das Spiel den Countdown bis zum
+nächsten Taschengeld (und schlägt einen kleineren Einsatz vor, falls einer reicht).
+Wird die Seite mitten in den Freispielen geschlossen, laufen die restlichen Freispiele
+nach dem Neuladen weiter – der Einsatz dafür wurde bereits abgebucht. Ein Zurückstellen
+der Uhr kann das Konto höchstens ein Intervall lang sperren.
+
+## Symbole und Regeln
+
+| Stufe   | Symbol                                     | 5 / 4 / 3 gleiche (× Linieneinsatz)           |
+| ------- | ------------------------------------------ | --------------------------------------------- |
+| Niedrig | Lineal, Bleistift, Radiergummi, Kreide     | 50–125 / 15–30 / 5–10                         |
+| Hoch    | Schulbuch, Apfel, Globus                   | 200–400 / 50–100 / 15–25                      |
+| Premium | Lehrer                                     | 1.000 / 200 / 50                              |
+| Wild    | **Direktorin** – ersetzt alle außer Glocke | 2.000 / 250 / 50                              |
+| Scatter | **Schulglocke** – zahlt überall            | 100 / 10 / 2 × Gesamteinsatz, 3+ = Freispiele |
+
+- 20 feste Gewinnlinien, Gewinne von links nach rechts; Gesamteinsatz = 20 × Linieneinsatz
+  (1, 2, 5, 10, 25 oder 50).
+- 3+ Schulglocken: **10 Freispiele („Hitzefrei“)** – alle Gewinne ×2, Gewinne mit
+  Direktorin zusätzlich ×2, erneut auslösbar bis 50 Freispiele.
+- Maximalgewinn pro Runde: 5.000 × Gesamteinsatz.
+- Die vollständige Gewinntabelle steht im Spiel unter „Gewinne“ und in
+  [docs/SPECIFICATION.md](docs/SPECIFICATION.md).
+
+Tastatur: Leertaste/Enter = Drehen (nochmal = schnell stoppen), +/− = Einsatz,
+T = Schnelldrehen, G = Taschengeld abholen, P/H/S = Gewinntabelle/Hilfe/Statistik,
+Esc = Dialog schließen.
+
+## Mathematik (ausgelieferte Konfiguration)
+
+Konfigurations-Hash `4c02cc0a...` – alle Zahlen in [docs/RTP_REPORT.md](docs/RTP_REPORT.md).
+
+| Kennzahl                   | Exakt (vollständige Aufzählung) | Simulation                                                   |
+| -------------------------- | ------------------------------- | ------------------------------------------------------------ |
+| Auszahlungsquote (RTP)     | **96,0022 %**                   | 96,0370 % (95-%-KI 95,868–96,206 %), 31,1 Mio. Drehs gepoolt |
+| Grundspiel / Freispiele    | 70,1744 % / 25,8278 %           | siehe Bericht                                                |
+| Trefferquote               | 51,681 %                        | 51,67–51,70 % je Lauf                                        |
+| Freispiele ausgelöst       | 1 zu 168,8                      | 1 zu 156–169 je Lauf                                         |
+| Standardabweichung/Einsatz | 4,824 (mittel)                  | 4,72–4,83 je Lauf                                            |
+
+Der RTP gilt je Einheit Grundspiel-Einsatz inklusive aller Freispiele. Der exakte Wert
+stammt aus der Aufzählung aller 102.400.000 Grundspiel- und 85.656.636
+Freispiel-Walzenkombinationen; Simulationen sind unabhängige Bestätigungen. Das
+Taschengeld ist kein Spielergebnis und geht in keinen RTP-Wert ein.
+
+## Entwicklung
+
+Voraussetzungen: Node.js 20.19+ (getestet mit Node 22) und npm. Keine API-Schlüssel,
+keine kostenpflichtigen Dienste.
 
 ```bash
-npm ci                     # install exact dependency versions
-npm run dev                # start the game at http://localhost:5173
+npm ci                     # exakte Abhängigkeiten installieren
+npm run dev                # Spiel unter http://localhost:5173 starten
+npm run build:standalone   # index.html (Einzeldatei) neu erzeugen
 ```
 
-| Task                                                                           | Command                                                            |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| Start the local game                                                           | `npm run dev`                                                      |
-| Run all automated tests (typecheck, unit/integration/math, browser end-to-end) | `npm run test:all`                                                 |
-| Unit, integration and math tests only                                          | `npm test`                                                         |
-| Browser end-to-end tests only                                                  | `npm run test:e2e` (first time: `npx playwright install chromium`) |
-| Validate the configuration                                                     | `npm run validate-config`                                          |
-| Exact mathematical analysis                                                    | `npm run analyze`                                                  |
-| Configurable simulation                                                        | `npm run simulate -- --spins 2000000 --seed 7 --workers 4`         |
-| Simulation presets (100k / 1M / 10M paid spins)                                | `npm run simulate:100k`, `simulate:1m`, `simulate:10m`             |
-| Conditional rare-event simulation                                              | `npm run simulate:feature`                                         |
-| Export the mathematical report                                                 | `npm run report`                                                   |
-| Everything mathematical, in order                                              | `npm run math:all`                                                 |
-| Production build / preview                                                     | `npm run build`, `npm run preview`                                 |
+| Aufgabe                                                      | Befehl                                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Lokales Spiel (mit Entwickler-Diagnose)                      | `npm run dev`                                                           |
+| Alle Tests (Typprüfung, Unit/Integration/Mathe, Browser-E2E) | `npm run test:all`                                                      |
+| Nur Unit-, Integrations- und Mathe-Tests                     | `npm test`                                                              |
+| Nur Browser-Tests                                            | `npm run test:e2e` (beim ersten Mal: `npx playwright install chromium`) |
+| Konfiguration prüfen                                         | `npm run validate-config`                                               |
+| Exakte Analyse                                               | `npm run analyze`                                                       |
+| Simulation (frei wählbar)                                    | `npm run simulate -- --spins 2000000 --seed 7 --workers 4`              |
+| Simulations-Presets (100k / 1M / 10M)                        | `npm run simulate:100k`, `simulate:1m`, `simulate:10m`                  |
+| Bedingte Simulation seltener Ereignisse                      | `npm run simulate:feature`                                              |
+| Mathe-Bericht exportieren                                    | `npm run report`                                                        |
+| Normaler Build (`dist/`) + Einzeldatei (`index.html`)        | `npm run build`                                                         |
 
-Simulation options: `--spins N` (paid spins; each is simulated with all free spins it
-triggers), `--seed TEXT` (reproducible) or `--crypto` (cryptographic RNG),
-`--workers N` (default: CPU cores, max 8), `--chunk-size N`, `--line-bet N`,
-`--out PATH`, `--config PATH`. Seeded results are identical for any worker count.
+Simulationsoptionen: `--spins N`, `--seed TEXT` (reproduzierbar) oder `--crypto`
+(kryptografischer Zufall), `--workers N`, `--chunk-size N`, `--line-bet N`,
+`--out PFAD`, `--config PFAD`. Mit Seed sind die Ergebnisse für jede Worker-Anzahl
+identisch.
 
-Development-only URL parameters: `?seed=TEXT` (reproducible outcomes), `?turbo=1`,
-`?motion=reduced`. A production build ignores `seed` and always uses the cryptographic
-RNG.
+Nur in der Entwicklungsversion: URL-Parameter `?seed=TEXT` (reproduzierbare Drehs),
+`?turbo=1`, `?motion=reduced`, das „Dev“-Panel (u. a. Spielgeld-Konto zurücksetzen).
+Die Einzeldatei `index.html` ist ein Produktions-Build: Sie ignoriert `seed` und nutzt
+immer den kryptografischen Zufallsgenerator des Browsers.
 
-## Results (shipped configuration)
-
-Configuration hash `8df5b9f9...` - full numbers in
-[docs/RTP_REPORT.md](docs/RTP_REPORT.md).
-
-| Metric                 | Exact (full enumeration) | Simulated (31.1M paid spins pooled) |
-| ---------------------- | ------------------------ | ----------------------------------- |
-| Total RTP              | **96.0022%**             | 96.0032% (95% CI 95.834% - 96.172%) |
-| Base game / free spins | 70.1744% / 25.8278%      | see report                          |
-| Hit frequency          | 51.681%                  | 51.67% - 51.70% per run             |
-| Free-spins trigger     | 1 in 168.8               | 1 in 156 - 170 per run              |
-| SD per unit stake      | 4.824 (medium)           | 4.72 - 4.83 per run                 |
-
-The RTP is per unit of base-game stake and includes all free spins and retriggers. The
-exact value comes from enumerating all 102,400,000 base-game and 85,656,636 free-spin
-reel-stop combinations; simulations are independent confirmations, not the source of
-the figure.
-
-## What is in the box
+## Aufbau
 
 ```
-config/            game.config.json (every gameplay parameter), reel-design.json
-src/config/        types, validation (path-specific errors), compilation, SHA-256 hash
-src/rng/           RNG abstraction: Web Crypto CSPRNG, seeded xoshiro128**, rejection sampling
-src/game/          engine: reels, paylines, payouts (Wild/Scatter), free spins, rounds,
-                   win cap, session state, exactly-once settlement ledger
-src/math/          exact-analysis (marginal method, full enumeration, FFT distribution,
-                   sensitivity), simulation (accumulator, runner, reports, Web Worker),
-                   statistics (intervals), reports (Markdown, specification)
-src/render/        Phaser reel scene, layout/tape math, React-Phaser bridge
-src/app, src/components, src/styles   React UI
+index.html         fertiges Spiel als Einzeldatei (generiert, nicht von Hand ändern)
+web/               Vite-Einstieg (index.html, main.ts, favicon) für dev und build
+config/            game.config.json (alle Spielparameter inkl. Taschengeld), reel-design.json
+src/config/        Typen, Validierung (Fehler mit Pfad), Kompilierung, SHA-256-Hash
+src/rng/           Zufall: Web-Crypto-CSPRNG, Seed-xoshiro128**, Rejection Sampling
+src/game/          Engine: Walzen, Linien, Gewinne (Wild/Scatter), Freispiele, Runden,
+                   Gewinnobergrenze, Sitzung, Buchungsjournal, Taschengeld, Speicherstand
+src/math/          exakte Analyse, Simulation, Statistik, Berichte
+src/assets/pixel/  Pixel-Art-Generator (32×32-Raster → SVG) und alle Symbole
+src/render/        Phaser-Walzenszene (Holzrahmen, Karopapier, Rotstift), Layout, Brücke
+src/app, src/components, src/styles   React-Oberfläche (Deutsch)
 scripts/           analyze, simulate, simulate-feature, export-report, validate-config,
-                   design-reels (+ worker pool)
-tests/             unit, integration, math, e2e (Playwright)
-docs/              design, mathematics, configuration, RTP report, specification,
-                   security, regulatory readiness, test results
-reports/           generated analysis/simulation JSON and CSV (committed)
+                   design-reels, build-standalone
+tests/             unit, integration, math, e2e (Playwright, inkl. Einzeldatei über file://)
+docs/              Design, Mathematik, Konfiguration, RTP-Bericht, Spezifikation,
+                   Sicherheit, Regulatorik, Testergebnisse (auf Englisch)
+reports/           erzeugte Analyse- und Simulationsdaten (JSON/CSV)
 ```
 
-Architecture in one paragraph: the **configuration** is validated and compiled into
-numeric tables; the **engine** turns RNG output into reel stops (the only place
-randomness enters), evaluates the window with pure functions, and drives rounds through
-one `playNextSpin()` used by both the interactive **session** and the **simulator**. The
-session settles every spin through an idempotent **ledger** before the **renderer** is
-asked to animate the already-settled result. The **math** module re-implements the rules
-independently for exact analysis, and the tests require all implementations to agree.
+Architektur in Kürze: Die **Konfiguration** wird geprüft und in Zahlentabellen
+übersetzt. Die **Engine** macht aus Zufallszahlen Walzenstopps (die einzige Stelle, an
+der Zufall eingeht) und wertet das Fenster mit reinen Funktionen aus; Spiel und
+Simulator nutzen dieselbe `playNextSpin()`-Funktion. Die **Sitzung** bucht jeden Dreh
+(Einsatz, Gewinn, Taschengeld) genau einmal im Journal, **bevor** die Walzen animiert
+werden, und speichert danach das Spielgeld-Konto. Das **Mathe-Modul** implementiert die
+Regeln unabhängig nach; die Tests verlangen, dass alle Implementierungen übereinstimmen.
 
-## Documentation
+## Dokumentation
 
-- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) - concept, rules, presentation, accessibility
-- [docs/SPECIFICATION.md](docs/SPECIFICATION.md) - symbols, paytable, paylines, reel strips (generated)
-- [docs/MATHEMATICS.md](docs/MATHEMATICS.md) - definitions, evaluation rules, exact and simulation methods
-- [docs/RTP_REPORT.md](docs/RTP_REPORT.md) - theoretical vs simulated results (generated)
-- [docs/CONFIGURATION.md](docs/CONFIGURATION.md) - every parameter, validation, safe change workflow
-- [docs/SECURITY.md](docs/SECURITY.md) - RNG, integrity measures, prototype limitations
-- [docs/REGULATORY_READINESS.md](docs/REGULATORY_READINESS.md) - roadmap to certification and platform integration
-- [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md) - observed test results
+- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) – Konzept, Regeln, Taschengeld, Darstellung, Barrierefreiheit
+- [docs/SPECIFICATION.md](docs/SPECIFICATION.md) – Symbole, Gewinntabelle, Linien, Walzenstreifen (generiert)
+- [docs/MATHEMATICS.md](docs/MATHEMATICS.md) – Definitionen, Auswertungsregeln, Methoden
+- [docs/RTP_REPORT.md](docs/RTP_REPORT.md) – theoretische vs. simulierte Werte (generiert)
+- [docs/CONFIGURATION.md](docs/CONFIGURATION.md) – alle Parameter, Validierung, sicheres Ändern
+- [docs/SECURITY.md](docs/SECURITY.md) – Zufall, Integrität, gespeichertes Spielgeld, Grenzen
+- [docs/REGULATORY_READINESS.md](docs/REGULATORY_READINESS.md) – Weg zu Zertifizierung und Plattform
+- [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md) – beobachtete Testergebnisse
 
-## Known limitations
+## Bekannte Grenzen
 
-- Client-side prototype: outcomes are generated in the browser, which the player
-  controls. Real-money use requires server-side outcome generation and settlement.
-- The RNG has not been independently tested or certified.
-- The 5,000x round cap is enforced but practically unreachable with the shipped strips;
-  probabilities below about 1e-13 are not resolved by the analysis and are reported as
-  "below floor".
-- Simulation confidence intervals use the normal approximation; with heavy-tailed
-  returns they are approximate for short runs.
-- No sound, no autoplay of paid spins, no persistence between page loads (history and
-  balance reset on reload), no responsible-gambling tooling beyond play-money
-  disclaimers.
-- The volatility class uses a documented project heuristic, not an industry standard.
-- Fast spin, quick stop and win celebrations may be restricted in some regulated markets.
+- Reiner Browser-Prototyp: Ergebnisse und Spielgeld-Konto entstehen bzw. liegen im
+  Browser, den der Spieler kontrolliert. `localStorage` und die Geräteuhr lassen sich
+  verändern – für Spielgeld ohne Wert unkritisch, für Echtgeld völlig ungeeignet.
+- Der Zufallsgenerator wurde nicht unabhängig geprüft oder zertifiziert.
+- Die 5.000×-Obergrenze ist umgesetzt, mit diesen Walzen aber praktisch unerreichbar;
+  Wahrscheinlichkeiten unter etwa 1e-13 löst die Analyse nicht auf.
+- Konfidenzintervalle der Simulation nutzen die Normalapproximation; bei kurzen Läufen
+  und stark schiefen Gewinnen sind sie nur näherungsweise.
+- Kein Ton, kein Autoplay bezahlter Drehs; Verlauf und Sitzungsstatistik gelten pro Tab
+  und werden nicht gespeichert.
+- Die Volatilitätsklasse ist eine dokumentierte Projekt-Konvention, kein Branchenstandard.
+- Schnelldrehen, Schnellstopp und Gewinn-Animationen sind in manchen regulierten Märkten
+  eingeschränkt.
 
-## License
+Glücksspiel kann süchtig machen. Hilfe gibt es z. B. bei der BZgA
+(check-dein-spiel.de) oder einer örtlichen Beratungsstelle.
 
-Original code and artwork for evaluation purposes. No license is granted for
-commercial gambling use.
+## Lizenz
+
+Eigener Code und eigene Grafiken zu Evaluationszwecken. Für kommerzielles Glücksspiel
+wird keine Lizenz erteilt. Die Schrift „Press Start 2P“ (CodeMan38) steht unter der SIL
+Open Font License 1.1.

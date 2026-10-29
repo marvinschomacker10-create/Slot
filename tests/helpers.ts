@@ -17,7 +17,7 @@ export function compileWith(mutate: (c: GameConfig) => void): CompiledGame {
 
 /**
  * Builds a window from a row-major picture (top row first), e.g.
- *   grid(['JADE JADE JADE RUBY MOON', '...', '...'])
+ *   grid(['RULER RULER RULER ERASER APPLE', '...', '...'])
  * and returns window[reel][row].
  */
 export function grid(rows: readonly string[]): string[][] {
@@ -34,11 +34,11 @@ export function cellsOf(g: CompiledGame, window: readonly (readonly string[])[])
 export function blockerWindow(g: CompiledGame): string[][] {
   // Each column uses symbols that never repeat across three consecutive columns.
   const cols = [
-    ['JADE', 'SAPPHIRE', 'RUBY'],
-    ['AMETHYST', 'COMET', 'MOON'],
-    ['PLANET', 'SUN', 'JADE'],
-    ['SAPPHIRE', 'RUBY', 'AMETHYST'],
-    ['COMET', 'MOON', 'PLANET'],
+    ['RULER', 'PENCIL', 'ERASER'],
+    ['CHALK', 'BOOK', 'APPLE'],
+    ['GLOBE', 'TEACHER', 'RULER'],
+    ['PENCIL', 'ERASER', 'CHALK'],
+    ['BOOK', 'APPLE', 'GLOBE'],
   ];
   return Array.from({ length: g.reels }, (_, r) => [...cols[r % cols.length]!]);
 }

@@ -11,7 +11,7 @@ import {
 } from '../statistics';
 import { HIGH_PAYOUT_THRESHOLDS, STREAK_BINS, bandLabels, type SimulationState } from './accumulator';
 
-export const SIMULATION_REPORT_SCHEMA = 'gilded-orbit/simulation-report@1';
+export const SIMULATION_REPORT_SCHEMA = 'pixel-pauker/simulation-report@2';
 
 /** Events observed fewer times than this are flagged as unreliable. */
 export const MIN_RELIABLE_EVENTS = 100;

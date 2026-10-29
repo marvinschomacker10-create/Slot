@@ -11,6 +11,7 @@ export function DevPanel({
   last,
   seed,
   mismatches,
+  onResetWallet,
 }: {
   game: CompiledGame;
   session: GameSession;
@@ -18,45 +19,46 @@ export function DevPanel({
   last: SpinRecord | null;
   seed: string | null;
   mismatches: number;
+  onResetWallet: () => void;
 }) {
-  const [integrity, setIntegrity] = useState<string>('not checked');
+  const [integrity, setIntegrity] = useState<string>('nicht geprüft');
   const shown = controller.displayedWindow();
   const matches = last ? JSON.stringify(shown) === JSON.stringify(last.outcome.window) : null;
   return (
     <div className="dev" data-testid="dev-panel">
       <dl className="kv">
         <div>
-          <dt>Configuration</dt>
+          <dt>Konfiguration</dt>
           <dd>
             {game.config.meta.id} {game.config.meta.version} · hash <code>{game.hash.slice(0, 16)}…</code>
           </dd>
         </div>
         <div>
-          <dt>Validation warnings</dt>
+          <dt>Validierungswarnungen</dt>
           <dd>
-            {game.warnings.length === 0 ? 'none' : game.warnings.map((w) => `${w.path}: ${w.message}`).join('; ')}
+            {game.warnings.length === 0 ? 'keine' : game.warnings.map((w) => `${w.path}: ${w.message}`).join('; ')}
           </dd>
         </div>
         <div>
           <dt>RNG</dt>
-          <dd>{seed !== null ? `seeded xoshiro128** "${seed}" (development only)` : 'Web Crypto CSPRNG'}</dd>
+          <dd>{seed !== null ? `Seed-xoshiro128** "${seed}" (nur Entwicklung)` : 'Web Crypto CSPRNG'}</dd>
         </div>
         <div>
           <dt>Renderer</dt>
           <dd>{controller.rendererType()}</dd>
         </div>
         <div>
-          <dt>Displayed grid equals settled outcome</dt>
+          <dt>Angezeigtes Raster = abgerechnetes Ergebnis</dt>
           <dd>
-            {matches === null ? 'no spin yet' : matches ? 'yes' : 'NO'} · mismatches so far: {mismatches}
+            {matches === null ? 'noch kein Dreh' : matches ? 'ja' : 'NEIN'} · Abweichungen bisher: {mismatches}
           </dd>
         </div>
         <div>
-          <dt>Session phase</dt>
+          <dt>Sitzungsphase</dt>
           <dd>{session.phase}</dd>
         </div>
         <div>
-          <dt>Ledger integrity</dt>
+          <dt>Buchungs-Integrität</dt>
           <dd>
             {integrity}{' '}
             <button
@@ -64,20 +66,25 @@ export function DevPanel({
               className="button button--small"
               onClick={() => {
                 const r = session.verifyIntegrity();
-                setIntegrity(r.ok ? `ok (${session.ledgerEntries.length} entries)` : r.problems.join('; '));
+                setIntegrity(r.ok ? `ok (${session.ledgerEntries.length} Buchungen)` : r.problems.join('; '));
               }}
             >
-              Verify
+              Prüfen
             </button>
           </dd>
         </div>
       </dl>
+      <p>
+        <button type="button" className="button button--small" onClick={onResetWallet} data-testid="reset-wallet">
+          Gespeichertes Spielgeld-Konto zurücksetzen
+        </button>
+      </p>
       <details>
-        <summary>Last spin record</summary>
-        <pre>{last ? JSON.stringify({ ...last, outcome: { ...last.outcome } }, null, 2) : 'none'}</pre>
+        <summary>Letzter Dreh (Datensatz)</summary>
+        <pre>{last ? JSON.stringify({ ...last, outcome: { ...last.outcome } }, null, 2) : 'keiner'}</pre>
       </details>
       <details>
-        <summary>Active configuration (config/game.config.json)</summary>
+        <summary>Aktive Konfiguration (config/game.config.json)</summary>
         <pre>{JSON.stringify(game.config, null, 2)}</pre>
       </details>
     </div>
