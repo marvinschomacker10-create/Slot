@@ -48,6 +48,8 @@ export interface RoundDistribution {
   /** True when the grid includes every reachable payout (capped, or uncapped with a finite maximum). */
   readonly horizonCoversAllOutcomes: boolean;
   readonly roundPmf: Float64Array;
+  /** P(round payout = u AND the paid spin triggered free spins), unnormalised joint pmf. */
+  readonly triggeredRoundPmf: Float64Array;
   /** P(min(B, cap) = u): the base spin alone (feature value excluded). */
   readonly baseSpinPmf: Float64Array;
   readonly features: readonly FeatureDistribution[];
@@ -118,7 +120,11 @@ export function computeRoundDistribution(game: CompiledGame, options: Distributi
   const fft = new FFT(fftSize);
   let fftCount = 0;
   const freeMass = new Map<number, number>();
-  for (const [e, pmf] of freeByAward) freeMass.set(e, pmf.reduce((a, b) => a + b, 0));
+  for (const [e, pmf] of freeByAward)
+    freeMass.set(
+      e,
+      pmf.reduce((a, b) => a + b, 0),
+    );
   const freeHat = new Map<number, { re: Float64Array; im: Float64Array }>();
   const freeLumped = new Map<number, Float64Array>();
   for (const [e, pmf] of freeByAward) {
@@ -179,7 +185,8 @@ export function computeRoundDistribution(game: CompiledGame, options: Distributi
           const y = isDelta ? freeLumped.get(e)! : lumpAtCap(fft.inverseProduct(xHat!, dHat), horizon, false);
           if (!isDelta) fftCount++;
           const a2 = trunc(awarded + e);
-          const target = a2 === played + 1 ? result : (next.get(a2) ?? next.set(a2, new Float64Array(horizon + 1)).get(a2)!);
+          const target =
+            a2 === played + 1 ? result : (next.get(a2) ?? next.set(a2, new Float64Array(horizon + 1)).get(a2)!);
           for (let i = 0; i <= horizon; i++) target[i]! += y[i]!;
         }
       }
@@ -195,11 +202,20 @@ export function computeRoundDistribution(game: CompiledGame, options: Distributi
         if (played >= 20_000) throw new Error('free-spins win distribution did not converge');
       }
     }
-    features.push({ initialAward: a0, pmf: result, expectedSpinsPlayed, probabilityAnyRetrigger, expectedRetriggers, states, unresolvedMass });
+    features.push({
+      initialAward: a0,
+      pmf: result,
+      expectedSpinsPlayed,
+      probabilityAnyRetrigger,
+      expectedRetriggers,
+      states,
+      unresolvedMass,
+    });
   }
 
   log('combining base game and feature distributions');
   const roundPmf = new Float64Array(horizon + 1);
+  const triggeredRoundPmf = new Float64Array(horizon + 1);
   const baseSpinPmf = new Float64Array(horizon + 1);
   let noTriggerMass = 0;
   for (const [a, pmf] of baseByAward) {
@@ -215,7 +231,10 @@ export function computeRoundDistribution(game: CompiledGame, options: Distributi
     const feature = features.find((f) => f.initialAward === a)!;
     const conv = lumpAtCap(fft.inverseProduct(fft.forwardReal(lumped), fft.forwardReal(feature.pmf)), horizon, false);
     fftCount += 3;
-    for (let i = 0; i <= horizon; i++) roundPmf[i]! += conv[i]!;
+    for (let i = 0; i <= horizon; i++) {
+      roundPmf[i]! += conv[i]!;
+      triggeredRoundPmf[i]! += conv[i]!;
+    }
   }
 
   let mass = 0;
@@ -228,6 +247,7 @@ export function computeRoundDistribution(game: CompiledGame, options: Distributi
     capped,
     horizonCoversAllOutcomes,
     roundPmf,
+    triggeredRoundPmf,
     baseSpinPmf,
     features,
     noTriggerMass,

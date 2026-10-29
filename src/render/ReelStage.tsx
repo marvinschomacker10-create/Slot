@@ -26,7 +26,10 @@ export function ReelStage({ controller, setup, label }: Props) {
     let game: Phaser.Game | null = null;
     let observer: ResizeObserver | null = null;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const size = () => ({ w: Math.max(1, Math.round(el.clientWidth * dpr)), h: Math.max(1, Math.round(el.clientHeight * dpr)) });
+    const size = () => ({
+      w: Math.max(1, Math.round(el.clientWidth * dpr)),
+      h: Math.max(1, Math.round(el.clientHeight * dpr)),
+    });
 
     void rasterizeSymbols(setup.symbols, Math.round(256 * dpr)).then((symbolCanvases) => {
       if (cancelled) return;

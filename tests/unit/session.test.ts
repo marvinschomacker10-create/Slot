@@ -32,7 +32,13 @@ describe('game session', () => {
   it('starts idle with the configured play-money balance', () => {
     const s = new GameSession(game, { rng: new SeededRandomSource(1) });
     const snap = s.getSnapshot();
-    expect(snap).toMatchObject({ balance: game.startingBalance, phase: 'idle', lineBet: 1, totalBet: 20, rngKind: 'seeded' });
+    expect(snap).toMatchObject({
+      balance: game.startingBalance,
+      phase: 'idle',
+      lineBet: 1,
+      totalBet: 20,
+      rngKind: 'seeded',
+    });
   });
 
   it('debits the stake and credits the win of a paid spin', () => {
@@ -71,7 +77,13 @@ describe('game session', () => {
     }
     expect(s.phase).toBe('idle');
     const snap = s.getSnapshot();
-    expect(snap.stats).toMatchObject({ rounds: 1, paidSpins: 1, freeSpins: 10, featuresTriggered: 1, totalStaked: 100 });
+    expect(snap.stats).toMatchObject({
+      rounds: 1,
+      paidSpins: 1,
+      freeSpins: 10,
+      featuresTriggered: 1,
+      totalStaked: 100,
+    });
     expect(snap.history[0]).toMatchObject({ roundId: 'R1', freeSpinsPlayed: 10, featureTriggered: true });
     expect(snap.history[0]!.spins).toHaveLength(11);
     expect(s.balance).toBe(10_000 - 100 + snap.stats.totalWon);

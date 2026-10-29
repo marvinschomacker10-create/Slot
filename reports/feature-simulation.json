@@ -1,0 +1,253 @@
+{
+  "schema": "gilded-orbit/feature-simulation@2",
+  "game": {
+    "id": "gilded-orbit",
+    "version": "1.0.0",
+    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+  },
+  "meta": {
+    "features": 1000000,
+    "seed": "feature-check",
+    "elapsedMs": 299327,
+    "generatedAt": "2026-10-29T09:22:08.797Z"
+  },
+  "description": "Complete free-spin features played through the game engine, compared with the exact stand-alone feature distribution (feature win alone, conditional on a trigger).",
+  "mean": {
+    "exact": 43.59731217351334,
+    "simulated": 43.58800750000182,
+    "ci95": {
+      "low": 43.516057413795515,
+      "high": 43.65995758620813
+    },
+    "z": -0.2534649497553731
+  },
+  "sd": {
+    "exact": 36.802031860178325,
+    "simulated": 36.70990217975083
+  },
+  "maxObservedWin": 741,
+  "tail": [
+    {
+      "metric": "Feature win >= 10x bet",
+      "exact": 0.9264411147738176,
+      "simulated": 0.926595,
+      "events": 926595,
+      "ci95": {
+        "low": 0.9260822007586296,
+        "high": 0.9271045217597043
+      },
+      "z": 0.5894818631273646,
+      "pValue": 0.5555380283183324
+    },
+    {
+      "metric": "Feature win >= 25x bet",
+      "exact": 0.6552169961727692,
+      "simulated": 0.655656,
+      "events": 655656,
+      "ci95": {
+        "low": 0.6547241191603287,
+        "high": 0.6565866849520351
+      },
+      "z": 0.9236401533862876,
+      "pValue": 0.3556737089484421
+    },
+    {
+      "metric": "Feature win >= 50x bet",
+      "exact": 0.3031259474430216,
+      "simulated": 0.302884,
+      "events": 302884,
+      "ci95": {
+        "low": 0.30198414443706556,
+        "high": 0.3037853699831131
+      },
+      "z": -0.5264199418650296,
+      "pValue": 0.5985964164165327
+    },
+    {
+      "metric": "Feature win >= 100x bet",
+      "exact": 0.06938710565835199,
+      "simulated": 0.06922,
+      "events": 69220,
+      "ci95": {
+        "low": 0.06872415952124909,
+        "high": 0.069719150113304
+      },
+      "z": -0.6576082255090453,
+      "pValue": 0.510789868794784
+    },
+    {
+      "metric": "Feature win >= 250x bet",
+      "exact": 0.0028487735011047425,
+      "simulated": 0.002794,
+      "events": 2794,
+      "ci95": {
+        "low": 0.0026924370225088743,
+        "high": 0.0028993829555718008
+      },
+      "z": -1.0276873894665186,
+      "pValue": 0.30409691794542804
+    },
+    {
+      "metric": "Feature win >= 500x bet",
+      "exact": 0.00010406988480178767,
+      "simulated": 0.000093,
+      "events": 93,
+      "ci95": {
+        "low": 0.00007592276296463679,
+        "high": 0.0001139179665969051
+      },
+      "z": -1.085183456047943,
+      "pValue": 0.27784042773362305
+    },
+    {
+      "metric": "Feature win >= 1000x bet",
+      "exact": 6.19896676736909e-9,
+      "simulated": 0,
+      "events": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.000003841444070138933
+      },
+      "z": -0.07873351767701148,
+      "pValue": 0.9372445110814573
+    }
+  ],
+  "spinsPlayed": [
+    {
+      "spins": 10,
+      "count": 958815,
+      "fraction": 0.958815,
+      "exact": 0.9591139096386372
+    },
+    {
+      "spins": 20,
+      "count": 38701,
+      "fraction": 0.038701,
+      "exact": 0.03848186748575014
+    },
+    {
+      "spins": 30,
+      "count": 2304,
+      "fraction": 0.002304,
+      "exact": 0.0022387731633833965
+    },
+    {
+      "spins": 40,
+      "count": 172,
+      "fraction": 0.000172,
+      "exact": 0.0001530118244848764
+    },
+    {
+      "spins": 50,
+      "count": 8,
+      "fraction": 0.000008,
+      "exact": 0.000012437887745792848
+    }
+  ],
+  "roundsGivenTrigger": {
+    "rounds": 1000000,
+    "paidSpinsDrawn": 169090533,
+    "elapsedMs": 213627,
+    "observedTriggerRate": 0.005913991648485726,
+    "mean": {
+      "exact": 46.2370689634166,
+      "simulated": 46.224235499998734,
+      "ci95": {
+        "low": 46.15176919116378,
+        "high": 46.29670180883369
+      },
+      "z": -0.3471009703763011
+    },
+    "triggeringSpin": {
+      "exact": 2.639756789902812,
+      "simulated": 2.641578000000068,
+      "z": 0.55382397098322
+    },
+    "tail": [
+      {
+        "metric": "Round win >= 10x bet | trigger",
+        "exact": 0.9562637882396143,
+        "simulated": 0.956442,
+        "events": 956442,
+        "ci95": {
+          "low": 0.9560401961994928,
+          "high": 0.9568402970076787
+        },
+        "z": 0.871418796169048,
+        "pValue": 0.38352552771473003
+      },
+      {
+        "metric": "Round win >= 25x bet | trigger",
+        "exact": 0.7029912871047272,
+        "simulated": 0.702666,
+        "events": 702666,
+        "ci95": {
+          "low": 0.7017693531527852,
+          "high": 0.7035610897870069
+        },
+        "z": -0.7118808018156316,
+        "pValue": 0.4765385623937748
+      },
+      {
+        "metric": "Round win >= 50x bet | trigger",
+        "exact": 0.328658235043261,
+        "simulated": 0.328476,
+        "events": 328476,
+        "ci95": {
+          "low": 0.3275561458291408,
+          "high": 0.3293971719705647
+        },
+        "z": -0.38796076040569166,
+        "pValue": 0.6980450614812912
+      },
+      {
+        "metric": "Round win >= 100x bet | trigger",
+        "exact": 0.07539707679312231,
+        "simulated": 0.075278,
+        "events": 75278,
+        "ci95": {
+          "low": 0.07476251426640337,
+          "high": 0.07579674882521337
+        },
+        "z": -0.4509955377273917,
+        "pValue": 0.6519927320388852
+      },
+      {
+        "metric": "Round win >= 250x bet | trigger",
+        "exact": 0.003040786469686517,
+        "simulated": 0.003111,
+        "events": 3111,
+        "ci95": {
+          "low": 0.003003742855462167,
+          "high": 0.003222074687142968
+        },
+        "z": 1.2752318528586497,
+        "pValue": 0.20222720245787507
+      },
+      {
+        "metric": "Round win >= 500x bet | trigger",
+        "exact": 0.00011031309497055094,
+        "simulated": 0.000115,
+        "events": 115,
+        "ci95": {
+          "low": 0.0000958157134343169,
+          "high": 0.00013802484710368594
+        },
+        "z": 0.44626885060551535,
+        "pValue": 0.6554030224050904
+      },
+      {
+        "metric": "Round win >= 1000x bet | trigger",
+        "exact": 6.556904152673343e-9,
+        "simulated": 0,
+        "events": 0,
+        "ci95": {
+          "low": 0,
+          "high": 0.000003841444070138933
+        },
+        "z": -0.08097471331018305,
+        "pValue": 0.9354619900707994
+      }
+    ]
+  }
+}

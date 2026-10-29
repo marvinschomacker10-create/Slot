@@ -1,7 +1,13 @@
 import type { CompiledGame } from '../../config/compile';
 import { playRound } from '../../game/engine';
 import { CryptoRandomSource, SeededRandomSource, deriveSeed, type RandomSource, type Seed } from '../../rng';
-import { closeBatch, createSimulationState, mergeSimulationStates, recordRound, type SimulationState } from './accumulator';
+import {
+  closeBatch,
+  createSimulationState,
+  mergeSimulationStates,
+  recordRound,
+  type SimulationState,
+} from './accumulator';
 
 export const DEFAULT_CHUNK_SIZE = 10_000;
 

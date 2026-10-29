@@ -22,5 +22,11 @@ const m = analyzeMarginals(game);
 console.log(`${path}: valid (${result.warnings.length} warning(s))`);
 console.log(`  config hash      ${game.hash}`);
 console.log(`  grid             ${game.reels} reels x ${game.rows} rows, ${game.lineCount} paylines`);
-console.log(`  reel lengths     ${Object.entries(game.config.reelSets).map(([k, v]) => `${k}: ${v.map((s) => s.symbols.length).join('/')}`).join('; ')}`);
-console.log(`  exact RTP (uncapped, marginal method): ${fmtPct(m.rtpUncapped.total)} (target ${fmtPct(game.config.math.targetRtp, 2)})`);
+console.log(
+  `  reel lengths     ${Object.entries(game.config.reelSets)
+    .map(([k, v]) => `${k}: ${v.map((s) => s.symbols.length).join('/')}`)
+    .join('; ')}`,
+);
+console.log(
+  `  exact RTP (uncapped, marginal method): ${fmtPct(m.rtpUncapped.total)} (target ${fmtPct(game.config.math.targetRtp, 2)})`,
+);

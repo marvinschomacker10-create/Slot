@@ -1,6 +1,10 @@
 import { Worker } from 'node:worker_threads';
 import type { CompiledGame } from '../../src/config';
-import { createSimulationState, mergeSimulationStates, type SimulationState } from '../../src/math/simulation/accumulator';
+import {
+  createSimulationState,
+  mergeSimulationStates,
+  type SimulationState,
+} from '../../src/math/simulation/accumulator';
 import { planChunks, simulateChunk, type ChunkSpec } from '../../src/math/simulation/runner';
 import type { Seed } from '../../src/rng';
 
@@ -48,22 +52,32 @@ export async function runParallelSimulation(game: CompiledGame, opts: ParallelOp
       const n = Math.min(opts.workers, chunks.length);
       for (let i = 0; i < n; i++) {
         // The bootstrap registers the TypeScript loader inside the worker (see sim-worker-bootstrap.mjs).
-        const w = new Worker(new URL('./sim-worker-bootstrap.mjs', import.meta.url), { workerData: { config: game.config }, execArgv: [] });
-        pool.push(w);
-        w.on('message', (m: { ready?: true; progress?: { chunkIndex: number; done: number }; result?: { chunkIndex: number; state: SimulationState } }) => {
-          if (m.ready) dispatch(w);
-          else if (m.progress) {
-            progress.set(m.progress.chunkIndex, m.progress.done);
-            report();
-          } else if (m.result) {
-            results[m.result.chunkIndex] = m.result.state;
-            progress.set(m.result.chunkIndex, chunks[m.result.chunkIndex]!.rounds);
-            report();
-            finished++;
-            if (finished === chunks.length) resolveAll();
-            dispatch(w);
-          }
+        const w = new Worker(new URL('./sim-worker-bootstrap.mjs', import.meta.url), {
+          workerData: { config: game.config },
+          execArgv: [],
         });
+        pool.push(w);
+        w.on(
+          'message',
+          (m: {
+            ready?: true;
+            progress?: { chunkIndex: number; done: number };
+            result?: { chunkIndex: number; state: SimulationState };
+          }) => {
+            if (m.ready) dispatch(w);
+            else if (m.progress) {
+              progress.set(m.progress.chunkIndex, m.progress.done);
+              report();
+            } else if (m.result) {
+              results[m.result.chunkIndex] = m.result.state;
+              progress.set(m.result.chunkIndex, chunks[m.result.chunkIndex]!.rounds);
+              report();
+              finished++;
+              if (finished === chunks.length) resolveAll();
+              dispatch(w);
+            }
+          },
+        );
         w.on('error', (e) => {
           for (const p of pool) void p.terminate();
           rejectAll(e);

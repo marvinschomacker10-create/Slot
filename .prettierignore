@@ -5,3 +5,5 @@ config/game.config.json
 package-lock.json
 test-results
 playwright-report
+docs/RTP_REPORT.md
+docs/SPECIFICATION.md

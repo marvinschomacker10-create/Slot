@@ -49,7 +49,12 @@ export function sensitivityReport(game: CompiledGame, options: { maxCandidates?:
       edited.paytable.line[symbol]![count] = value + step;
       const rtp = rtpOf(edited);
       if (rtp !== null) {
-        paytable.push({ kind: 'paytable', description: `${symbol} x${count}: ${value} -> ${value + step}`, rtpAfter: rtp, delta: rtp - current });
+        paytable.push({
+          kind: 'paytable',
+          description: `${symbol} x${count}: ${value} -> ${value + step}`,
+          rtpAfter: rtp,
+          delta: rtp - current,
+        });
       }
     }
   }
@@ -59,7 +64,12 @@ export function sensitivityReport(game: CompiledGame, options: { maxCandidates?:
     edited.paytable.scatter[count] = value + step;
     const rtp = rtpOf(edited);
     if (rtp !== null) {
-      paytable.push({ kind: 'scatter-pay', description: `SCATTER x${count}: ${value} -> ${value + step} (x total bet)`, rtpAfter: rtp, delta: rtp - current });
+      paytable.push({
+        kind: 'scatter-pay',
+        description: `SCATTER x${count}: ${value} -> ${value + step} (x total bet)`,
+        rtpAfter: rtp,
+        delta: rtp - current,
+      });
     }
   }
 

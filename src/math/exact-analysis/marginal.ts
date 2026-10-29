@@ -125,7 +125,10 @@ export function analyzeModeMarginals(game: CompiledGame, modeName: GameMode): Mo
   const symbolUnits = new Float64Array(nSym);
   const lineHit: number[] = [];
   let expectedLineUnits = 0;
-  const cache = new Map<string, { units: number; hit: number; bySymbol: Float64Array; byCombo: Map<string, [number, number]> }>();
+  const cache = new Map<
+    string,
+    { units: number; hit: number; bySymbol: Float64Array; byCombo: Map<string, [number, number]> }
+  >();
   const comboTotals = new Map<string, [number, number]>(); // key -> [probability summed over lines, units]
 
   // A probe window: only the cells on the evaluated line are filled in.
@@ -216,7 +219,9 @@ export function analyzeModeMarginals(game: CompiledGame, modeName: GameMode): Mo
     const award = mode.awards[c]!;
     awards.set(award, (awards.get(award) ?? 0) + p);
   }
-  const awardPmf = [...awards.entries()].sort((a, b) => a[0] - b[0]).map(([award, probability]) => ({ award, probability }));
+  const awardPmf = [...awards.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([award, probability]) => ({ award, probability }));
 
   const symbolLineUnits: Record<string, number> = {};
   game.symbolIds.forEach((id, i) => {
@@ -279,7 +284,9 @@ export function featureSpinDistribution(
         break;
       }
       if (played >= 20_000) {
-        throw new Error(`free-spins length distribution did not converge (mass ${total.toExponential(2)} still unresolved after ${played} spins)`);
+        throw new Error(
+          `free-spins length distribution did not converge (mass ${total.toExponential(2)} still unresolved after ${played} spins)`,
+        );
       }
     }
   }
@@ -295,9 +302,13 @@ export function analyzeMarginals(game: CompiledGame): MarginalAnalysis {
     .filter((a) => a.award > 0 && a.probability > 0)
     .map(({ award, probability }) => {
       const dist = featureSpinDistribution(award, retriggerPmf, game.maxTotalFreeSpins);
-      const spinsPmf = [...dist.spinsPmf.entries()].sort((a, b) => a[0] - b[0]).map(([spins, p]) => ({ spins, probability: p }));
+      const spinsPmf = [...dist.spinsPmf.entries()]
+        .sort((a, b) => a[0] - b[0])
+        .map(([spins, p]) => ({ spins, probability: p }));
       const expectedSpins = spinsPmf.reduce((acc, s) => acc + s.spins * s.probability, 0);
-      const probabilityAnyRetrigger = spinsPmf.filter((s) => s.spins > award).reduce((acc, s) => acc + s.probability, 0);
+      const probabilityAnyRetrigger = spinsPmf
+        .filter((s) => s.spins > award)
+        .reduce((acc, s) => acc + s.probability, 0);
       return {
         initialAward: award,
         probability,

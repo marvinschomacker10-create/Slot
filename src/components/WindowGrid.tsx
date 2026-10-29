@@ -1,7 +1,15 @@
 import { SymbolIcon } from './SymbolIcon';
 
 /** Compact rendering of a settled window (window[reel][row]) for history and diagnostics. */
-export function WindowGrid({ window, highlight, size = 26 }: { window: readonly (readonly string[])[]; highlight?: ReadonlySet<string>; size?: number }) {
+export function WindowGrid({
+  window,
+  highlight,
+  size = 26,
+}: {
+  window: readonly (readonly string[])[];
+  highlight?: ReadonlySet<string>;
+  size?: number;
+}) {
   const rows = window[0]?.length ?? 0;
   return (
     <table className="window-grid">

@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { grantRetrigger, remainingFreeSpins, startFreeSpins, truncateAward } from '../../src/game/bonus';
-import { assertLineBet, outcomeFromStops, playNextSpin, playRound, resolveSpin, roundWinCap, startRound } from '../../src/game/engine';
+import {
+  assertLineBet,
+  outcomeFromStops,
+  playNextSpin,
+  playRound,
+  resolveSpin,
+  roundWinCap,
+  startRound,
+} from '../../src/game/engine';
 import { GameStateError } from '../../src/game/errors';
 import { SeededRandomSource } from '../../src/rng';
 import { ScriptedRandom, compileWith, game, scatterStops } from '../helpers';

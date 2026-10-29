@@ -162,7 +162,8 @@ export function recordRound(game: CompiledGame, s: SimulationState, r: RoundResu
   const band = bandIndex(x);
   s.bandCounts[band]! += 1;
   s.bandPayout[band]! += r.totalWin;
-  for (let i = 0; i < HIGH_PAYOUT_THRESHOLDS.length; i++) if (x >= HIGH_PAYOUT_THRESHOLDS[i]!) s.thresholdCounts[i]! += 1;
+  for (let i = 0; i < HIGH_PAYOUT_THRESHOLDS.length; i++)
+    if (x >= HIGH_PAYOUT_THRESHOLDS[i]!) s.thresholdCounts[i]! += 1;
 
   const baseSpin = r.spins[0]!;
   const baseOutcome = baseSpin.outcome;

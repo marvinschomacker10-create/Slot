@@ -20,7 +20,12 @@ export function BandChart({ data, title }: { data: readonly BandDatum[]; title: 
   const plotW = 300;
   const height = data.length * rowH + 24;
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => t * max);
-  const top3 = new Set([...data.map((d, i) => [d.value, i] as const)].sort((a, b) => b[0] - a[0]).slice(0, 3).map(([, i]) => i));
+  const top3 = new Set(
+    [...data.map((d, i) => [d.value, i] as const)]
+      .sort((a, b) => b[0] - a[0])
+      .slice(0, 3)
+      .map(([, i]) => i),
+  );
   const fmt = (v: number) => `${(v * 100).toFixed(1)}%`;
   return (
     <figure className="chart">
@@ -43,7 +48,10 @@ export function BandChart({ data, title }: { data: readonly BandDatum[]; title: 
             const h = 16;
             const w = Math.max(0, (d.value / max) * plotW);
             const r = Math.min(4, w);
-            const path = w > 0 ? `M${labelW},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${h - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} z` : '';
+            const path =
+              w > 0
+                ? `M${labelW},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${h - 2 * r} a${r},${r} 0 0 1 -${r},${r} h-${w - r} z`
+                : '';
             return (
               <g
                 key={d.label}

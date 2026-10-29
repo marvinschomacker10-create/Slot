@@ -74,7 +74,8 @@ export function App() {
   const changeBet = useCallback(
     (delta: number) => {
       const next = snap.lineBetIndex + delta;
-      if (next >= 0 && next < game.lineBetOptions.length && !sessionInFeature && slot.phase !== 'spinning') slot.setLineBetIndex(next);
+      if (next >= 0 && next < game.lineBetOptions.length && !sessionInFeature && slot.phase !== 'spinning')
+        slot.setLineBetIndex(next);
     },
     [game, sessionInFeature, slot, snap.lineBetIndex],
   );
@@ -83,7 +84,8 @@ export function App() {
     const onKey = (e: KeyboardEvent) => {
       if (panel || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       const t = e.target as HTMLElement | null;
-      const interactive = t && (t.closest('button, a, input, select, textarea, summary, [contenteditable="true"]') !== null);
+      const interactive =
+        t && t.closest('button, a, input, select, textarea, summary, [contenteditable="true"]') !== null;
       if ((e.key === ' ' || e.key === 'Enter') && !interactive) {
         e.preventDefault();
         if (slot.banner) slot.dismissBanner();
@@ -151,11 +153,16 @@ export function App() {
       </header>
 
       <main className="stage">
-        <div className={`feature-bar${inFeature ? ' is-visible' : ''}`} aria-hidden={!inFeature} data-testid="feature-bar">
+        <div
+          className={`feature-bar${inFeature ? ' is-visible' : ''}`}
+          aria-hidden={!inFeature}
+          data-testid="feature-bar"
+        >
           {feature && (
             <>
               <span>
-                Free spins played <strong data-testid="free-spins-played">{feature.played}</strong> of <strong>{feature.totalAwarded}</strong>
+                Free spins played <strong data-testid="free-spins-played">{feature.played}</strong> of{' '}
+                <strong>{feature.totalAwarded}</strong>
               </span>
               <span>
                 Feature win <strong>{credits(feature.totalWin)}</strong>
@@ -168,7 +175,9 @@ export function App() {
         </div>
         <div className="reels-wrap">
           <ReelStage controller={slot.controller} setup={sceneSetup} label="Slot reels" />
-          {slot.banner && <Banner banner={slot.banner} onDismiss={slot.dismissBanner} reducedMotion={settings.reducedMotion} />}
+          {slot.banner && (
+            <Banner banner={slot.banner} onDismiss={slot.dismissBanner} reducedMotion={settings.reducedMotion} />
+          )}
         </div>
         <p className="message" data-testid="message">
           {slot.message}
@@ -245,7 +254,14 @@ export function App() {
       )}
       {panel === 'dev' && flags.dev && (
         <Modal title="Developer diagnostics" onClose={close} wide>
-          <DevPanel game={game} session={slot.session} controller={slot.controller} last={slot.lastRevealed} seed={flags.seed} mismatches={slot.windowMismatches} />
+          <DevPanel
+            game={game}
+            session={slot.session}
+            controller={slot.controller}
+            last={slot.lastRevealed}
+            seed={flags.seed}
+            mismatches={slot.windowMismatches}
+          />
         </Modal>
       )}
     </div>

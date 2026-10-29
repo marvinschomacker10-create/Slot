@@ -38,7 +38,12 @@ export interface SimulationMeta {
 export interface SimulationReport {
   readonly schema: typeof SIMULATION_REPORT_SCHEMA;
   readonly game: { readonly id: string; readonly version: string; readonly configHash: string };
-  readonly meta: SimulationMeta & { readonly rounds: number; readonly roundsPerSecond: number; readonly lineBet: number; readonly totalBet: number };
+  readonly meta: SimulationMeta & {
+    readonly rounds: number;
+    readonly roundsPerSecond: number;
+    readonly lineBet: number;
+    readonly totalBet: number;
+  };
   readonly totals: {
     readonly rounds: number;
     readonly baseSpins: number;
@@ -76,9 +81,19 @@ export interface SimulationReport {
     readonly winPerTrigger: { readonly mean: number; readonly sd: number; readonly ci95: Interval } | null;
     readonly maxFeatureWin: number;
   };
-  readonly extremes: { readonly maxRoundWin: number; readonly maxBaseSpinWin: number; readonly maxFreeSpinWin: number; readonly capHits: ProportionEstimate };
+  readonly extremes: {
+    readonly maxRoundWin: number;
+    readonly maxBaseSpinWin: number;
+    readonly maxFreeSpinWin: number;
+    readonly capHits: ProportionEstimate;
+  };
   readonly thresholds: readonly (ProportionEstimate & { readonly multiplier: number })[];
-  readonly bands: readonly { readonly label: string; readonly count: number; readonly probability: number; readonly rtpContribution: number }[];
+  readonly bands: readonly {
+    readonly label: string;
+    readonly count: number;
+    readonly probability: number;
+    readonly rtpContribution: number;
+  }[];
   readonly symbolContributions: readonly { readonly symbol: string; readonly base: number; readonly free: number }[];
   readonly scatterContributions: { readonly base: number; readonly free: number };
   readonly losingStreaks: {
@@ -104,7 +119,14 @@ function proportion(count: number, trials: number, label: string, theoretical?: 
     const need = trialsForRelativePrecision(theoretical, 0.1);
     warning += ` About ${need.toExponential(2)} trials are needed for +/-10% precision at the theoretical probability ${theoretical.toExponential(3)}.`;
   }
-  return { count, trials, estimate, ci95: wilsonInterval(count, trials, 0.95), reliable: count >= MIN_RELIABLE_EVENTS, warning };
+  return {
+    count,
+    trials,
+    estimate,
+    ci95: wilsonInterval(count, trials, 0.95),
+    reliable: count >= MIN_RELIABLE_EVENTS,
+    warning,
+  };
 }
 
 export function buildSimulationReport(
@@ -125,18 +147,34 @@ export function buildSimulationReport(
     s.batches.map((b) => b.payout / (b.rounds * T)),
     s.batches.map((b) => b.rounds),
   );
-  if (batch.batches < 10) warnings.push(`Only ${batch.batches} batch(es): the batch-means interval is not meaningful below 10 batches.`);
+  if (batch.batches < 10)
+    warnings.push(`Only ${batch.batches} batch(es): the batch-means interval is not meaningful below 10 batches.`);
 
   const tTheory = (m: number) => theory?.round.thresholds.find((t) => t.multiplier === m)?.probability;
   const thresholds = HIGH_PAYOUT_THRESHOLDS.map((m, i) => ({
     multiplier: m,
     ...proportion(s.thresholdCounts[i]!, n, `Rounds paying >= ${m}x bet`, tTheory(m)),
   }));
-  const capHits = proportion(s.capHits, n, 'Rounds reaching the win cap', theory && theory.round.capProbability > 0 ? theory.round.capProbability : undefined);
+  const capHits = proportion(
+    s.capHits,
+    n,
+    'Rounds reaching the win cap',
+    theory && theory.round.capProbability > 0 ? theory.round.capProbability : undefined,
+  );
 
   const triggers = proportion(s.triggers, n, 'Free-spin triggers', theory?.feature.triggerProbability);
-  const retrig = proportion(s.retriggerScatterSpins, s.freeSpins, 'Retrigger-qualifying free spins', theory?.freeGame.retriggerProbabilityPerSpin);
-  const withRetrig = proportion(s.featuresWithRetrigger, s.triggers, 'Features with at least one retrigger', theory?.feature.probabilityAnyRetrigger);
+  const retrig = proportion(
+    s.retriggerScatterSpins,
+    s.freeSpins,
+    'Retrigger-qualifying free spins',
+    theory?.freeGame.retriggerProbabilityPerSpin,
+  );
+  const withRetrig = proportion(
+    s.featuresWithRetrigger,
+    s.triggers,
+    'Features with at least one retrigger',
+    theory?.feature.probabilityAnyRetrigger,
+  );
 
   for (const p of [triggers, retrig, withRetrig, capHits, ...thresholds]) if (p.warning) warnings.push(p.warning);
   const roundsFor = (halfWidth: number) => Math.ceil(((1.959963984540054 * sd) / halfWidth) ** 2);
@@ -153,7 +191,10 @@ export function buildSimulationReport(
   const meanLosses = winsObserved > 0 ? s.lossesBeforeWin.reduce((a, c, k) => a + c * k, 0) / winsObserved : 0;
   const atLeast = [5, 10, 20, 30, 50, 100].map((k) => ({
     rounds: k,
-    observedFraction: winsObserved > 0 ? s.lossesBeforeWin.slice(Math.min(k, STREAK_BINS)).reduce((a, b) => a + b, 0) / winsObserved : 0,
+    observedFraction:
+      winsObserved > 0
+        ? s.lossesBeforeWin.slice(Math.min(k, STREAK_BINS)).reduce((a, b) => a + b, 0) / winsObserved
+        : 0,
   }));
 
   return {
@@ -198,15 +239,26 @@ export function buildSimulationReport(
       baseSpinsPerTrigger: s.triggers > 0 ? n / s.triggers : null,
       freeSpinsPerTrigger:
         s.triggers > 0
-          ? { mean: s.featureSpinMoments.mean, ci95: meanInterval(s.featureSpinMoments.mean, stdDev(s.featureSpinMoments), s.triggers) }
+          ? {
+              mean: s.featureSpinMoments.mean,
+              ci95: meanInterval(s.featureSpinMoments.mean, stdDev(s.featureSpinMoments), s.triggers),
+            }
           : null,
       retriggerEvents: s.retriggerEvents,
       retriggerProbabilityPerFreeSpin: retrig,
       featuresWithRetrigger: withRetrig,
-      winPerTrigger: s.triggers > 0 ? { mean: featureMean, sd: featureSd, ci95: meanInterval(featureMean, featureSd, s.triggers) } : null,
+      winPerTrigger:
+        s.triggers > 0
+          ? { mean: featureMean, sd: featureSd, ci95: meanInterval(featureMean, featureSd, s.triggers) }
+          : null,
       maxFeatureWin: s.maxFeature / T,
     },
-    extremes: { maxRoundWin: s.maxRound / T, maxBaseSpinWin: s.maxBaseSpin / T, maxFreeSpinWin: s.maxFreeSpin / T, capHits },
+    extremes: {
+      maxRoundWin: s.maxRound / T,
+      maxBaseSpinWin: s.maxBaseSpin / T,
+      maxFreeSpinWin: s.maxFreeSpin / T,
+      capHits,
+    },
     thresholds,
     bands: bandLabels().map((label, i) => ({
       label,
@@ -288,16 +340,32 @@ export function compareWithTheory(theory: ExactAnalysis, sim: SimulationReport):
 
   meanRow('Total RTP', theory.rtp.total, sim.rtp.estimate, sim.rtp.ci95, sim.rtp.standardError);
   meanRow('Base-game RTP', theory.rtp.base, sim.rtp.base, sim.rtp.baseCi95, halfToSe(sim.rtp.baseCi95));
-  meanRow('Free-spins RTP contribution', theory.rtp.feature, sim.rtp.feature, sim.rtp.featureCi95, halfToSe(sim.rtp.featureCi95));
+  meanRow(
+    'Free-spins RTP contribution',
+    theory.rtp.feature,
+    sim.rtp.feature,
+    sim.rtp.featureCi95,
+    halfToSe(sim.rtp.featureCi95),
+  );
   propRow('Hit frequency (round pays > 0)', theory.round.hitFrequency, sim.hitFrequency);
   propRow('Base spin with a line win', theory.baseGame.lineWinProbability, sim.lineWinProbability);
   propRow('Net-positive round', theory.round.probabilityNetPositive, sim.netPositiveProbability);
   propRow('Free-spins trigger', theory.feature.triggerProbability, sim.feature.triggers);
-  propRow('Retrigger per free spin', theory.freeGame.retriggerProbabilityPerSpin, sim.feature.retriggerProbabilityPerFreeSpin);
+  propRow(
+    'Retrigger per free spin',
+    theory.freeGame.retriggerProbabilityPerSpin,
+    sim.feature.retriggerProbabilityPerFreeSpin,
+  );
   propRow('Feature with >= 1 retrigger', theory.feature.probabilityAnyRetrigger, sim.feature.featuresWithRetrigger);
   if (sim.feature.freeSpinsPerTrigger) {
     const f = sim.feature.freeSpinsPerTrigger;
-    meanRow('Free spins played per trigger', theory.feature.expectedFreeSpinsPlayedPerTrigger, f.mean, f.ci95, halfToSe(f.ci95));
+    meanRow(
+      'Free spins played per trigger',
+      theory.feature.expectedFreeSpinsPlayedPerTrigger,
+      f.mean,
+      f.ci95,
+      halfToSe(f.ci95),
+    );
   }
   if (sim.feature.winPerTrigger) {
     const f = sim.feature.winPerTrigger;
@@ -331,8 +399,18 @@ export function simulationSummaryCsv(r: SimulationReport): string {
     ['rtp_batch_means', r.rtp.estimate, r.rtp.batchMeansCi95.low, r.rtp.batchMeansCi95.high],
     ['round_payout_sd', r.roundPayout.sd, '', ''],
     ['hit_frequency', r.hitFrequency.estimate, r.hitFrequency.ci95.low, r.hitFrequency.ci95.high],
-    ['line_win_probability', r.lineWinProbability.estimate, r.lineWinProbability.ci95.low, r.lineWinProbability.ci95.high],
-    ['net_positive_probability', r.netPositiveProbability.estimate, r.netPositiveProbability.ci95.low, r.netPositiveProbability.ci95.high],
+    [
+      'line_win_probability',
+      r.lineWinProbability.estimate,
+      r.lineWinProbability.ci95.low,
+      r.lineWinProbability.ci95.high,
+    ],
+    [
+      'net_positive_probability',
+      r.netPositiveProbability.estimate,
+      r.netPositiveProbability.ci95.low,
+      r.netPositiveProbability.ci95.high,
+    ],
     ['trigger_probability', r.feature.triggers.estimate, r.feature.triggers.ci95.low, r.feature.triggers.ci95.high],
     ['max_round_win_x_bet', r.extremes.maxRoundWin, '', ''],
     ...r.thresholds.map((t) => [`p_round_ge_${t.multiplier}x`, t.estimate, t.ci95.low, t.ci95.high]),
@@ -342,7 +420,33 @@ export function simulationSummaryCsv(r: SimulationReport): string {
 
 export function comparisonCsv(rows: readonly ComparisonRow[]): string {
   return toCsv(
-    ['metric', 'theoretical', 'simulated', 'ci95_low', 'ci95_high', 'standard_error', 'difference', 'z', 'p_value', 'within_ci95', 'events', 'reliable'],
-    rows.map((r) => [r.metric, r.theoretical, r.simulated, r.ci95Low, r.ci95High, r.standardError, r.difference, r.z, r.pValue, r.withinCi95, r.events ?? '', r.reliable]),
+    [
+      'metric',
+      'theoretical',
+      'simulated',
+      'ci95_low',
+      'ci95_high',
+      'standard_error',
+      'difference',
+      'z',
+      'p_value',
+      'within_ci95',
+      'events',
+      'reliable',
+    ],
+    rows.map((r) => [
+      r.metric,
+      r.theoretical,
+      r.simulated,
+      r.ci95Low,
+      r.ci95High,
+      r.standardError,
+      r.difference,
+      r.z,
+      r.pValue,
+      r.withinCi95,
+      r.events ?? '',
+      r.reliable,
+    ]),
   );
 }

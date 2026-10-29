@@ -107,7 +107,9 @@ export function referenceEvaluate(
   const scatter = cfg.symbols.find((s) => s.kind === 'scatter')!.id;
   const table = (t: Record<string, number> | undefined, count: number): number => {
     if (!t) return 0;
-    const keys = Object.keys(t).map(Number).filter((k) => k <= count);
+    const keys = Object.keys(t)
+      .map(Number)
+      .filter((k) => k <= count);
     return keys.length ? t[String(Math.max(...keys))]! : 0;
   };
   const lines: ReferenceLineWin[] = [];
@@ -144,10 +146,23 @@ export function referenceEvaluate(
   let scatterCount = 0;
   for (const col of window) for (const s of col) if (s === scatter) scatterCount++;
   const scatterPays = mode === 'base' || cfg.freeSpins.scatterPaysInFeature;
-  const scatterUnits = scatterPays ? table(cfg.paytable.scatter, scatterCount) * cfg.paylines.length * m.winMultiplier : 0;
-  const awards = mode === 'base' ? cfg.freeSpins.triggerAwards : cfg.freeSpins.retrigger.enabled ? cfg.freeSpins.retrigger.awards : {};
+  const scatterUnits = scatterPays
+    ? table(cfg.paytable.scatter, scatterCount) * cfg.paylines.length * m.winMultiplier
+    : 0;
+  const awards =
+    mode === 'base'
+      ? cfg.freeSpins.triggerAwards
+      : cfg.freeSpins.retrigger.enabled
+        ? cfg.freeSpins.retrigger.awards
+        : {};
   const award = table(awards, scatterCount);
-  return { lines, scatterCount, scatterUnits, totalUnits: lines.reduce((a, l) => a + l.units, 0) + scatterUnits, award };
+  return {
+    lines,
+    scatterCount,
+    scatterUnits,
+    totalUnits: lines.reduce((a, l) => a + l.units, 0) + scatterUnits,
+    award,
+  };
 }
 
 /** Stops for a base or free spin showing exactly `n` scatters (on reels 0..n-1). */

@@ -32,9 +32,13 @@ describe('Monte Carlo through the game engine agrees with exact analysis', () =>
     const rtp = s.payout / s.stake;
     const se = stdDev(s.roundMoments) / Math.sqrt(s.rounds);
     expect(zScore(rtp, m.rtpUncapped.total, se)).toBeLessThan(Z);
-    expect(zScore(s.triggers / s.rounds, m.triggerProbability, binomialSe(m.triggerProbability, s.rounds))).toBeLessThan(Z);
+    expect(
+      zScore(s.triggers / s.rounds, m.triggerProbability, binomialSe(m.triggerProbability, s.rounds)),
+    ).toBeLessThan(Z);
     // Distribution-level values come from the committed exact analysis (its hash is checked in regression.test.ts).
-    const exact = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../reports/analysis.json'), 'utf8')) as ExactAnalysis;
+    const exact = JSON.parse(
+      readFileSync(resolve(import.meta.dirname, '../../reports/analysis.json'), 'utf8'),
+    ) as ExactAnalysis;
     expect(exact.game.configHash).toBe(game.hash);
     const hit = exact.round.hitFrequency;
     expect(zScore(s.hits / s.rounds, hit, binomialSe(hit, s.rounds))).toBeLessThan(Z);
@@ -53,7 +57,9 @@ describe('Monte Carlo through the game engine agrees with exact analysis', () =>
     expect(zScore(s.capHits / n, a.round.capProbability, binomialSe(a.round.capProbability, n))).toBeLessThan(Z);
     expect(zScore(s.hits / n, a.round.hitFrequency, binomialSe(a.round.hitFrequency, n))).toBeLessThan(Z);
     const spins = s.featureSpinMoments;
-    expect(zScore(spins.mean, a.feature.expectedFreeSpinsPlayedPerTrigger, stdDev(spins) / Math.sqrt(spins.n))).toBeLessThan(Z);
+    expect(
+      zScore(spins.mean, a.feature.expectedFreeSpinsPlayedPerTrigger, stdDev(spins) / Math.sqrt(spins.n)),
+    ).toBeLessThan(Z);
     const fw = s.featureMoments;
     expect(zScore(fw.mean, a.feature.expectedWin, stdDev(fw) / Math.sqrt(fw.n))).toBeLessThan(Z);
     // The cap ends features early here, so fewer spins are played than awarded.

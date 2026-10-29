@@ -41,7 +41,11 @@ export interface SlotGame {
 }
 
 function sameWindow(a: readonly (readonly string[])[] | null, b: readonly (readonly string[])[]): boolean {
-  return a !== null && a.length === b.length && a.every((col, i) => col.length === b[i]!.length && col.every((s, j) => s === b[i]![j]));
+  return (
+    a !== null &&
+    a.length === b.length &&
+    a.every((col, i) => col.length === b[i]!.length && col.every((s, j) => s === b[i]![j]))
+  );
 }
 
 /**
@@ -100,7 +104,11 @@ export function useSlotGame(game: CompiledGame, createRng: () => RandomSource, s
     autoTimer.current = setTimeout(() => {
       autoTimer.current = null;
       if (bannerRef.current?.kind === 'feature-start') setBannerBoth(null);
-      if (sessionRef.current.phase === 'free-spins' && phaseRef.current !== 'spinning' && settingsRef.current.autoFreeSpins) {
+      if (
+        sessionRef.current.phase === 'free-spins' &&
+        phaseRef.current !== 'spinning' &&
+        settingsRef.current.autoFreeSpins
+      ) {
         spinRef.current();
       }
     }, delay);
@@ -111,18 +119,28 @@ export function useSlotGame(game: CompiledGame, createRng: () => RandomSource, s
       const s = settingsRef.current;
       const steps = winSteps(game, record);
       const lines = record.outcome.lineWins.map((w) => ({ lineIndex: w.lineIndex, positions: w.positions }));
-      const scatter = record.outcome.scatter.win > 0 || record.freeSpinsGranted > 0 ? record.outcome.scatter.positions : [];
+      const scatter =
+        record.outcome.scatter.win > 0 || record.freeSpinsGranted > 0 ? record.outcome.scatter.positions : [];
       if (steps.length > 0) {
         controller.showWins(lines, scatter);
         setMessage(steps[0]!.text);
         if (steps.length > 2 && !s.reducedMotion) {
           let i = 0;
-          cycle.current = setInterval(() => {
-            i = (i + 1) % steps.length;
-            const step = steps[i]!;
-            controller.focus(step.kind === 'line' ? { kind: 'line', lineIndex: step.lineIndex } : step.kind === 'scatter' ? { kind: 'scatter' } : { kind: 'all' });
-            setMessage(step.text);
-          }, s.turbo ? 900 : 1400);
+          cycle.current = setInterval(
+            () => {
+              i = (i + 1) % steps.length;
+              const step = steps[i]!;
+              controller.focus(
+                step.kind === 'line'
+                  ? { kind: 'line', lineIndex: step.lineIndex }
+                  : step.kind === 'scatter'
+                    ? { kind: 'scatter' }
+                    : { kind: 'all' },
+              );
+              setMessage(step.text);
+            },
+            s.turbo ? 900 : 1400,
+          );
         } else if (steps.length === 2) {
           setMessage(steps[1]!.text);
         }
@@ -168,7 +186,9 @@ export function useSlotGame(game: CompiledGame, createRng: () => RandomSource, s
     const before = revealedRef.current && !revealedRef.current.roundComplete ? revealedRef.current.feature : null;
     setPending(record);
     setPhaseBoth('spinning');
-    setMessage(record.mode === 'free' && before ? `Free spin ${before.played + 1} of ${before.totalAwarded}` : 'Good luck!');
+    setMessage(
+      record.mode === 'free' && before ? `Free spin ${before.played + 1} of ${before.totalAwarded}` : 'Good luck!',
+    );
     controller.setFeatureMode(record.mode === 'free');
     void controller
       .spin({
@@ -252,7 +272,13 @@ export function useSlotGame(game: CompiledGame, createRng: () => RandomSource, s
   );
 
   const displayBalance = pending ? pending.balanceAfterStake : snapshot.balance;
-  const displayWin = pending ? (pending.mode === 'free' ? pending.roundWinAfter - pending.credited : null) : lastRevealed ? lastRevealed.roundWinAfter : null;
+  const displayWin = pending
+    ? pending.mode === 'free'
+      ? pending.roundWinAfter - pending.credited
+      : null
+    : lastRevealed
+      ? lastRevealed.roundWinAfter
+      : null;
   const revealedFeature = lastRevealed && !lastRevealed.roundComplete ? lastRevealed.feature : null;
   const displayFeature = pending ? (pending.mode === 'free' ? revealedFeature : null) : revealedFeature;
 

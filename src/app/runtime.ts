@@ -11,7 +11,9 @@ export interface RuntimeFlags {
   readonly forceReducedMotion: boolean;
 }
 
-export function readRuntimeFlags(search: string = typeof location === 'undefined' ? '' : location.search): RuntimeFlags {
+export function readRuntimeFlags(
+  search: string = typeof location === 'undefined' ? '' : location.search,
+): RuntimeFlags {
   const params = new URLSearchParams(search);
   const dev = import.meta.env.DEV;
   return {

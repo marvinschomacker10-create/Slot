@@ -8,7 +8,9 @@ parentPort!.on('message', (msg: { chunk: ChunkSpec } | { exit: true }) => {
   if ('exit' in msg) {
     process.exit(0);
   }
-  const state = simulateChunk(game, msg.chunk, (done) => parentPort!.postMessage({ progress: { chunkIndex: msg.chunk.chunkIndex, done } }));
+  const state = simulateChunk(game, msg.chunk, (done) =>
+    parentPort!.postMessage({ progress: { chunkIndex: msg.chunk.chunkIndex, done } }),
+  );
   parentPort!.postMessage({ result: { chunkIndex: msg.chunk.chunkIndex, state } });
 });
 parentPort!.postMessage({ ready: true });

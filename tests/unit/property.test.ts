@@ -5,10 +5,20 @@ import { evaluateSpin } from '../../src/game/payouts';
 import { cellsOf, compileWith, game, referenceEvaluate } from '../helpers';
 
 const symbolIds = game.symbolIds as string[];
-const windowArb = fc.array(fc.array(fc.constantFrom(...symbolIds), { minLength: 3, maxLength: 3 }), { minLength: 5, maxLength: 5 });
+const windowArb = fc.array(fc.array(fc.constantFrom(...symbolIds), { minLength: 3, maxLength: 3 }), {
+  minLength: 5,
+  maxLength: 5,
+});
 // Wild-heavy windows exercise substitution edge cases far more often than uniform ones.
 const wildHeavyArb = fc.array(
-  fc.array(fc.oneof({ weight: 3, arbitrary: fc.constant('WILD') }, { weight: 1, arbitrary: fc.constant('SCATTER') }, { weight: 4, arbitrary: fc.constantFrom('SUN', 'MOON', 'JADE') }), { minLength: 3, maxLength: 3 }),
+  fc.array(
+    fc.oneof(
+      { weight: 3, arbitrary: fc.constant('WILD') },
+      { weight: 1, arbitrary: fc.constant('SCATTER') },
+      { weight: 4, arbitrary: fc.constantFrom('SUN', 'MOON', 'JADE') },
+    ),
+    { minLength: 3, maxLength: 3 },
+  ),
   { minLength: 5, maxLength: 5 },
 );
 const modeArb = fc.constantFrom<GameMode>('base', 'free');
@@ -19,7 +29,9 @@ describe('property-based checks of the payout evaluator', () => {
       fc.property(fc.oneof(windowArb, wildHeavyArb), modeArb, (window, mode) => {
         const r = evaluateSpin(game, game.modes[mode], cellsOf(game, window), 1);
         const ref = referenceEvaluate(game, mode, window);
-        expect(r.lineWins.map((w) => [w.lineIndex, w.symbol, w.count, w.units])).toEqual(ref.lines.map((w) => [w.lineIndex, w.symbol, w.count, w.units]));
+        expect(r.lineWins.map((w) => [w.lineIndex, w.symbol, w.count, w.units])).toEqual(
+          ref.lines.map((w) => [w.lineIndex, w.symbol, w.count, w.units]),
+        );
         expect(r.scatter.count).toBe(ref.scatterCount);
         expect(r.scatterUnits).toBe(ref.scatterUnits);
         expect(r.totalUnits).toBe(ref.totalUnits);

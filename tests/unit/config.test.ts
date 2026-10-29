@@ -10,9 +10,15 @@ function errorsFor(mutate: (c: GameConfig & Record<string, unknown>) => void) {
   return validateConfig(c).errors;
 }
 
-function expectError(mutate: (c: GameConfig & Record<string, unknown>) => void, path: string | RegExp, message?: RegExp) {
+function expectError(
+  mutate: (c: GameConfig & Record<string, unknown>) => void,
+  path: string | RegExp,
+  message?: RegExp,
+) {
   const errors = errorsFor(mutate);
-  const hit = errors.find((e) => (typeof path === 'string' ? e.path === path : path.test(e.path)) && (!message || message.test(e.message)));
+  const hit = errors.find(
+    (e) => (typeof path === 'string' ? e.path === path : path.test(e.path)) && (!message || message.test(e.message)),
+  );
   expect(hit, `expected an error at ${String(path)}; got ${JSON.stringify(errors)}`).toBeDefined();
 }
 
@@ -64,13 +70,21 @@ describe('configuration validation', () => {
   });
 
   it('rejects line pays for scatters, unknown symbols and missing regular pays', () => {
-    expectError((c) => (c.paytable.line.SCATTER = { '3': 1 }), 'paytable.line.SCATTER', /scatter symbols cannot have line pays/);
+    expectError(
+      (c) => (c.paytable.line.SCATTER = { '3': 1 }),
+      'paytable.line.SCATTER',
+      /scatter symbols cannot have line pays/,
+    );
     expectError((c) => (c.paytable.line.GHOST = { '3': 1 }), 'paytable.line.GHOST', /unknown symbol/);
     expectError((c) => delete c.paytable.line.MOON, 'paytable.line', /"MOON" has no line pays/);
   });
 
   it('rejects longer combinations paying less than shorter ones', () => {
-    expectError((c) => (c.paytable.line.SUN = { '3': 50, '4': 40, '5': 1000 }), 'paytable.line.SUN.4', /must not pay less/);
+    expectError(
+      (c) => (c.paytable.line.SUN = { '3': 50, '4': 40, '5': 1000 }),
+      'paytable.line.SUN.4',
+      /must not pay less/,
+    );
   });
 
   it('rejects invalid count keys and pay values', () => {
@@ -88,7 +102,11 @@ describe('configuration validation', () => {
   it('validates reel strips', () => {
     expectError((c) => (c.reelSets.base!.length = 4), 'reelSets.base', /exactly 5 strips/);
     expectError((c) => (c.reelSets.base![0]!.symbols[3] = 'GHOST'), 'reelSets.base[0].symbols[3]', /unknown symbol/);
-    expectError((c) => (c.reelSets.base![1]!.symbols = ['JADE', 'RUBY']), 'reelSets.base[1].symbols', /at least 3 stops/);
+    expectError(
+      (c) => (c.reelSets.base![1]!.symbols = ['JADE', 'RUBY']),
+      'reelSets.base[1].symbols',
+      /at least 3 stops/,
+    );
     expectError((c) => (c.reelSets.base![2]!.weights = [1, 2]), 'reelSets.base[2].weights', /one weight per stop/);
     expectError(
       (c) => (c.reelSets.base![2]!.weights = c.reelSets.base![2]!.symbols.map((_, i) => (i === 0 ? 0 : 1))),
@@ -109,8 +127,15 @@ describe('configuration validation', () => {
   it('validates modes, free spins, bets, limits and session', () => {
     expectError((c) => (c.modes.free.reelSet = 'nope'), 'modes.free.reelSet', /existing reel set/);
     expectError((c) => (c.modes.base.wildMultiplier = 0), 'modes.base.wildMultiplier');
-    expectError((c) => (c.freeSpins.retrigger.maxTotalSpins = 5), 'freeSpins.retrigger.maxTotalSpins', /at least the largest initial award/);
-    expectError((c) => ((c.freeSpins.retrigger as { enabled: unknown }).enabled = 'yes'), 'freeSpins.retrigger.enabled');
+    expectError(
+      (c) => (c.freeSpins.retrigger.maxTotalSpins = 5),
+      'freeSpins.retrigger.maxTotalSpins',
+      /at least the largest initial award/,
+    );
+    expectError(
+      (c) => ((c.freeSpins.retrigger as { enabled: unknown }).enabled = 'yes'),
+      'freeSpins.retrigger.enabled',
+    );
     expectError((c) => (c.bet.lineBetOptions = [1, 1, 2]), 'bet.lineBetOptions[1]', /strictly increasing/);
     expectError((c) => (c.bet.defaultLineBetIndex = 99), 'bet.defaultLineBetIndex');
     expectError((c) => (c.limits.maxWinMultiplier = 0), 'limits.maxWinMultiplier');
@@ -176,7 +201,15 @@ describe('compiled configuration', () => {
 
 describe('configuration hash', () => {
   it('matches node:crypto SHA-256 on assorted inputs', () => {
-    for (const s of ['', 'abc', 'a'.repeat(55), 'b'.repeat(56), 'c'.repeat(64), 'Ünïcødé ✓ 🎰', JSON.stringify(cloneConfig())]) {
+    for (const s of [
+      '',
+      'abc',
+      'a'.repeat(55),
+      'b'.repeat(56),
+      'c'.repeat(64),
+      'Ünïcødé ✓ 🎰',
+      JSON.stringify(cloneConfig()),
+    ]) {
       expect(sha256Hex(s)).toBe(createHash('sha256').update(s, 'utf8').digest('hex'));
     }
   });
@@ -189,7 +222,11 @@ describe('configuration hash', () => {
       Array.isArray(v)
         ? v.map(reverseKeys)
         : v !== null && typeof v === 'object'
-          ? Object.fromEntries(Object.entries(v).reverse().map(([k, x]) => [k, reverseKeys(x)]))
+          ? Object.fromEntries(
+              Object.entries(v)
+                .reverse()
+                .map(([k, x]) => [k, reverseKeys(x)]),
+            )
           : v;
     const reordered = reverseKeys(c);
     expect(JSON.stringify(reordered)).not.toBe(JSON.stringify(c));

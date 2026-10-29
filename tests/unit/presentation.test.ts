@@ -2,7 +2,14 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { celebrationLevel, describeSpin, winSteps, winTier } from '../../src/app/presentation';
 import { GameSession } from '../../src/game/state/session';
-import { computeLayout, easeOutBack, planLanding, planSpinTiming, tapeSymbol, type TapeSegment } from '../../src/render/layout';
+import {
+  computeLayout,
+  easeOutBack,
+  planLanding,
+  planSpinTiming,
+  tapeSymbol,
+  type TapeSegment,
+} from '../../src/render/layout';
 import { SeededRandomSource } from '../../src/rng';
 import { ScriptedRandom, game, scatterStops } from '../helpers';
 
@@ -30,7 +37,8 @@ describe('reel landing (renderer tape model)', () => {
           // Cells that may already be visible keep their symbols (no popping).
           visibleBefore.forEach((sym, k) => expect(tapeSymbol(landing.segments, Math.floor(-position) + k)).toBe(sym));
           // At the end position, row r shows strip[(stop + r) mod length], i.e. the engine's window.
-          for (let r = 0; r < 3; r++) expect(tapeSymbol(landing.segments, r - landing.end)).toBe(to[(s + r) % to.length]);
+          for (let r = 0; r < 3; r++)
+            expect(tapeSymbol(landing.segments, r - landing.end)).toBe(to[(s + r) % to.length]);
         },
       ),
       { numRuns: 2000 },

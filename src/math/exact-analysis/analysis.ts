@@ -5,7 +5,7 @@ import { computeRoundDistribution, type RoundDistribution } from './distribution
 import type { SpinDistribution } from './enumerate';
 import { analyzeMarginals, type MarginalAnalysis, type ModeMarginals } from './marginal';
 
-export const EXACT_ANALYSIS_SCHEMA = 'gilded-orbit/exact-analysis@2';
+export const EXACT_ANALYSIS_SCHEMA = 'gilded-orbit/exact-analysis@3';
 
 export const DEFINITIONS = {
   rtpDenominator:
@@ -110,6 +110,12 @@ export interface ExactAnalysis {
     readonly quantiles: Readonly<Record<string, number>>;
     readonly probabilityWinAtLeast: readonly ProbabilityRow[];
     readonly maxPossibleWinUpperBound: number;
+    /** Whole-round payout (triggering spin + feature) conditional on a trigger. */
+    readonly roundGivenTrigger: {
+      readonly meanWin: number;
+      readonly triggeringSpinMeanWin: number;
+      readonly probabilityWinAtLeast: readonly ProbabilityRow[];
+    };
   };
   readonly round: {
     readonly hitFrequency: number;
@@ -261,7 +267,9 @@ function spinSection(game: CompiledGame, dist: SpinDistribution, marg: ModeMargi
     winningLinesPmf: Array.from(dist.winningLines)
       .map((w, lines) => ({ lines, probability: w / n }))
       .filter((r) => r.probability > 0),
-    scatterCountPmf: marg.scatterCountPmf.map((p, scatters) => ({ scatters, probability: p })).filter((r) => r.probability > 0),
+    scatterCountPmf: marg.scatterCountPmf
+      .map((p, scatters) => ({ scatters, probability: p }))
+      .filter((r) => r.probability > 0),
     symbolContributions: game.symbolIds
       .map((symbol, i) => ({ symbol, rtp: dist.symbolUnits[i]! / n / T }))
       .filter((r) => r.rtp > 0),
@@ -346,7 +354,9 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
   /** P(initial award a | trigger). */
   const featureWeight = (a: number) => marg.features.find((m) => m.initialAward === a)!.probability / trig;
   const spinsPmf = new Map<number, number>();
-  for (const f of marg.features) for (const s of f.spinsPmf) spinsPmf.set(s.spins, (spinsPmf.get(s.spins) ?? 0) + (f.probability / trig) * s.probability);
+  for (const f of marg.features)
+    for (const s of f.spinsPmf)
+      spinsPmf.set(s.spins, (spinsPmf.get(s.spins) ?? 0) + (f.probability / trig) * s.probability);
 
   const baseSec = spinSection(game, dist.base, marg.base);
   const freeSec = spinSection(game, dist.free, marg.free);
@@ -374,7 +384,12 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
 
   return {
     schema: EXACT_ANALYSIS_SCHEMA,
-    game: { id: game.config.meta.id, name: game.config.meta.name, version: game.config.meta.version, configHash: game.hash },
+    game: {
+      id: game.config.meta.id,
+      name: game.config.meta.name,
+      version: game.config.meta.version,
+      configHash: game.hash,
+    },
     generatedAt: (options.now?.() ?? new Date()).toISOString(),
     definitions: DEFINITIONS,
     method: {
@@ -398,7 +413,9 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
       reels: game.reels,
       rows: game.rows,
       paylines: T,
-      reelLengths: Object.fromEntries(Object.entries(game.config.reelSets).map(([k, v]) => [k, v.map((s) => s.symbols.length)])),
+      reelLengths: Object.fromEntries(
+        Object.entries(game.config.reelSets).map(([k, v]) => [k, v.map((s) => s.symbols.length)]),
+      ),
       maxWinMultiplier: game.maxWinMultiplier,
       targetRtp: game.config.math.targetRtp,
       freeSpinsMaxTotal: game.maxTotalFreeSpins,
@@ -426,11 +443,25 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
         .map((p, scatters) => ({ scatters, probability: p, award: game.modes.base.awards[scatters]! }))
         .filter((r) => r.award > 0 && r.probability > 0),
       expectedFreeSpinsPerTrigger: marg.expectedFreeSpinsPerTrigger,
-      expectedFreeSpinsPlayedPerTrigger: dist.features.reduce((acc, f) => acc + featureWeight(f.initialAward) * f.expectedSpinsPlayed, 0),
-      freeSpinsPmf: [...spinsPmf.entries()].sort((a, b) => a[0] - b[0]).map(([spins, probability]) => ({ spins, probability })),
-      probabilityAnyRetrigger: dist.features.reduce((a, f) => a + featureWeight(f.initialAward) * f.probabilityAnyRetrigger, 0),
-      probabilityAnyRetriggerUncapped: marg.features.reduce((a, f) => a + (f.probability / trig) * f.probabilityAnyRetrigger, 0),
-      expectedRetriggersPerFeature: dist.features.reduce((a, f) => a + featureWeight(f.initialAward) * f.expectedRetriggers, 0),
+      expectedFreeSpinsPlayedPerTrigger: dist.features.reduce(
+        (acc, f) => acc + featureWeight(f.initialAward) * f.expectedSpinsPlayed,
+        0,
+      ),
+      freeSpinsPmf: [...spinsPmf.entries()]
+        .sort((a, b) => a[0] - b[0])
+        .map(([spins, probability]) => ({ spins, probability })),
+      probabilityAnyRetrigger: dist.features.reduce(
+        (a, f) => a + featureWeight(f.initialAward) * f.probabilityAnyRetrigger,
+        0,
+      ),
+      probabilityAnyRetriggerUncapped: marg.features.reduce(
+        (a, f) => a + (f.probability / trig) * f.probabilityAnyRetrigger,
+        0,
+      ),
+      expectedRetriggersPerFeature: dist.features.reduce(
+        (a, f) => a + featureWeight(f.initialAward) * f.expectedRetriggers,
+        0,
+      ),
       expectedWinUncapped: marg.expectedFeatureUnitsPerTrigger / T,
       expectedWin: trig > 0 ? (rtpTotal - rtpBase) / trig : 0,
       standaloneMeanWin: featureM.mean,
@@ -438,6 +469,16 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
       quantiles: quantiles(featurePmf, T, [0.1, 0.25, 0.5, 0.75, 0.9, 0.99]),
       probabilityWinAtLeast: tailRows(featurePmf, T, [10, 25, 50, 100, 250, 500, 1000, 2500, 5000], floor),
       maxPossibleWinUpperBound: Math.min(cap, featureBound) / T,
+      roundGivenTrigger: (() => {
+        const cond = new Float64Array(horizon + 1);
+        for (let i = 0; i <= horizon; i++) cond[i] = dist.triggeredRoundPmf[i]! / trig;
+        const mean = moments(cond, T).mean;
+        return {
+          meanWin: mean,
+          triggeringSpinMeanWin: mean - (rtpTotal - rtpBase) / trig,
+          probabilityWinAtLeast: tailRows(cond, T, [10, 25, 50, 100, 250, 500, 1000], floor),
+        };
+      })(),
     },
     round: {
       hitFrequency: 1 - p0,
@@ -471,7 +512,8 @@ export function analyzeGame(game: CompiledGame, options: AnalyzeOptions = {}): E
     volatility: {
       sdPerUnitStake: roundM.sd,
       classification: classifyVolatility(roundM.sd),
-      scale: 'Heuristic scale on the standard deviation of the round return per unit stake: < 3 low, 3-7 medium, 7-15 high, >= 15 very high.',
+      scale:
+        'Heuristic scale on the standard deviation of the round return per unit stake: < 3 low, 3-7 medium, 7-15 high, >= 15 very high.',
       rtpShareFromRoundsAtLeast: [10, 50, 100, 500, 1000].map(share),
       sessionRtpSd: [100, 1000, 10_000, 100_000].map((n) => ({ rounds: n, sd: roundM.sd / Math.sqrt(n) })),
       caveats: [

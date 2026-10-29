@@ -38,7 +38,18 @@ describe('command-line tools', () => {
 
   it('simulate writes JSON and CSV results with a theory comparison', () => {
     const out = join(dir, 'sim-cli');
-    const r = run('simulate.ts', ['--spins', '20000', '--seed', 'cli', '--workers', '2', '--chunk-size', '5000', '--out', out]);
+    const r = run('simulate.ts', [
+      '--spins',
+      '20000',
+      '--seed',
+      'cli',
+      '--workers',
+      '2',
+      '--chunk-size',
+      '5000',
+      '--out',
+      out,
+    ]);
     expect(r.status, r.stderr).toBe(0);
     const json = JSON.parse(readFileSync(`${out}.json`, 'utf8'));
     expect(json.totals.rounds).toBe(20_000);
@@ -48,7 +59,10 @@ describe('command-line tools', () => {
     expect(existsSync(`${out}-comparison.csv`)).toBe(true);
     // Same seed, different worker count: identical results.
     const out1 = join(dir, 'sim-cli-1');
-    expect(run('simulate.ts', ['--spins', '20000', '--seed', 'cli', '--workers', '1', '--chunk-size', '5000', '--out', out1]).status).toBe(0);
+    expect(
+      run('simulate.ts', ['--spins', '20000', '--seed', 'cli', '--workers', '1', '--chunk-size', '5000', '--out', out1])
+        .status,
+    ).toBe(0);
     expect(JSON.parse(readFileSync(`${out1}.json`, 'utf8')).totals).toEqual(json.totals);
   });
 
@@ -69,6 +83,6 @@ describe('command-line tools', () => {
     const text = readFileSync(md, 'utf8');
     expect(text).toMatch(/# RTP and Mathematical Report/);
     expect(text).toMatch(/20,000 paid spins/);
-    expect(existsSync(join(reports, 'comparison-20000.csv'))).toBe(true);
+    expect(existsSync(join(reports, 'simulation-20000-comparison.csv'))).toBe(true);
   });
 });

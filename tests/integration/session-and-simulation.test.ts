@@ -50,17 +50,33 @@ describe('simulation engine', () => {
 
   it('gives the same result whatever order chunks are computed in (worker independence)', () => {
     const chunks = planChunks(25_000, 10_000, 'order', 1);
-    const states = chunks.map((c) => simulateChunk(game, c)).reverse().reverse();
+    const states = chunks
+      .map((c) => simulateChunk(game, c))
+      .reverse()
+      .reverse();
     const shuffled = [chunks[2]!, chunks[0]!, chunks[1]!].map((c) => ({ i: c.chunkIndex, s: simulateChunk(game, c) }));
     const ordered = shuffled.sort((x, y) => x.i - y.i).map((x) => x.s);
-    const merge = (list: typeof states) => list.reduce((acc, s) => mergeSimulationStates(acc, s), createSimulationState(game, 1));
+    const merge = (list: typeof states) =>
+      list.reduce((acc, s) => mergeSimulationStates(acc, s), createSimulationState(game, 1));
     expect(merge(ordered)).toEqual(merge(states));
     expect(merge(states)).toEqual(runSimulation(game, { rounds: 25_000, seed: 'order', chunkSize: 10_000 }));
   });
 
   it('worker-thread runs equal single-threaded runs', async () => {
-    const single = await runParallelSimulation(game, { rounds: 30_000, seed: 'threads', chunkSize: 5_000, workers: 1, lineBet: 1 });
-    const multi = await runParallelSimulation(game, { rounds: 30_000, seed: 'threads', chunkSize: 5_000, workers: 3, lineBet: 1 });
+    const single = await runParallelSimulation(game, {
+      rounds: 30_000,
+      seed: 'threads',
+      chunkSize: 5_000,
+      workers: 1,
+      lineBet: 1,
+    });
+    const multi = await runParallelSimulation(game, {
+      rounds: 30_000,
+      seed: 'threads',
+      chunkSize: 5_000,
+      workers: 3,
+      lineBet: 1,
+    });
     expect(multi).toEqual(single);
   });
 
@@ -73,7 +89,9 @@ describe('simulation engine', () => {
 
   it('rejects merging results of different configurations', () => {
     const toy = compileGame(toyConfig());
-    expect(() => mergeSimulationStates(createSimulationState(game, 1), createSimulationState(toy, 1))).toThrow(/different configurations/);
+    expect(() => mergeSimulationStates(createSimulationState(game, 1), createSimulationState(toy, 1))).toThrow(
+      /different configurations/,
+    );
   });
 });
 
@@ -81,7 +99,14 @@ describe('statistical report generation', () => {
   const toy = compileGame(toyConfig());
   const analysis = analyzeGame(toy, { now: () => new Date('2026-01-01T00:00:00Z') });
   const state = runSimulation(toy, { rounds: 50_000, seed: 'report' });
-  const meta = { seed: 'report', rngKind: 'seeded' as const, chunkSize: 10_000, workers: 1, elapsedMs: 1000, generatedAt: '2026-01-01T00:00:00Z' };
+  const meta = {
+    seed: 'report',
+    rngKind: 'seeded' as const,
+    chunkSize: 10_000,
+    workers: 1,
+    elapsedMs: 1000,
+    generatedAt: '2026-01-01T00:00:00Z',
+  };
   const report = buildSimulationReport(toy, state, meta, analysis);
 
   it('builds a complete JSON report with intervals and warnings', () => {
@@ -110,7 +135,9 @@ describe('statistical report generation', () => {
     expect(rows.map((r) => r.metric)).toContain('Total RTP');
     for (const r of rows.filter((x) => x.reliable)) expect(Math.abs(r.z)).toBeLessThan(5);
     const csv = comparisonCsv(rows).trim().split('\n');
-    expect(csv[0]).toBe('metric,theoretical,simulated,ci95_low,ci95_high,standard_error,difference,z,p_value,within_ci95,events,reliable');
+    expect(csv[0]).toBe(
+      'metric,theoretical,simulated,ci95_low,ci95_high,standard_error,difference,z,p_value,within_ci95,events,reliable',
+    );
     expect(csv).toHaveLength(rows.length + 1);
     const summary = simulationSummaryCsv(report).trim().split('\n');
     expect(summary[0]).toBe('metric,value,ci95_low,ci95_high');
@@ -118,8 +145,19 @@ describe('statistical report generation', () => {
   });
 
   it('renders the Markdown RTP report from computed values', () => {
-    const md = renderRtpReport({ analysis, simulations: [{ ...report, comparison: compareWithTheory(analysis, report) }], generatedAt: '2026-01-01T00:00:00Z' });
-    for (const heading of ['## 1. Definitions', '## 2. Headline results', '## 6. Free spins', '## 7. Payout distribution and volatility', '## 8. High-payout events', '## 10. Simulation results']) {
+    const md = renderRtpReport({
+      analysis,
+      simulations: [{ ...report, comparison: compareWithTheory(analysis, report) }],
+      generatedAt: '2026-01-01T00:00:00Z',
+    });
+    for (const heading of [
+      '## 1. Definitions',
+      '## 2. Headline results',
+      '## 6. Free spins',
+      '## 7. Payout distribution and volatility',
+      '## 8. High-payout events',
+      '## 10. Simulation results',
+    ]) {
       expect(md).toContain(heading);
     }
     expect(md).toContain(analysis.game.configHash);

@@ -41,42 +41,64 @@ writeFileSync(resolve(outDir, 'analysis.json'), JSON.stringify(output, null, 2) 
 const a = analysis;
 writeFileSync(
   resolve(outDir, 'analysis-summary.csv'),
-  toCsv(['metric', 'value'], [
-    ['rtp_total', a.rtp.total],
-    ['rtp_base', a.rtp.base],
-    ['rtp_feature', a.rtp.feature],
-    ['rtp_total_uncapped', a.rtp.totalUncapped],
-    ['cap_effect', a.rtp.capEffect],
-    ['expected_net_per_unit_stake', a.rtp.expectedNetPerUnitStake],
-    ['hit_frequency', a.round.hitFrequency],
-    ['line_win_probability_base_spin', a.baseGame.lineWinProbability],
-    ['probability_net_positive', a.round.probabilityNetPositive],
-    ['trigger_probability', a.feature.triggerProbability],
-    ['base_spins_between_triggers', a.feature.expectedBaseSpinsBetweenTriggers],
-    ['free_spins_per_trigger', a.feature.expectedFreeSpinsPerTrigger],
-    ['retrigger_probability_per_free_spin', a.freeGame.retriggerProbabilityPerSpin],
-    ['probability_feature_retriggers', a.feature.probabilityAnyRetrigger],
-    ['feature_expected_win_x_bet', a.feature.expectedWin],
-    ['feature_sd_x_bet', a.feature.sdWin],
-    ['round_sd_per_unit_stake', a.round.sd],
-    ['round_variance_per_unit_stake', a.round.variance],
-    ['max_base_spin_win_x_bet', a.round.maxBaseSpinWin],
-    ['max_free_spin_win_x_bet', a.round.maxFreeSpinWin],
-    ['max_round_win_upper_bound_x_bet', a.round.maxPossibleWinUpperBound],
-    ['volatility_classification', a.volatility.classification],
-  ]),
+  toCsv(
+    ['metric', 'value'],
+    [
+      ['rtp_total', a.rtp.total],
+      ['rtp_base', a.rtp.base],
+      ['rtp_feature', a.rtp.feature],
+      ['rtp_total_uncapped', a.rtp.totalUncapped],
+      ['cap_effect', a.rtp.capEffect],
+      ['expected_net_per_unit_stake', a.rtp.expectedNetPerUnitStake],
+      ['hit_frequency', a.round.hitFrequency],
+      ['line_win_probability_base_spin', a.baseGame.lineWinProbability],
+      ['probability_net_positive', a.round.probabilityNetPositive],
+      ['trigger_probability', a.feature.triggerProbability],
+      ['base_spins_between_triggers', a.feature.expectedBaseSpinsBetweenTriggers],
+      ['free_spins_per_trigger', a.feature.expectedFreeSpinsPerTrigger],
+      ['retrigger_probability_per_free_spin', a.freeGame.retriggerProbabilityPerSpin],
+      ['probability_feature_retriggers', a.feature.probabilityAnyRetrigger],
+      ['feature_expected_win_x_bet', a.feature.expectedWin],
+      ['feature_sd_x_bet', a.feature.sdWin],
+      ['round_sd_per_unit_stake', a.round.sd],
+      ['round_variance_per_unit_stake', a.round.variance],
+      ['max_base_spin_win_x_bet', a.round.maxBaseSpinWin],
+      ['max_free_spin_win_x_bet', a.round.maxFreeSpinWin],
+      ['max_round_win_upper_bound_x_bet', a.round.maxPossibleWinUpperBound],
+      ['volatility_classification', a.volatility.classification],
+    ],
+  ),
 );
 writeFileSync(
   resolve(outDir, 'payout-bands.csv'),
-  toCsv(['band_x_bet', 'probability', 'rtp_contribution'], a.round.bands.map((b) => [b.label, b.probability, b.rtpContribution])),
+  toCsv(
+    ['band_x_bet', 'probability', 'rtp_contribution'],
+    a.round.bands.map((b) => [b.label, b.probability, b.rtpContribution]),
+  ),
 );
 writeFileSync(
   resolve(outDir, 'line-combinations.csv'),
   toCsv(
     ['mode', 'symbol', 'count', 'pay_x_line_bet', 'probability_per_line', 'one_in_per_line', 'rtp_contribution'],
     [
-      ...a.baseGame.lineCombinations.map((c) => ['base', c.symbol, c.count, c.pay, c.probabilityPerLine, c.oneInPerLine, c.rtpContribution]),
-      ...a.freeGame.lineCombinations.map((c) => ['free', c.symbol, c.count, c.pay, c.probabilityPerLine, c.oneInPerLine, c.rtpContribution]),
+      ...a.baseGame.lineCombinations.map((c) => [
+        'base',
+        c.symbol,
+        c.count,
+        c.pay,
+        c.probabilityPerLine,
+        c.oneInPerLine,
+        c.rtpContribution,
+      ]),
+      ...a.freeGame.lineCombinations.map((c) => [
+        'free',
+        c.symbol,
+        c.count,
+        c.pay,
+        c.probabilityPerLine,
+        c.oneInPerLine,
+        c.rtpContribution,
+      ]),
     ],
   ),
 );
@@ -89,20 +111,38 @@ if (values.pmf) {
 }
 
 console.log(`\nExact analysis of ${a.game.name} ${a.game.version} (config ${a.game.configHash.slice(0, 12)})`);
-console.log(`  combinations         base ${fmtNum(a.method.baseCombinations)}, free ${fmtNum(a.method.freeCombinations)}`);
-console.log(`  total RTP            ${fmtPct(a.rtp.total)}  (target ${fmtPct(a.rtp.target, 2)}, deviation ${(a.rtp.deviationFromTarget * 100).toFixed(4)} pts)`);
-console.log(`    base game          ${fmtPct(a.rtp.base)}  (lines ${fmtPct(a.rtp.baseLine)}, scatter ${fmtPct(a.rtp.baseScatter)})`);
+console.log(
+  `  combinations         base ${fmtNum(a.method.baseCombinations)}, free ${fmtNum(a.method.freeCombinations)}`,
+);
+console.log(
+  `  total RTP            ${fmtPct(a.rtp.total)}  (target ${fmtPct(a.rtp.target, 2)}, deviation ${(a.rtp.deviationFromTarget * 100).toFixed(4)} pts)`,
+);
+console.log(
+  `    base game          ${fmtPct(a.rtp.base)}  (lines ${fmtPct(a.rtp.baseLine)}, scatter ${fmtPct(a.rtp.baseScatter)})`,
+);
 console.log(`    free spins         ${fmtPct(a.rtp.feature)}`);
-console.log(`    cap effect         ${Math.abs(a.rtp.capEffect) < 1e-9 ? 'negligible (floating-point noise level)' : a.rtp.capEffect.toExponential(3)}`);
+console.log(
+  `    cap effect         ${Math.abs(a.rtp.capEffect) < 1e-9 ? 'negligible (floating-point noise level)' : a.rtp.capEffect.toExponential(3)}`,
+);
 console.log(`  hit frequency        ${fmtPct(a.round.hitFrequency, 3)}`);
 console.log(`  net-positive rounds  ${fmtPct(a.round.probabilityNetPositive, 3)}`);
-console.log(`  feature trigger      1 in ${fmtNum(a.feature.expectedBaseSpinsBetweenTriggers, 2)}; ${fmtNum(a.feature.expectedFreeSpinsPerTrigger, 4)} free spins; avg ${fmtNum(a.feature.expectedWin, 3)}x bet`);
+console.log(
+  `  feature trigger      1 in ${fmtNum(a.feature.expectedBaseSpinsBetweenTriggers, 2)}; ${fmtNum(a.feature.expectedFreeSpinsPerTrigger, 4)} free spins; avg ${fmtNum(a.feature.expectedWin, 3)}x bet`,
+);
 console.log(`  SD per unit stake    ${fmtNum(a.round.sd, 4)} (${a.volatility.classification} on the documented scale)`);
-console.log(`  max win              base spin ${fmtNum(a.round.maxBaseSpinWin)}x, free spin ${fmtNum(a.round.maxFreeSpinWin)}x, round <= ${fmtNum(a.round.maxPossibleWinUpperBound)}x`);
-console.log(`  cross-check          marginal vs enumeration max |diff| ${a.crossChecks.maxAbsDifference.toExponential(2)} (${a.crossChecks.agree ? 'agree' : 'DISAGREE'})`);
-console.log(`  numerics             mass error ${a.method.totalMassError.toExponential(2)}, floor ${a.method.numericalFloor.toExponential(1)}, ${a.method.fftCount} FFTs`);
+console.log(
+  `  max win              base spin ${fmtNum(a.round.maxBaseSpinWin)}x, free spin ${fmtNum(a.round.maxFreeSpinWin)}x, round <= ${fmtNum(a.round.maxPossibleWinUpperBound)}x`,
+);
+console.log(
+  `  cross-check          marginal vs enumeration max |diff| ${a.crossChecks.maxAbsDifference.toExponential(2)} (${a.crossChecks.agree ? 'agree' : 'DISAGREE'})`,
+);
+console.log(
+  `  numerics             mass error ${a.method.totalMassError.toExponential(2)}, floor ${a.method.numericalFloor.toExponential(1)}, ${a.method.fftCount} FFTs`,
+);
 if (sensitivity && Math.abs(sensitivity.deviation) > 0.0005) {
   console.log(`\n  RTP deviates from target; candidate single-stop changes:`);
   for (const c of sensitivity.closestToTarget.slice(0, 5)) console.log(`    ${c.description} -> ${fmtPct(c.rtpAfter)}`);
 }
-console.log(`\nWrote ${resolve(outDir, 'analysis.json')} and CSV tables (${((performance.now() - t0) / 1000).toFixed(1)} s)`);
+console.log(
+  `\nWrote ${resolve(outDir, 'analysis.json')} and CSV tables (${((performance.now() - t0) / 1000).toFixed(1)} s)`,
+);

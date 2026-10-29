@@ -16,8 +16,8 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
   return (
     <div className="paytable" data-testid="paytable">
       <p className="muted">
-        Values in credits at the current line bet of {credits(lineBet)} (total bet {credits(totalBet)}). Line wins pay the line bet times the
-        value below; the scatter pays the total bet times its value.
+        Values in credits at the current line bet of {credits(lineBet)} (total bet {credits(totalBet)}). Line wins pay
+        the line bet times the value below; the scatter pays the total bet times its value.
       </p>
       <div className="paytable__grid">
         {[...regulars].reverse().map((s) => {
@@ -59,11 +59,13 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
 
       <h3>Rules</h3>
       <ul className="rules">
-        <li>{game.lineCount} fixed paylines. Wins pay left to right on consecutive reels starting from the leftmost reel.</li>
+        <li>
+          {game.lineCount} fixed paylines. Wins pay left to right on consecutive reels starting from the leftmost reel.
+        </li>
         <li>Only the highest win on each payline is paid. Wins on different paylines are added together.</li>
         <li>
-          {wild.name} substitutes for all symbols except {scatter.name}. Where a run of {wild.name} symbols alone pays more than the
-          substituted combination, the {wild.name} combination is paid instead.
+          {wild.name} substitutes for all symbols except {scatter.name}. Where a run of {wild.name} symbols alone pays
+          more than the substituted combination, the {wild.name} combination is paid instead.
         </li>
         <li>{scatter.name} pays in any position, independent of paylines, and is added to line wins.</li>
         <li>
@@ -73,20 +75,23 @@ export function PaytablePanel({ game, lineBet }: { game: CompiledGame; lineBet: 
           . Free spins are played at the bet of the triggering spin and never cost a stake.
         </li>
         <li>
-          During free spins all wins are multiplied by {free.winMultiplier}; line wins that include a {wild.name} are additionally multiplied by{' '}
-          {free.wildMultiplier} (once per line).
+          During free spins all wins are multiplied by {free.winMultiplier}; line wins that include a {wild.name} are
+          additionally multiplied by {free.wildMultiplier} (once per line).
         </li>
         <li>
           {fs.retrigger.enabled
             ? `Free spins can be retriggered: ${Object.entries(fs.retrigger.awards)
                 .map(([c, v]) => `${c}+ scatters award ${v} more`)
-                .join(', ')}${fs.retrigger.maxTotalSpins !== null ? `, up to ${fs.retrigger.maxTotalSpins} free spins per feature` : ''}.`
+                .join(
+                  ', ',
+                )}${fs.retrigger.maxTotalSpins !== null ? `, up to ${fs.retrigger.maxTotalSpins} free spins per feature` : ''}.`
             : 'Free spins cannot be retriggered.'}
         </li>
         {cfg.limits.maxWinMultiplier !== null && (
           <li>
-            The total win of one game round (paid spin plus its free spins) is capped at {credits(cfg.limits.maxWinMultiplier)}x the total bet
-            ({credits(cfg.limits.maxWinMultiplier * totalBet)} credits). When the cap is reached the round ends.
+            The total win of one game round (paid spin plus its free spins) is capped at{' '}
+            {credits(cfg.limits.maxWinMultiplier)}x the total bet ({credits(cfg.limits.maxWinMultiplier * totalBet)}{' '}
+            credits). When the cap is reached the round ends.
           </li>
         )}
         <li>Displayed wins are the credits added to the balance; they do not include the stake.</li>

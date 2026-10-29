@@ -194,7 +194,9 @@ code {
   padding: 5px 12px;
   font-size: 13px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 .chip:hover:not(:disabled) {
   background: rgba(233, 196, 106, 0.12);
@@ -300,7 +302,9 @@ code {
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(36, 30, 58, 0.9), rgba(16, 13, 28, 0.95));
   border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 .controls__bet,
 .controls__win {
@@ -359,14 +363,20 @@ code {
   border-radius: 50%;
   border: 3px solid #fff1c1;
   background: radial-gradient(circle at 35% 30%, #fff6d0, var(--gold) 40%, #a8741f 80%);
-  box-shadow: 0 0 0 6px rgba(233, 196, 106, 0.15), 0 0 32px rgba(233, 196, 106, 0.45), inset 0 -6px 12px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    0 0 0 6px rgba(233, 196, 106, 0.15),
+    0 0 32px rgba(233, 196, 106, 0.45),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.25);
   color: #2b1a02;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 20px;
   letter-spacing: 0.12em;
   cursor: pointer;
-  transition: transform 0.12s, box-shadow 0.2s, filter 0.2s;
+  transition:
+    transform 0.12s,
+    box-shadow 0.2s,
+    filter 0.2s;
 }
 .spin-button:hover:not(:disabled) {
   transform: scale(1.04);
@@ -380,7 +390,9 @@ code {
 .spin-button.is-feature {
   background: radial-gradient(circle at 35% 30%, #f1e6ff, var(--violet) 45%, #5b2bb5 85%);
   border-color: #efe3ff;
-  box-shadow: 0 0 0 6px rgba(179, 136, 255, 0.2), 0 0 32px rgba(179, 136, 255, 0.55);
+  box-shadow:
+    0 0 0 6px rgba(179, 136, 255, 0.2),
+    0 0 32px rgba(179, 136, 255, 0.55);
   color: #1d0b3a;
 }
 .spin-button:disabled {
@@ -388,7 +400,9 @@ code {
   cursor: not-allowed;
 }
 .spin-button:focus-visible {
-  box-shadow: var(--focus), 0 0 32px rgba(233, 196, 106, 0.45);
+  box-shadow:
+    var(--focus),
+    0 0 32px rgba(233, 196, 106, 0.45);
 }
 
 .low-balance {

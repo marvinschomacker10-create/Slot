@@ -77,7 +77,8 @@ describe.each(variants)('full enumeration (%s)', (_name, g) => {
     const fast = enumerateSpinDistribution(g, mode);
     const marg = analyzeModeMarginals(g, mode);
     // Relative tolerance: both are sums of ~1e4-1e8 floating-point terms.
-    const close = (a: number, b: number) => expect(Math.abs(a - b)).toBeLessThanOrEqual(1e-13 * Math.max(1, Math.abs(b)));
+    const close = (a: number, b: number) =>
+      expect(Math.abs(a - b)).toBeLessThanOrEqual(1e-13 * Math.max(1, Math.abs(b)));
     close(fast.totalUnits / fast.combinations, marg.expectedUnits);
     close(fast.scatterUnits / fast.combinations, marg.expectedScatterUnits);
   });
@@ -90,12 +91,16 @@ describe('real configuration', () => {
       const marg = analyzeModeMarginals(game, mode);
       expect(fast.combinations).toBe(mode === 'base' ? 40 ** 5 : 38 * 39 * 39 * 39 * 38);
       expect(Math.abs(fast.totalUnits / fast.combinations - marg.expectedUnits)).toBeLessThan(1e-11);
-      expect(Math.abs(fast.lineWinCombinations / fast.combinations - (1 - fast.winningLines[0]! / fast.combinations))).toBeLessThan(1e-15);
+      expect(
+        Math.abs(fast.lineWinCombinations / fast.combinations - (1 - fast.winningLines[0]! / fast.combinations)),
+      ).toBeLessThan(1e-15);
     }
   });
 
   it('per-reel-row marginals are used when strips are weighted (rows then differ)', () => {
-    const g = compileWith((c) => (c.reelSets.base![0]!.weights = c.reelSets.base![0]!.symbols.map((_, i) => (i % 4) + 1)));
+    const g = compileWith(
+      (c) => (c.reelSets.base![0]!.weights = c.reelSets.base![0]!.symbols.map((_, i) => (i % 4) + 1)),
+    );
     const marg = analyzeModeMarginals(g, 'base');
     const fast = enumerateSpinDistribution(g, 'base');
     expect(Math.abs(fast.totalUnits / fast.combinations - marg.expectedUnits)).toBeLessThan(1e-11);

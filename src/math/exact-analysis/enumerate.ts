@@ -68,12 +68,14 @@ export function enumerateSpinDistribution(game: CompiledGame, modeName: GameMode
   // Per reel: symbols visible at each (stop, row), scatter count per stop, weight per stop.
   const vis = strips.map((s) => {
     const a = new Int16Array(s.length * ROWS);
-    for (let st = 0; st < s.length; st++) for (let r = 0; r < ROWS; r++) a[st * ROWS + r] = s.symbols[(st + r) % s.length]!;
+    for (let st = 0; st < s.length; st++)
+      for (let r = 0; r < ROWS; r++) a[st * ROWS + r] = s.symbols[(st + r) % s.length]!;
     return a;
   });
   const sc = strips.map((s, i) => {
     const a = new Int8Array(s.length);
-    for (let st = 0; st < s.length; st++) for (let r = 0; r < ROWS; r++) if (vis[i]![st * ROWS + r] === game.scatter) a[st]!++;
+    for (let st = 0; st < s.length; st++)
+      for (let r = 0; r < ROWS; r++) if (vis[i]![st * ROWS + r] === game.scatter) a[st]!++;
     return a;
   });
   const maxScatter = sc.reduce((acc, a) => acc + Math.max(...a), 0);

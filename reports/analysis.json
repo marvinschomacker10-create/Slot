@@ -1,12 +1,12 @@
 {
-  "schema": "gilded-orbit/exact-analysis@2",
+  "schema": "gilded-orbit/exact-analysis@3",
   "game": {
     "id": "gilded-orbit",
     "name": "Gilded Orbit",
     "version": "1.0.0",
     "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
   },
-  "generatedAt": "2026-10-29T08:39:06.627Z",
+  "generatedAt": "2026-10-29T09:11:30.235Z",
   "definitions": {
     "rtpDenominator": "RTP = expected total payout of a game round divided by the base-game stake of that round. A round is one paid base-game spin plus every free spin it triggers, including retriggers. Free spins have no stake and are not part of the denominator.",
     "units": "Internally all wins are integers in line-bet units. Multipliers (\"x bet\") in reports are multiples of the total bet (line bet x 20 paylines).",
@@ -21,10 +21,10 @@
     "baseCombinations": 102400000,
     "freeCombinations": 85656636,
     "enumerationMs": {
-      "base": 1509,
-      "free": 2315
+      "base": 1992,
+      "free": 2668
     },
-    "distributionMs": 15196,
+    "distributionMs": 13477,
     "fftSize": 262144,
     "fftCount": 422,
     "featureStates": 140,
@@ -928,7 +928,62 @@
         "roundsFor10PctPrecision": null
       }
     ],
-    "maxPossibleWinUpperBound": 5000
+    "maxPossibleWinUpperBound": 5000,
+    "roundGivenTrigger": {
+      "meanWin": 46.2370689634166,
+      "triggeringSpinMeanWin": 2.639756789902812,
+      "probabilityWinAtLeast": [
+        {
+          "multiplier": 10,
+          "probability": 0.9562637882396143,
+          "oneIn": 1.0457365554340394,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 18
+        },
+        {
+          "multiplier": 25,
+          "probability": 0.7029912871047272,
+          "oneIn": 1.4224927368851248,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 163
+        },
+        {
+          "multiplier": 50,
+          "probability": 0.328658235043261,
+          "oneIn": 3.042674405734488,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 785
+        },
+        {
+          "multiplier": 100,
+          "probability": 0.07539707679312231,
+          "oneIn": 13.263113671420475,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 4711
+        },
+        {
+          "multiplier": 250,
+          "probability": 0.003040786469686517,
+          "oneIn": 328.8622894007723,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 125947
+        },
+        {
+          "multiplier": 500,
+          "probability": 0.00011031309497055094,
+          "oneIn": 9065.10691470454,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 3481940
+        },
+        {
+          "multiplier": 1000,
+          "probability": 6.556904152673343e-9,
+          "oneIn": 152510998.59257296,
+          "belowNumericalFloor": false,
+          "roundsFor10PctPrecision": 58586471790
+        }
+      ]
+    }
   },
   "round": {
     "hitFrequency": 0.51680666015625,

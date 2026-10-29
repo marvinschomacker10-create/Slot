@@ -1,6 +1,12 @@
 import type { Settings } from '../app/settings';
 
-export function SettingsPanel({ settings, onChange }: { settings: Settings; onChange: (patch: Partial<Settings>) => void }) {
+export function SettingsPanel({
+  settings,
+  onChange,
+}: {
+  settings: Settings;
+  onChange: (patch: Partial<Settings>) => void;
+}) {
   const toggle = (key: keyof Settings, label: string, hint: string) => (
     <label className="toggle">
       <input type="checkbox" checked={settings[key]} onChange={(e) => onChange({ [key]: e.target.checked })} />

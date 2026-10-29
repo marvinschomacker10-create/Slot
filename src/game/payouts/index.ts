@@ -33,7 +33,8 @@ export function evaluateSpin(
   cells: ArrayLike<number>,
   lineBet: number,
 ): SpinEvaluation {
-  if (!Number.isSafeInteger(lineBet) || lineBet < 1) throw new RangeError(`line bet must be a positive integer, got ${lineBet}`);
+  if (!Number.isSafeInteger(lineBet) || lineBet < 1)
+    throw new RangeError(`line bet must be a positive integer, got ${lineBet}`);
   if (cells.length !== game.cells) throw new RangeError(`expected ${game.cells} cells, got ${cells.length}`);
 
   const lineWins: LineWin[] = [];

@@ -20,7 +20,9 @@ export function totalBetFor(game: CompiledGame, lineBet: number): number {
 
 export function assertLineBet(game: CompiledGame, lineBet: number): void {
   if (!game.lineBetOptions.includes(lineBet)) {
-    throw new GameStateError(`line bet ${lineBet} is not one of the configured options [${game.lineBetOptions.join(', ')}]`);
+    throw new GameStateError(
+      `line bet ${lineBet} is not one of the configured options [${game.lineBetOptions.join(', ')}]`,
+    );
   }
 }
 

@@ -2,10 +2,37 @@ import type { ExactAnalysis } from '../exact-analysis/analysis';
 import type { SensitivityReport } from '../exact-analysis/sensitivity';
 import type { ComparisonRow, SimulationReport } from '../simulation/report';
 
+export interface FeatureSimulationResult {
+  readonly game: { readonly configHash: string };
+  readonly meta: { readonly features: number; readonly seed: string; readonly elapsedMs: number };
+  readonly mean: { readonly exact: number; readonly simulated: number; readonly ci95: { low: number; high: number }; readonly z: number };
+  readonly tail: readonly { metric: string; exact: number; simulated: number; events: number; ci95: { low: number; high: number }; z: number }[];
+  readonly roundsGivenTrigger?: {
+    readonly rounds: number;
+    readonly paidSpinsDrawn: number;
+    readonly observedTriggerRate: number;
+    readonly mean: { readonly exact: number; readonly simulated: number; readonly ci95: { low: number; high: number }; readonly z: number };
+    readonly triggeringSpin: { readonly exact: number; readonly simulated: number; readonly z: number };
+    readonly tail: readonly { metric: string; exact: number; simulated: number; events: number; ci95: { low: number; high: number }; z: number }[];
+  };
+}
+
 export interface ReportInputs {
   readonly analysis: ExactAnalysis & { readonly sensitivity?: SensitivityReport | null };
   readonly simulations: readonly (SimulationReport & { readonly comparison?: readonly ComparisonRow[] | null })[];
+  readonly featureSimulation?: FeatureSimulationResult | null;
   readonly generatedAt: string;
+}
+
+/** Pools independent runs (different seeds / RNG streams): exact merge of means and variances. */
+export function poolSimulations(sims: ReportInputs['simulations']): { rounds: number; rtp: number; sd: number; ci95: { low: number; high: number } } | null {
+  if (sims.length === 0) return null;
+  const N = sims.reduce((a, s) => a + s.totals.rounds, 0);
+  const mean = sims.reduce((a, s) => a + s.totals.rounds * s.roundPayout.mean, 0) / N;
+  const m2 = sims.reduce((a, s) => a + (s.totals.rounds - 1) * s.roundPayout.variance + s.totals.rounds * (s.roundPayout.mean - mean) ** 2, 0);
+  const sd = Math.sqrt(m2 / (N - 1));
+  const half = (1.959963984540054 * sd) / Math.sqrt(N);
+  return { rounds: N, rtp: mean, sd, ci95: { low: mean - half, high: mean + half } };
 }
 
 const pct = (x: number, d = 4) => `${(x * 100).toFixed(d)}%`;
@@ -20,7 +47,7 @@ function table(header: readonly string[], rows: readonly (readonly (string | num
 }
 
 /** Renders docs/RTP_REPORT.md from computed results only. */
-export function renderRtpReport({ analysis: a, simulations, generatedAt }: ReportInputs): string {
+export function renderRtpReport({ analysis: a, simulations, featureSimulation, generatedAt }: ReportInputs): string {
   const out: string[] = [];
   const p = (s = '') => out.push(s);
 
@@ -233,6 +260,69 @@ export function renderRtpReport({ analysis: a, simulations, generatedAt }: Repor
     }
   }
 
+  const pooled = poolSimulations(simulations);
+  if (pooled && simulations.length > 1) {
+    p('### Pooled over all independent runs');
+    p();
+    p(`The runs above use different seeds (independent RNG streams), so they can be pooled. Pooled over ${num(pooled.rounds)} paid spins: simulated RTP ${pct(pooled.rtp)} (95% CI ${pct(pooled.ci95.low)} to ${pct(pooled.ci95.high)}), exact ${pct(a.rtp.total)}, z = ${((pooled.rtp - a.rtp.total) / (pooled.sd / Math.sqrt(pooled.rounds))).toFixed(2)}.`);
+    p();
+    const pooledRows = a.round.thresholds
+      .filter((t) => !t.belowNumericalFloor && t.probability > 0)
+      .map((t) => {
+        let events = 0;
+        let rounds = 0;
+        for (const s of simulations) {
+          const row = s.thresholds.find((x) => x.multiplier === t.multiplier);
+          if (row) {
+            events += row.count;
+            rounds += row.trials;
+          }
+        }
+        const est = events / rounds;
+        const z = (est - t.probability) / Math.sqrt((t.probability * (1 - t.probability)) / rounds);
+        return [`${num(t.multiplier)}x bet`, sci(t.probability), sci(est), num(events), z.toFixed(2)];
+      });
+    p(table(['Round pays at least', 'Exact', 'Pooled simulated', 'Events', 'z'], pooledRows));
+    p();
+  }
+
+  const flagged = simulations.flatMap((s) => (s.comparison ?? []).filter((c) => Math.abs(c.z) > 3).map((c) => ({ run: s, c })));
+  if (flagged.length > 0) {
+    p('### Discrepancies above |z| = 3');
+    p();
+    const totalComparisons = simulations.reduce((acc, s) => acc + (s.comparison?.length ?? 0), 0);
+    for (const { run, c } of flagged) {
+      p(`- ${num(run.totals.rounds)} spins (${run.meta.rngKind === 'seeded' ? `seed "${run.meta.seed}"` : 'crypto RNG'}): **${c.metric}** exact ${sci(c.theoretical)}, simulated ${sci(c.simulated)}, z = ${c.z.toFixed(2)}${c.events !== null ? ` (${num(c.events)} events)` : ''}.`);
+    }
+    p();
+    p(`Across all ${totalComparisons} comparisons, about ${(totalComparisons * 0.0027).toFixed(2)} values beyond |z| = 3 are expected by chance alone (normal approximation). A flagged value is resolved by independent evidence rather than by re-running until it disappears: the other runs, the pooled estimate above, and the conditional feature simulation below (which observes far more tail events).`);
+    p();
+  }
+
+  if (featureSimulation) {
+    const f = featureSimulation;
+    p('### Conditional feature simulation (rare-event check)');
+    p();
+    p(`${num(f.meta.features)} complete free-spin features were played through the game engine (seed "${f.meta.seed}"), each starting from an initial award drawn from the exact trigger distribution. Because every simulated round is a feature, high-payout events are about ${num(1 / a.feature.triggerProbability, 0)} times more frequent per simulated round than in a plain simulation, so the tail of the feature distribution can be checked with many more events. Reproduce with \`npm run simulate:feature\`.`);
+    p();
+    p(table(['Metric', 'Exact', 'Simulated', '95% CI', 'Events', 'z'], [
+      ['Mean stand-alone feature win (x bet)', num(f.mean.exact, 4), num(f.mean.simulated, 4), `${num(f.mean.ci95.low, 3)} .. ${num(f.mean.ci95.high, 3)}`, '-', f.mean.z.toFixed(2)],
+      ...f.tail.map((r) => [r.metric, sci(r.exact), sci(r.simulated), `${sci(r.ci95.low, 2)} .. ${sci(r.ci95.high, 2)}`, num(r.events), r.z.toFixed(2)]),
+    ]));
+    p();
+    const g = f.roundsGivenTrigger;
+    if (g && g.rounds > 0) {
+      p(`**Whole rounds given a trigger.** ${num(g.rounds)} triggering paid spins were obtained by exact rejection sampling of the base-game reel stops (${num(g.paidSpinsDrawn)} paid spins drawn; observed trigger rate ${pct(g.observedTriggerRate, 4)} vs exact ${pct(a.feature.triggerProbability, 4)}). The recorded random values were then replayed through the unmodified \`playRound()\`, so the triggering spin and its feature follow the real game path. This checks the convolution of the triggering-spin win with the feature, which the round-level tail probabilities depend on.`);
+      p();
+      p(table(['Metric', 'Exact', 'Simulated', '95% CI', 'Events', 'z'], [
+        ['Mean round win given a trigger (x bet)', num(g.mean.exact, 4), num(g.mean.simulated, 4), `${num(g.mean.ci95.low, 3)} .. ${num(g.mean.ci95.high, 3)}`, '-', g.mean.z.toFixed(2)],
+        ['Mean triggering-spin win (x bet)', num(g.triggeringSpin.exact, 4), num(g.triggeringSpin.simulated, 4), '-', '-', g.triggeringSpin.z.toFixed(2)],
+        ...g.tail.map((r) => [r.metric, sci(r.exact), sci(r.simulated), `${sci(r.ci95.low, 2)} .. ${sci(r.ci95.high, 2)}`, num(r.events), r.z.toFixed(2)]),
+      ]));
+      p();
+    }
+  }
+
   const sens = a.sensitivity;
   if (sens) {
     p('## 11. Sensitivity and candidate parameter changes');
@@ -253,7 +343,15 @@ export function renderRtpReport({ analysis: a, simulations, generatedAt }: Repor
   p('npm run simulate:100k    # seeded presets -> reports/simulation-*.json/.csv');
   p('npm run simulate:1m');
   p('npm run simulate:10m');
-  p('npm run report           # regenerates this file and reports/comparison-*.csv');
+  p('npm run simulate:feature # conditional feature simulation -> reports/feature-simulation.json');
+  p('npm run report           # regenerates this file, SPECIFICATION.md and reports/simulation-*-comparison.csv');
+  p('```');
+  p();
+  p('Additional independent runs included above were produced with:');
+  p();
+  p('```bash');
+  p('npm run simulate -- --spins 10000000 --seed check-a --out reports/simulation-10m-b');
+  p('npm run simulate -- --spins 10000000 --crypto --out reports/simulation-10m-crypto   # not reproducible by design');
   p('```');
   p();
   p('Seeded simulations are bit-for-bit reproducible for a given seed, chunk size and configuration, independent of the number of worker threads. Use `--crypto` for a non-reproducible run with the cryptographic RNG.');

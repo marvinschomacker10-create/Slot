@@ -44,23 +44,48 @@ describe('symbol payouts', () => {
 
 describe('Wild substitution', () => {
   it('substitutes in any position of the combination', () => {
-    expect(lineWin(middle('MOON', 'WILD', 'MOON', 'JADE', 'RUBY'), 0)).toMatchObject({ symbol: 'MOON', count: 3, containsWild: true, win: 20 });
-    expect(lineWin(middle('WILD', 'WILD', 'MOON', 'MOON', 'RUBY'), 0)).toMatchObject({ symbol: 'MOON', count: 4, win: 75 });
-    expect(lineWin(middle('MOON', 'MOON', 'MOON', 'MOON', 'WILD'), 0)).toMatchObject({ symbol: 'MOON', count: 5, win: 300 });
+    expect(lineWin(middle('MOON', 'WILD', 'MOON', 'JADE', 'RUBY'), 0)).toMatchObject({
+      symbol: 'MOON',
+      count: 3,
+      containsWild: true,
+      win: 20,
+    });
+    expect(lineWin(middle('WILD', 'WILD', 'MOON', 'MOON', 'RUBY'), 0)).toMatchObject({
+      symbol: 'MOON',
+      count: 4,
+      win: 75,
+    });
+    expect(lineWin(middle('MOON', 'MOON', 'MOON', 'MOON', 'WILD'), 0)).toMatchObject({
+      symbol: 'MOON',
+      count: 5,
+      win: 300,
+    });
   });
 
   it('pays the Wild-only combination when it is worth more than the substituted one', () => {
     // WILD x3 = 50 beats JADE x4 = 15.
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'JADE', 'RUBY'), 0)).toMatchObject({ symbol: 'WILD', count: 3, win: 50 });
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'JADE', 'RUBY'), 0)).toMatchObject({
+      symbol: 'WILD',
+      count: 3,
+      win: 50,
+    });
   });
 
   it('pays the substituted combination when it is worth more than the Wild-only one', () => {
     // SUN x5 = 1000 beats WILD x3 = 50.
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'SUN', 'SUN'), 0)).toMatchObject({ symbol: 'SUN', count: 5, win: 1000 });
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'SUN', 'SUN'), 0)).toMatchObject({
+      symbol: 'SUN',
+      count: 5,
+      win: 1000,
+    });
   });
 
   it('pays five Wilds from the Wild row of the paytable', () => {
-    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'WILD', 'WILD'), 0)).toMatchObject({ symbol: 'WILD', count: 5, win: 2000 });
+    expect(lineWin(middle('WILD', 'WILD', 'WILD', 'WILD', 'WILD'), 0)).toMatchObject({
+      symbol: 'WILD',
+      count: 5,
+      win: 2000,
+    });
   });
 
   it('prefers the regular symbol on an exact tie', () => {
@@ -80,7 +105,13 @@ describe('Wild substitution', () => {
     const { wildMultiplier, winMultiplier } = game.config.modes.free;
     const one = lineWin(middle('PLANET', 'WILD', 'PLANET', 'JADE', 'RUBY'), 0, free)!;
     const three = lineWin(middle('PLANET', 'WILD', 'WILD', 'WILD', 'RUBY'), 0, free)!;
-    expect(one).toMatchObject({ count: 3, basePay: 25, wildMultiplier, modeMultiplier: winMultiplier, units: 25 * wildMultiplier * winMultiplier });
+    expect(one).toMatchObject({
+      count: 3,
+      basePay: 25,
+      wildMultiplier,
+      modeMultiplier: winMultiplier,
+      units: 25 * wildMultiplier * winMultiplier,
+    });
     expect(three).toMatchObject({ count: 4, basePay: 100, units: 100 * wildMultiplier * winMultiplier });
     const plain = lineWin(middle('PLANET', 'PLANET', 'PLANET', 'JADE', 'RUBY'), 0, free)!;
     expect(plain).toMatchObject({ containsWild: false, wildMultiplier: 1, units: 25 * winMultiplier });
@@ -99,8 +130,18 @@ describe('Wild substitution', () => {
 
 describe('Scatter', () => {
   const scatterWindow = (n: number) => {
-    const w = grid(['COMET MOON PLANET JADE SAPPHIRE', 'JADE AMETHYST SAPPHIRE RUBY MOON', 'RUBY COMET JADE PLANET AMETHYST']);
-    const spots: [number, number][] = [[0, 0], [1, 2], [2, 1], [3, 0], [4, 2]];
+    const w = grid([
+      'COMET MOON PLANET JADE SAPPHIRE',
+      'JADE AMETHYST SAPPHIRE RUBY MOON',
+      'RUBY COMET JADE PLANET AMETHYST',
+    ]);
+    const spots: [number, number][] = [
+      [0, 0],
+      [1, 2],
+      [2, 1],
+      [3, 0],
+      [4, 2],
+    ];
     for (let i = 0; i < n; i++) w[spots[i]![0]]![spots[i]![1]] = 'SCATTER';
     return w;
   };
@@ -122,7 +163,11 @@ describe('Scatter', () => {
 
   it('records the scatter positions independently of paylines', () => {
     const s = evaluateScatter(game, base, cellsOf(game, scatterWindow(3)), 1);
-    expect(s.positions).toEqual([{ reel: 0, row: 0 }, { reel: 1, row: 2 }, { reel: 2, row: 1 }]);
+    expect(s.positions).toEqual([
+      { reel: 0, row: 0 },
+      { reel: 1, row: 2 },
+      { reel: 2, row: 1 },
+    ]);
   });
 
   it('pays with the free-spins multiplier during the feature and uses the retrigger table', () => {

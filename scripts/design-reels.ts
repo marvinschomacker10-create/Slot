@@ -28,14 +28,22 @@ const wild = config.symbols.find((s) => s.kind === 'wild')!.id;
 
 for (const [name, reels] of Object.entries(design.reelSets)) {
   config.reelSets[name] = reels.map((counts, i) => ({
-    symbols: arrangeStrip(counts, { seed: `${design.seed}/${name}/${i}`, rows: config.grid.rows, scatter, wild, wildGap: design.wildGap }),
+    symbols: arrangeStrip(counts, {
+      seed: `${design.seed}/${name}/${i}`,
+      rows: config.grid.rows,
+      scatter,
+      wild,
+      wildGap: design.wildGap,
+    }),
   }));
 }
 const m = analyzeMarginals(compileGame(config));
 for (const [name, strips] of Object.entries(config.reelSets)) {
   console.log(`${name}: lengths ${strips.map((s) => s.symbols.length).join(', ')}`);
 }
-console.log(`exact uncapped RTP: base ${m.rtpUncapped.base.toFixed(6)}, feature ${m.rtpUncapped.feature.toFixed(6)}, total ${m.rtpUncapped.total.toFixed(6)}`);
+console.log(
+  `exact uncapped RTP: base ${m.rtpUncapped.base.toFixed(6)}, feature ${m.rtpUncapped.feature.toFixed(6)}, total ${m.rtpUncapped.total.toFixed(6)}`,
+);
 if (process.argv.includes('--write')) {
   writeFileSync(configPath, formatConfigJson(config));
   console.log(`wrote ${configPath}`);

@@ -23,7 +23,9 @@ export function SimulationRunner() {
     worker.current = w;
     setState({ kind: 'running', done: 0, total: rounds });
     w.onmessage = (e: MessageEvent) => {
-      const m = e.data as { type: 'progress'; done: number; total: number } | { type: 'done'; report: SimulationReport; comparison: ComparisonRow[] | null };
+      const m = e.data as
+        | { type: 'progress'; done: number; total: number }
+        | { type: 'done'; report: SimulationReport; comparison: ComparisonRow[] | null };
       if (m.type === 'progress') setState({ kind: 'running', done: m.done, total: m.total });
       else {
         setState({ kind: 'done', report: m.report, comparison: m.comparison });
@@ -45,20 +47,29 @@ export function SimulationRunner() {
     <section className="sim" aria-labelledby="sim-title">
       <h3 id="sim-title">Run a simulation</h3>
       <p className="muted">
-        Simulates complete rounds through the same game engine in a background worker. Use the command line (<code>npm run simulate:10m</code>)
-        for 10 million rounds or more.
+        Simulates complete rounds through the same game engine in a background worker. Use the command line (
+        <code>npm run simulate:10m</code>) for 10 million rounds or more.
       </p>
       <div className="sim__controls">
         <label>
           Rounds
-          <select value={rounds} onChange={(e) => setRounds(Number(e.target.value))} disabled={state.kind === 'running'}>
+          <select
+            value={rounds}
+            onChange={(e) => setRounds(Number(e.target.value))}
+            disabled={state.kind === 'running'}
+          >
             <option value={100_000}>100,000</option>
             <option value={1_000_000}>1,000,000</option>
           </select>
         </label>
         <label>
           Seed (optional)
-          <input value={seed} onChange={(e) => setSeed(e.target.value)} placeholder="crypto RNG" disabled={state.kind === 'running'} />
+          <input
+            value={seed}
+            onChange={(e) => setSeed(e.target.value)}
+            placeholder="crypto RNG"
+            disabled={state.kind === 'running'}
+          />
         </label>
         {state.kind === 'running' ? (
           <button type="button" className="button" onClick={cancel}>
@@ -71,7 +82,14 @@ export function SimulationRunner() {
         )}
       </div>
       {state.kind === 'running' && (
-        <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={state.total} aria-valuenow={state.done} aria-label="Simulation progress">
+        <div
+          className="progress"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={state.total}
+          aria-valuenow={state.done}
+          aria-label="Simulation progress"
+        >
           <div style={{ width: `${(state.done / state.total) * 100}%` }} />
         </div>
       )}
@@ -79,8 +97,10 @@ export function SimulationRunner() {
       {state.kind === 'done' && (
         <div className="sim__result" data-testid="simulation-result">
           <p>
-            <strong>{state.report.totals.rounds.toLocaleString('en-US')}</strong> rounds in {(state.report.meta.elapsedMs / 1000).toFixed(1)} s:
-            RTP <strong>{pct(state.report.rtp.estimate, 3)}</strong> (95% CI {pct(state.report.rtp.ci95.low, 2)} to {pct(state.report.rtp.ci95.high, 2)})
+            <strong>{state.report.totals.rounds.toLocaleString('en-US')}</strong> rounds in{' '}
+            {(state.report.meta.elapsedMs / 1000).toFixed(1)} s: RTP{' '}
+            <strong>{pct(state.report.rtp.estimate, 3)}</strong> (95% CI {pct(state.report.rtp.ci95.low, 2)} to{' '}
+            {pct(state.report.rtp.ci95.high, 2)})
           </p>
           {state.comparison && (
             <div className="table-scroll">

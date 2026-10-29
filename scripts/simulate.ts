@@ -16,7 +16,12 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { EXACT_ANALYSIS_SCHEMA, type ExactAnalysis } from '../src/math/exact-analysis/analysis';
 import { DEFAULT_CHUNK_SIZE } from '../src/math/simulation/runner';
-import { buildSimulationReport, compareWithTheory, comparisonCsv, simulationSummaryCsv } from '../src/math/simulation/report';
+import {
+  buildSimulationReport,
+  compareWithTheory,
+  comparisonCsv,
+  simulationSummaryCsv,
+} from '../src/math/simulation/report';
 import { DEFAULT_CONFIG_PATH, REPORTS_DIR, fmtNum, fmtPct, loadGame } from './lib/load-config';
 import { runParallelSimulation } from './lib/parallel-sim';
 
@@ -51,11 +56,18 @@ const parseCount = (s: string, what: string) => {
   return n;
 };
 
-const preset = values.preset ? (PRESETS[values.preset.toLowerCase()] ?? fail(`unknown preset "${values.preset}" (use ${Object.keys(PRESETS).join(', ')})`)) : undefined;
-const rounds = values.spins ? parseCount(values.spins, '--spins') : (preset?.rounds ?? fail('pass --spins N or --preset 100k|1m|10m'));
+const preset = values.preset
+  ? (PRESETS[values.preset.toLowerCase()] ??
+    fail(`unknown preset "${values.preset}" (use ${Object.keys(PRESETS).join(', ')})`))
+  : undefined;
+const rounds = values.spins
+  ? parseCount(values.spins, '--spins')
+  : (preset?.rounds ?? fail('pass --spins N or --preset 100k|1m|10m'));
 if (values.crypto && values.seed) fail('--crypto and --seed are mutually exclusive');
 const seed = values.crypto ? undefined : (values.seed ?? preset?.seed ?? 'default');
-const workers = values.workers ? parseCount(values.workers, '--workers') : Math.max(1, Math.min(8, availableParallelism()));
+const workers = values.workers
+  ? parseCount(values.workers, '--workers')
+  : Math.max(1, Math.min(8, availableParallelism()));
 const chunkSize = parseCount(values['chunk-size']!, '--chunk-size');
 const game = loadGame(values.config);
 const lineBet = values['line-bet'] ? parseCount(values['line-bet'], '--line-bet') : game.lineBetOptions[0]!;
@@ -80,7 +92,9 @@ const state = await runParallelSimulation(game, {
     if (now - lastPrint < 1000 && done < total) return;
     lastPrint = now;
     const rate = done / ((now - t0) / 1000);
-    process.stderr.write(`\r  ${fmtNum(done)} / ${fmtNum(total)} rounds (${((done / total) * 100).toFixed(1)}%), ${fmtNum(Math.round(rate))} rounds/s   `);
+    process.stderr.write(
+      `\r  ${fmtNum(done)} / ${fmtNum(total)} rounds (${((done / total) * 100).toFixed(1)}%), ${fmtNum(Math.round(rate))} rounds/s   `,
+    );
   },
 });
 const elapsedMs = performance.now() - t0;
@@ -89,8 +103,12 @@ process.stderr.write('\n');
 let theory: ExactAnalysis | undefined;
 if (existsSync(values.analysis!)) {
   const a = JSON.parse(readFileSync(values.analysis!, 'utf8')) as ExactAnalysis;
-  if (a.schema !== EXACT_ANALYSIS_SCHEMA) console.warn('warning: analysis.json uses an older format; run `npm run analyze` to compare.');
-  else if (a.game.configHash !== game.hash) console.warn('warning: analysis.json was computed for a different configuration; run `npm run analyze` to compare.');
+  if (a.schema !== EXACT_ANALYSIS_SCHEMA)
+    console.warn('warning: analysis.json uses an older format; run `npm run analyze` to compare.');
+  else if (a.game.configHash !== game.hash)
+    console.warn(
+      'warning: analysis.json was computed for a different configuration; run `npm run analyze` to compare.',
+    );
   else theory = a;
 }
 const report = buildSimulationReport(
@@ -113,15 +131,25 @@ writeFileSync(`${outBase}.csv`, simulationSummaryCsv(report));
 if (comparison) writeFileSync(`${outBase}-comparison.csv`, comparisonCsv(comparison));
 
 const r = report;
-console.log(`\nSimulation of ${fmtNum(r.totals.rounds)} rounds (${fmtNum(r.totals.freeSpins)} free spins) in ${(elapsedMs / 1000).toFixed(1)} s`);
-console.log(`  RTP            ${fmtPct(r.rtp.estimate)}  95% CI [${fmtPct(r.rtp.ci95.low)}, ${fmtPct(r.rtp.ci95.high)}]  (batch means [${fmtPct(r.rtp.batchMeansCi95.low)}, ${fmtPct(r.rtp.batchMeansCi95.high)}])`);
+console.log(
+  `\nSimulation of ${fmtNum(r.totals.rounds)} rounds (${fmtNum(r.totals.freeSpins)} free spins) in ${(elapsedMs / 1000).toFixed(1)} s`,
+);
+console.log(
+  `  RTP            ${fmtPct(r.rtp.estimate)}  95% CI [${fmtPct(r.rtp.ci95.low)}, ${fmtPct(r.rtp.ci95.high)}]  (batch means [${fmtPct(r.rtp.batchMeansCi95.low)}, ${fmtPct(r.rtp.batchMeansCi95.high)}])`,
+);
 console.log(`    base / free  ${fmtPct(r.rtp.base)} / ${fmtPct(r.rtp.feature)}`);
-console.log(`  hit frequency  ${fmtPct(r.hitFrequency.estimate, 3)};  trigger 1 in ${fmtNum(r.feature.baseSpinsPerTrigger ?? NaN, 1)};  SD ${fmtNum(r.roundPayout.sd, 3)}`);
-console.log(`  max round win  ${fmtNum(r.extremes.maxRoundWin)}x bet;  longest no-win streak ${r.losingStreaks.longest}`);
+console.log(
+  `  hit frequency  ${fmtPct(r.hitFrequency.estimate, 3)};  trigger 1 in ${fmtNum(r.feature.baseSpinsPerTrigger ?? NaN, 1)};  SD ${fmtNum(r.roundPayout.sd, 3)}`,
+);
+console.log(
+  `  max round win  ${fmtNum(r.extremes.maxRoundWin)}x bet;  longest no-win streak ${r.losingStreaks.longest}`,
+);
 if (comparison) {
   console.log('\n  metric                              theoretical     simulated        z');
   for (const c of comparison) {
-    console.log(`  ${c.metric.padEnd(34)} ${c.theoretical.toPrecision(6).padStart(12)}  ${c.simulated.toPrecision(6).padStart(12)}  ${c.z.toFixed(2).padStart(7)}${c.reliable ? '' : '  (few events)'}`);
+    console.log(
+      `  ${c.metric.padEnd(34)} ${c.theoretical.toPrecision(6).padStart(12)}  ${c.simulated.toPrecision(6).padStart(12)}  ${c.z.toFixed(2).padStart(7)}${c.reliable ? '' : '  (few events)'}`,
+    );
   }
 }
 if (r.warnings.length) {

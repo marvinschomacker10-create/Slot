@@ -19,24 +19,28 @@ import {
 describe('running moments', () => {
   it('match a two-pass computation and merge exactly', () => {
     fc.assert(
-      fc.property(fc.array(fc.double({ min: -1e3, max: 1e3, noNaN: true }), { minLength: 2, maxLength: 200 }), fc.nat(), (xs, cut) => {
-        const k = cut % xs.length;
-        const all = emptyMoments();
-        const a = emptyMoments();
-        const b = emptyMoments();
-        xs.forEach((x, i) => {
-          pushMoment(all, x);
-          pushMoment(i < k ? a : b, x);
-        });
-        const mean = xs.reduce((s, x) => s + x, 0) / xs.length;
-        const v = xs.reduce((s, x) => s + (x - mean) ** 2, 0) / (xs.length - 1);
-        const merged = mergeMoments(a, b);
-        expect(all.mean).toBeCloseTo(mean, 8);
-        expect(variance(all)).toBeCloseTo(v, 6);
-        expect(merged.n).toBe(xs.length);
-        expect(merged.mean).toBeCloseTo(mean, 8);
-        expect(variance(merged)).toBeCloseTo(v, 6);
-      }),
+      fc.property(
+        fc.array(fc.double({ min: -1e3, max: 1e3, noNaN: true }), { minLength: 2, maxLength: 200 }),
+        fc.nat(),
+        (xs, cut) => {
+          const k = cut % xs.length;
+          const all = emptyMoments();
+          const a = emptyMoments();
+          const b = emptyMoments();
+          xs.forEach((x, i) => {
+            pushMoment(all, x);
+            pushMoment(i < k ? a : b, x);
+          });
+          const mean = xs.reduce((s, x) => s + x, 0) / xs.length;
+          const v = xs.reduce((s, x) => s + (x - mean) ** 2, 0) / (xs.length - 1);
+          const merged = mergeMoments(a, b);
+          expect(all.mean).toBeCloseTo(mean, 8);
+          expect(variance(all)).toBeCloseTo(v, 6);
+          expect(merged.n).toBe(xs.length);
+          expect(merged.mean).toBeCloseTo(mean, 8);
+          expect(variance(merged)).toBeCloseTo(v, 6);
+        },
+      ),
     );
   });
 });
@@ -87,12 +91,16 @@ describe('distributions and intervals', () => {
 describe('FFT convolution', () => {
   it('matches direct convolution', () => {
     fc.assert(
-      fc.property(fc.array(fc.double({ min: 0, max: 1, noNaN: true }), { minLength: 1, maxLength: 60 }), fc.array(fc.double({ min: 0, max: 1, noNaN: true }), { minLength: 1, maxLength: 60 }), (a, b) => {
-        const fft = new FFT(nextPow2(a.length + b.length));
-        const viaFft = fft.inverseProduct(fft.forwardReal(a), fft.forwardReal(b));
-        const direct = convolveDirect(a, b);
-        direct.forEach((v, i) => expect(Math.abs(viaFft[i]! - v)).toBeLessThan(1e-12));
-      }),
+      fc.property(
+        fc.array(fc.double({ min: 0, max: 1, noNaN: true }), { minLength: 1, maxLength: 60 }),
+        fc.array(fc.double({ min: 0, max: 1, noNaN: true }), { minLength: 1, maxLength: 60 }),
+        (a, b) => {
+          const fft = new FFT(nextPow2(a.length + b.length));
+          const viaFft = fft.inverseProduct(fft.forwardReal(a), fft.forwardReal(b));
+          const direct = convolveDirect(a, b);
+          direct.forEach((v, i) => expect(Math.abs(viaFft[i]! - v)).toBeLessThan(1e-12));
+        },
+      ),
       { numRuns: 200 },
     );
   });

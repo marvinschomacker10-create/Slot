@@ -2,7 +2,14 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { compileGame } from '../../src/config';
 import { drawStop, physicalStopFromVirtual } from '../../src/game/reels';
-import { CryptoRandomSource, SeededRandomSource, createRandomSource, deriveSeed, uniformInt, type RandomSource } from '../../src/rng';
+import {
+  CryptoRandomSource,
+  SeededRandomSource,
+  createRandomSource,
+  deriveSeed,
+  uniformInt,
+  type RandomSource,
+} from '../../src/rng';
 import { cloneConfig, ScriptedRandom } from '../helpers';
 
 describe('xoshiro128** seeded generator', () => {

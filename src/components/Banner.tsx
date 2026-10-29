@@ -5,7 +5,15 @@ import type { Banner as BannerState } from '../app/useSlotGame';
 const TIER_TEXT = { big: 'Big win', mega: 'Mega win', epic: 'Epic win', small: '', none: '' } as const;
 
 /** Overlay for feature start/end and large wins. The counted-up number ends exactly on the settled amount. */
-export function Banner({ banner, onDismiss, reducedMotion }: { banner: BannerState; onDismiss: () => void; reducedMotion: boolean }) {
+export function Banner({
+  banner,
+  onDismiss,
+  reducedMotion,
+}: {
+  banner: BannerState;
+  onDismiss: () => void;
+  reducedMotion: boolean;
+}) {
   const target = banner.kind === 'big-win' ? banner.amount : banner.kind === 'feature-end' ? banner.total : 0;
   const [shown, setShown] = useState(reducedMotion ? target : 0);
   useEffect(() => {
@@ -34,7 +42,13 @@ export function Banner({ banner, onDismiss, reducedMotion }: { banner: BannerSta
   }, [banner, onDismiss]);
 
   return (
-    <button type="button" className={`banner banner--${banner.kind}`} onClick={onDismiss} data-testid="banner" aria-label="Dismiss announcement">
+    <button
+      type="button"
+      className={`banner banner--${banner.kind}`}
+      onClick={onDismiss}
+      data-testid="banner"
+      aria-label="Dismiss announcement"
+    >
       {banner.kind === 'feature-start' && (
         <>
           <span className="banner__eyebrow">Orbit aligned</span>

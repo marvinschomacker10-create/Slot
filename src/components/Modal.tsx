@@ -15,9 +15,11 @@ export function Modal({ title, onClose, children, wide, testId }: Props) {
     const previous = document.activeElement as HTMLElement | null;
     const el = ref.current!;
     const focusables = () =>
-      Array.from(el.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])')).filter(
-        (n) => !n.hasAttribute('disabled'),
-      );
+      Array.from(
+        el.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((n) => !n.hasAttribute('disabled'));
     (focusables()[0] ?? el).focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

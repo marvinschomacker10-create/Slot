@@ -17,9 +17,12 @@ interface Hook {
   windowMismatches(): number;
 }
 
-const hook = (page: Page) => page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__ !== undefined);
-const snapshot = (page: Page) => page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.snapshot());
-const displayed = (page: Page) => page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.displayedWindow());
+const hook = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__ !== undefined);
+const snapshot = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.snapshot());
+const displayed = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.displayedWindow());
 const credits = (n: number) => n.toLocaleString('en-US');
 
 async function open(page: Page, query: string) {
@@ -74,10 +77,13 @@ test('the displayed reels, balance and win agree with the engine after every spi
     expect(shown).toEqual(after.lastSpin!.outcome.window);
     await expect(page.getByTestId('balance')).toHaveText(credits(after.balance));
     await expect(page.getByTestId('last-win')).toHaveText(credits(after.lastSpin!.roundWinAfter));
-    if (after.phase === 'idle') expect(after.balance).toBe(before.balance - before.totalBet + after.lastSpin!.roundWinAfter);
+    if (after.phase === 'idle')
+      expect(after.balance).toBe(before.balance - before.totalBet + after.lastSpin!.roundWinAfter);
     await waitRoundComplete(page);
   }
-  expect(await page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.windowMismatches())).toBe(0);
+  expect(
+    await page.evaluate(() => (window as unknown as { __GILDED_ORBIT__: Hook }).__GILDED_ORBIT__.windowMismatches()),
+  ).toBe(0);
   expect(errors).toEqual([]);
 });
 
@@ -159,7 +165,10 @@ test('responsive layout has no horizontal scrolling', async ({ page }) => {
   await open(page, 'seed=e2e-layout&turbo=1');
   await page.getByTestId('spin-button').click();
   await waitIdle(page);
-  const [scrollWidth, innerWidth] = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
+  const [scrollWidth, innerWidth] = await page.evaluate(() => [
+    document.documentElement.scrollWidth,
+    window.innerWidth,
+  ]);
   expect(scrollWidth).toBeLessThanOrEqual(innerWidth);
   await expect(page.getByTestId('spin-button')).toBeInViewport();
 });

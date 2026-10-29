@@ -35,7 +35,10 @@ export function winSteps(game: CompiledGame, record: SpinRecord): PresentationSt
   const linesText = o.lineWins.length === 1 ? '1 line' : `${o.lineWins.length} lines`;
   steps.push({
     kind: 'all',
-    text: o.lineWins.length > 0 ? `Win ${record.credited.toLocaleString('en-US')} on ${linesText}` : `Win ${record.credited.toLocaleString('en-US')}`,
+    text:
+      o.lineWins.length > 0
+        ? `Win ${record.credited.toLocaleString('en-US')} on ${linesText}`
+        : `Win ${record.credited.toLocaleString('en-US')}`,
   });
   for (const w of o.lineWins) {
     const mult = w.wildMultiplier > 1 || w.modeMultiplier > 1 ? ` (x${w.wildMultiplier * w.modeMultiplier})` : '';
@@ -47,7 +50,10 @@ export function winSteps(game: CompiledGame, record: SpinRecord): PresentationSt
   }
   if (o.scatter.count > 0 && (o.scatter.win > 0 || record.freeSpinsGranted > 0)) {
     const fs = record.freeSpinsGranted > 0 ? ` + ${record.freeSpinsGranted} free spins` : '';
-    steps.push({ kind: 'scatter', text: `${o.scatter.count} x ${symbolName(game, o.scatter.symbol)} pays ${o.scatter.win.toLocaleString('en-US')}${fs}` });
+    steps.push({
+      kind: 'scatter',
+      text: `${o.scatter.count} x ${symbolName(game, o.scatter.symbol)} pays ${o.scatter.win.toLocaleString('en-US')}${fs}`,
+    });
   }
   return steps;
 }

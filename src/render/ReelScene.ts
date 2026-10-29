@@ -78,7 +78,10 @@ export class ReelScene extends Phaser.Scene {
   private spinStart = 0;
   private spinResolve: (() => void) | null = null;
   private featureMode = false;
-  private shownWins: { lines: { lineIndex: number; positions: readonly Position[] }[]; scatter: readonly Position[] } | null = null;
+  private shownWins: {
+    lines: { lineIndex: number; positions: readonly Position[] }[];
+    scatter: readonly Position[];
+  } | null = null;
   private focusTarget: { kind: 'all' } | { kind: 'line'; lineIndex: number } | { kind: 'scatter' } = { kind: 'all' };
   private previewLines: readonly number[] | null = null;
   private reducedMotion = false;
@@ -299,7 +302,13 @@ export class ReelScene extends Phaser.Scene {
   // ---------------------------------------------------------------- drawing
 
   private currentLayout(): ReelLayout {
-    return computeLayout(this.scale.width, this.scale.height, this.setup.reels, this.setup.rows, this.setup.devicePixelRatio);
+    return computeLayout(
+      this.scale.width,
+      this.scale.height,
+      this.setup.reels,
+      this.setup.rows,
+      this.setup.devicePixelRatio,
+    );
   }
 
   private relayout(): void {
@@ -422,9 +431,12 @@ export class ReelScene extends Phaser.Scene {
 
     const focused = this.focusTarget;
     const winningCells = new Set<string>();
-    const activeLines = wins.lines.filter((w) => focused.kind === 'all' || (focused.kind === 'line' && focused.lineIndex === w.lineIndex));
+    const activeLines = wins.lines.filter(
+      (w) => focused.kind === 'all' || (focused.kind === 'line' && focused.lineIndex === w.lineIndex),
+    );
     for (const w of activeLines) for (const p of w.positions) winningCells.add(`${p.reel}:${p.row}`);
-    if (focused.kind === 'all' || focused.kind === 'scatter') for (const p of wins.scatter) winningCells.add(`${p.reel}:${p.row}`);
+    if (focused.kind === 'all' || focused.kind === 'scatter')
+      for (const p of wins.scatter) winningCells.add(`${p.reel}:${p.row}`);
 
     // Dim symbols that are not part of the highlighted win.
     this.reels.forEach((r, reel) => {
@@ -437,7 +449,15 @@ export class ReelScene extends Phaser.Scene {
         if (on && !this.reducedMotion) {
           const base = sprite.scaleX;
           this.pulses.push(
-            this.tweens.add({ targets: sprite, scaleX: base * 1.1, scaleY: base * 1.1, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }),
+            this.tweens.add({
+              targets: sprite,
+              scaleX: base * 1.1,
+              scaleY: base * 1.1,
+              duration: 420,
+              yoyo: true,
+              repeat: -1,
+              ease: 'Sine.easeInOut',
+            }),
           );
         }
       });

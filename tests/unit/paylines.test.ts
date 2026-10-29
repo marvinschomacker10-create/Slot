@@ -30,23 +30,26 @@ describe('paylines', () => {
     expect(() => paylinePositions(game, 20)).toThrow(RangeError);
   });
 
-  it.each(game.config.paylines.map((line, i) => [i, line] as const))('payline %i %j pays a five-of-a-kind placed on it', (lineIndex, line) => {
-    const window = BLOCKERS.map((col) => [...col]);
-    line.forEach((row, reel) => (window[reel]![row] = 'SUN'));
-    const result = evaluateSpin(game, game.modes.base, cellsOf(game, window), 1);
+  it.each(game.config.paylines.map((line, i) => [i, line] as const))(
+    'payline %i %j pays a five-of-a-kind placed on it',
+    (lineIndex, line) => {
+      const window = BLOCKERS.map((col) => [...col]);
+      line.forEach((row, reel) => (window[reel]![row] = 'SUN'));
+      const result = evaluateSpin(game, game.modes.base, cellsOf(game, window), 1);
 
-    const target = result.lineWins.find((w) => w.lineIndex === lineIndex);
-    expect(target).toMatchObject({ symbol: 'SUN', count: 5, basePay: 1000, win: 1000 });
-    expect(target!.positions).toEqual(line.map((row, reel) => ({ reel, row })));
+      const target = result.lineWins.find((w) => w.lineIndex === lineIndex);
+      expect(target).toMatchObject({ symbol: 'SUN', count: 5, basePay: 1000, win: 1000 });
+      expect(target!.positions).toEqual(line.map((row, reel) => ({ reel, row })));
 
-    // Every other line wins exactly when it shares the first >= 3 cells with this line.
-    for (const [k, other] of game.config.paylines.entries()) {
-      if (k === lineIndex) continue;
-      let agree = 0;
-      while (agree < 5 && other[agree] === line[agree]) agree++;
-      const w = result.lineWins.find((x) => x.lineIndex === k);
-      if (agree >= 3) expect(w).toMatchObject({ symbol: 'SUN', count: agree });
-      else expect(w).toBeUndefined();
-    }
-  });
+      // Every other line wins exactly when it shares the first >= 3 cells with this line.
+      for (const [k, other] of game.config.paylines.entries()) {
+        if (k === lineIndex) continue;
+        let agree = 0;
+        while (agree < 5 && other[agree] === line[agree]) agree++;
+        const w = result.lineWins.find((x) => x.lineIndex === k);
+        if (agree >= 3) expect(w).toMatchObject({ symbol: 'SUN', count: agree });
+        else expect(w).toBeUndefined();
+      }
+    },
+  );
 });

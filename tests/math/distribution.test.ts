@@ -48,7 +48,8 @@ function directRoundPmf(g: CompiledGame): Float64Array {
     else {
       for (const [e, pmf] of free) {
         const next = feature(played + 1, Math.min(max, awarded + e));
-        for (const [u, p] of pmf) for (let v = 0; v <= cap; v++) if (next[v]) res[Math.min(cap, u + v)]! += p * next[v]!;
+        for (const [u, p] of pmf)
+          for (let v = 0; v <= cap; v++) if (next[v]) res[Math.min(cap, u + v)]! += p * next[v]!;
       }
     }
     featureMemo.set(key, res);

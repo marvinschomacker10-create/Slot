@@ -6,7 +6,9 @@ import { cloneConfig } from '../helpers';
  * a low free-spins limit) so that every stop combination and every feature path can
  * be checked exhaustively by independent brute force.
  */
-export function toyConfig(variant: { weights?: boolean; noCap?: boolean; unlimitedRetriggers?: boolean } = {}): GameConfig {
+export function toyConfig(
+  variant: { weights?: boolean; noCap?: boolean; unlimitedRetriggers?: boolean } = {},
+): GameConfig {
   const c = cloneConfig();
   c.meta.id = 'toy';
   c.reelSets = {

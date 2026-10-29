@@ -39,7 +39,9 @@ export function sha256Hex(input: string): string {
   view.setUint32(padded.length - 8, Math.floor(bitLen / 2 ** 32));
   view.setUint32(padded.length - 4, bitLen >>> 0);
 
-  const h = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
+  const h = new Uint32Array([
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+  ]);
   const w = new Uint32Array(64);
   const rotr = (x: number, n: number) => (x >>> n) | (x << (32 - n));
 
@@ -52,7 +54,14 @@ export function sha256Hex(input: string): string {
       const s1 = rotr(b, 17) ^ rotr(b, 19) ^ (b >>> 10);
       w[i] = (w[i - 16]! + s0 + w[i - 7]! + s1) >>> 0;
     }
-    let a = h[0]!, b = h[1]!, c = h[2]!, d = h[3]!, e = h[4]!, f = h[5]!, g = h[6]!, hh = h[7]!;
+    let a = h[0]!,
+      b = h[1]!,
+      c = h[2]!,
+      d = h[3]!,
+      e = h[4]!,
+      f = h[5]!,
+      g = h[6]!,
+      hh = h[7]!;
     for (let i = 0; i < 64; i++) {
       const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
       const ch = (e & f) ^ (~e & g);

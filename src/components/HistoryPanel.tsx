@@ -7,7 +7,10 @@ export function HistoryPanel({ game, history }: { game: CompiledGame; history: r
   if (history.length === 0) return <p className="muted">No rounds played yet in this session.</p>;
   return (
     <div className="history" data-testid="history">
-      <p className="muted">Most recent {history.length} rounds of this session (newest first). Each round is one paid spin plus its free spins.</p>
+      <p className="muted">
+        Most recent {history.length} rounds of this session (newest first). Each round is one paid spin plus its free
+        spins.
+      </p>
       <ul>
         {history.map((r) => (
           <li key={r.roundId}>
@@ -17,7 +20,10 @@ export function HistoryPanel({ game, history }: { game: CompiledGame; history: r
                 <span>{new Date(r.startedAt).toLocaleTimeString()}</span>
                 <span>Bet {credits(r.totalBet)}</span>
                 <span className={r.totalWin > 0 ? 'win' : 'muted'}>Win {credits(r.totalWin)}</span>
-                <span className={r.net >= 0 ? 'win' : 'muted'}>Net {r.net >= 0 ? '+' : ''}{credits(r.net)}</span>
+                <span className={r.net >= 0 ? 'win' : 'muted'}>
+                  Net {r.net >= 0 ? '+' : ''}
+                  {credits(r.net)}
+                </span>
                 {r.featureTriggered && <span className="tag">{r.freeSpinsPlayed} free spins</span>}
                 {r.capReached && <span className="tag">max win</span>}
               </summary>

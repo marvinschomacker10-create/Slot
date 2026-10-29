@@ -33,7 +33,9 @@ export function DevPanel({
         </div>
         <div>
           <dt>Validation warnings</dt>
-          <dd>{game.warnings.length === 0 ? 'none' : game.warnings.map((w) => `${w.path}: ${w.message}`).join('; ')}</dd>
+          <dd>
+            {game.warnings.length === 0 ? 'none' : game.warnings.map((w) => `${w.path}: ${w.message}`).join('; ')}
+          </dd>
         </div>
         <div>
           <dt>RNG</dt>
@@ -45,7 +47,9 @@ export function DevPanel({
         </div>
         <div>
           <dt>Displayed grid equals settled outcome</dt>
-          <dd>{matches === null ? 'no spin yet' : matches ? 'yes' : 'NO'} · mismatches so far: {mismatches}</dd>
+          <dd>
+            {matches === null ? 'no spin yet' : matches ? 'yes' : 'NO'} · mismatches so far: {mismatches}
+          </dd>
         </div>
         <div>
           <dt>Session phase</dt>

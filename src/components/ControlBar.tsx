@@ -18,7 +18,20 @@ interface Props {
   readonly onShowLines: (on: boolean) => void;
 }
 
-export function ControlBar({ game, lineBetIndex, phase, inFeature, betLocked: lockedBySession, canSpin, win, turbo, onBet, onSpin, onTurbo, onShowLines }: Props) {
+export function ControlBar({
+  game,
+  lineBetIndex,
+  phase,
+  inFeature,
+  betLocked: lockedBySession,
+  canSpin,
+  win,
+  turbo,
+  onBet,
+  onSpin,
+  onTurbo,
+  onShowLines,
+}: Props) {
   const lineBet = game.lineBetOptions[lineBetIndex]!;
   const betLocked = lockedBySession || inFeature || phase === 'spinning';
   const spinning = phase === 'spinning';
@@ -29,7 +42,13 @@ export function ControlBar({ game, lineBetIndex, phase, inFeature, betLocked: lo
           Bet
         </span>
         <div className="stepper" aria-labelledby="bet-label">
-          <button type="button" className="icon-button" onClick={() => onBet(lineBetIndex - 1)} disabled={betLocked || lineBetIndex === 0} aria-label="Decrease bet">
+          <button
+            type="button"
+            className="icon-button"
+            onClick={() => onBet(lineBetIndex - 1)}
+            disabled={betLocked || lineBetIndex === 0}
+            aria-label="Decrease bet"
+          >
             −
           </button>
           <output className="value" data-testid="total-bet" aria-live="polite">
@@ -69,7 +88,13 @@ export function ControlBar({ game, lineBetIndex, phase, inFeature, betLocked: lo
           {win === null ? '–' : credits(win)}
         </output>
         <div className="controls__toggles">
-          <button type="button" className={`chip${turbo ? ' is-on' : ''}`} aria-pressed={turbo} onClick={onTurbo} title="Fast spin (T)">
+          <button
+            type="button"
+            className={`chip${turbo ? ' is-on' : ''}`}
+            aria-pressed={turbo}
+            onClick={onTurbo}
+            title="Fast spin (T)"
+          >
             ⚡ Fast
           </button>
           <button
