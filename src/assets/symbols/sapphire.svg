@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="body" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#b9e2ff"/><stop offset="0.45" stop-color="#2f7ef0"/><stop offset="1" stop-color="#0b2a78"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3c4"/><stop offset="0.5" stop-color="#d6a93c"/><stop offset="1" stop-color="#7c5714"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#4aa3ff" stop-opacity="0.45"/><stop offset="1" stop-color="#4aa3ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="140" r="116" fill="url(#glow)"/>
+  <path d="M128 24 C 168 86 208 126 208 164 A 80 80 0 0 1 48 164 C 48 126 88 86 128 24 Z" fill="url(#body)" stroke="url(#rim)" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M128 72 L 162 150 L 128 206 L 94 150 Z" fill="#dff1ff" fill-opacity="0.25" stroke="#ffffff" stroke-opacity="0.5" stroke-width="3"/>
+  <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="3" fill="none">
+    <path d="M128 30 L128 72"/><path d="M60 140 L94 150"/><path d="M196 140 L162 150"/><path d="M128 238 L128 206"/>
+  </g>
+  <path d="M120 44 C 104 74 82 104 70 132 C 82 118 98 100 116 84 Z" fill="#ffffff" fill-opacity="0.55"/>
+  <ellipse cx="102" cy="168" rx="14" ry="22" fill="#ffffff" fill-opacity="0.18"/>
+</svg>

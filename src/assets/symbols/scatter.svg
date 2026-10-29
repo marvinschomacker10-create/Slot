@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6d0"/><stop offset="0.45" stop-color="#f1c453"/><stop offset="1" stop-color="#8c5d10"/>
+    </linearGradient>
+    <radialGradient id="face" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#16485c"/><stop offset="1" stop-color="#071622"/>
+    </radialGradient>
+    <radialGradient id="gem" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#e6fffb"/><stop offset="0.45" stop-color="#2fe0c9"/><stop offset="1" stop-color="#0a6b73"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.4" stop-color="#5ff6e0" stop-opacity="0.55"/><stop offset="1" stop-color="#5ff6e0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="120" r="128" fill="url(#glow)"/>
+  <circle cx="128" cy="116" r="96" fill="url(#face)" stroke="url(#gold)" stroke-width="9"/>
+  <g fill="none" stroke="url(#gold)" stroke-width="5">
+    <circle cx="128" cy="116" r="72" stroke-dasharray="4 10"/>
+    <ellipse cx="128" cy="116" rx="86" ry="30" transform="rotate(-28 128 116)"/>
+    <ellipse cx="128" cy="116" rx="86" ry="30" transform="rotate(28 128 116)"/>
+  </g>
+  <circle cx="54" cy="78" r="8" fill="url(#gold)"/><circle cx="202" cy="154" r="8" fill="url(#gold)"/>
+  <polygon points="128,80 156,116 128,152 100,116" fill="url(#gem)" stroke="#e6fffb" stroke-width="3"/>
+  <polygon points="128,80 128,116 100,116" fill="#ffffff" fill-opacity="0.45"/>
+  <rect x="24" y="182" width="208" height="52" rx="14" fill="#071622" stroke="url(#gold)" stroke-width="6"/>
+  <text x="128" y="221" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" letter-spacing="4" fill="url(#gold)">SCATTER</text>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="tail" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6d8"/><stop offset="0.3" stop-color="#ffb347" stop-opacity="0.95"/><stop offset="1" stop-color="#ff5e3a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="tail2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6f8ff"/><stop offset="0.4" stop-color="#5fd4ff" stop-opacity="0.85"/><stop offset="1" stop-color="#3fc8ff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0.42" cy="0.38" r="0.6">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#ffe9a8"/><stop offset="0.75" stop-color="#f2a227"/><stop offset="1" stop-color="#a5560a"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd27a" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <path d="M176 44 C 128 96 72 152 14 236 C 84 176 126 134 196 86 Z" fill="url(#tail)"/>
+  <path d="M204 82 C 162 136 116 184 58 246 C 124 190 160 152 210 106 Z" fill="url(#tail2)"/>
+  <path d="M150 30 C 116 72 76 112 22 160 C 82 124 122 94 168 54 Z" fill="url(#tail2)" opacity="0.8"/>
+  <circle cx="174" cy="80" r="80" fill="url(#halo)"/>
+  <circle cx="174" cy="80" r="50" fill="url(#core)" stroke="#fff3c4" stroke-width="6"/>
+  <circle cx="157" cy="62" r="14" fill="#ffffff" fill-opacity="0.85"/>
+  <g fill="#fff6d8">
+    <path d="M62 52 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6 z"/>
+    <path d="M220 178 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z"/>
+  </g>
+</svg>
