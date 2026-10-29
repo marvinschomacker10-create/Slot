@@ -1,0 +1,34 @@
+{
+  "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f",
+  "generatedAt": "2026-10-29T08:14:52.718Z",
+  "theoretical": {
+    "rtp": {
+      "total": 0.9600224518329281,
+      "base": 0.7017441406250009,
+      "feature": 0.2582783112079272,
+      "baseLine": 0.6873423828124993,
+      "baseScatter": 0.014401757812500018,
+      "totalUncapped": 0.9600224518329634,
+      "capEffect": 3.530509218307998e-14,
+      "target": 0.96,
+      "deviationFromTarget": 0.000022451832928149784,
+      "expectedPayoutPerUnitStake": 0.9600224518329281,
+      "expectedNetPerUnitStake": -0.039977548167071886
+    },
+    "hitFrequency": 0.51680666015625,
+    "sd": 4.824349936338727,
+    "triggerProbability": 0.005924179687500008
+  },
+  "simulations": [
+    {
+      "rounds": 100000,
+      "seed": "preset-100k",
+      "rtp": 0.96029,
+      "ci95": {
+        "low": 0.929645653555907,
+        "high": 0.990934346444093
+      },
+      "maxAbsZ": 0.8930280848903897
+    }
+  ]
+}

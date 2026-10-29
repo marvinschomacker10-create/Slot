@@ -1,0 +1,1503 @@
+{
+  "schema": "gilded-orbit/exact-analysis@2",
+  "game": {
+    "id": "gilded-orbit",
+    "name": "Gilded Orbit",
+    "version": "1.0.0",
+    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+  },
+  "generatedAt": "2026-10-29T08:39:06.627Z",
+  "definitions": {
+    "rtpDenominator": "RTP = expected total payout of a game round divided by the base-game stake of that round. A round is one paid base-game spin plus every free spin it triggers, including retriggers. Free spins have no stake and are not part of the denominator.",
+    "units": "Internally all wins are integers in line-bet units. Multipliers (\"x bet\") in reports are multiples of the total bet (line bet x 20 paylines).",
+    "displayedWins": "Displayed wins are the credits paid to the balance. They do NOT include the stake: the stake is debited separately when the round starts. Net result of a round = win - stake.",
+    "hit": "A hit is a round with a payout greater than zero (any line win, scatter win or feature win).",
+    "netPositive": "A net-positive round pays strictly more than its stake.",
+    "losingRound": "A losing (no-win) round pays nothing. A net-losing round pays less than its stake.",
+    "capRule": "The total payout of one round is capped at limits.maxWinMultiplier x total bet. When the cap is reached the round ends immediately and remaining free spins are forfeited (they could not pay anything)."
+  },
+  "method": {
+    "summary": "Exact. Every reel-stop combination of the base and free-spin reel sets is enumerated with an independent evaluator. The free-spin feature (including retriggers and the total-spins limit) is solved as a Markov chain whose win distribution is propagated by FFT convolution on an integer grid capped at the round win cap. Means are cross-checked against the marginal (linearity-of-expectation) method that uses the game engine evaluator.",
+    "baseCombinations": 102400000,
+    "freeCombinations": 85656636,
+    "enumerationMs": {
+      "base": 1509,
+      "free": 2315
+    },
+    "distributionMs": 15196,
+    "fftSize": 262144,
+    "fftCount": 422,
+    "featureStates": 140,
+    "horizonUnits": 100000,
+    "capped": true,
+    "horizonCoversAllOutcomes": true,
+    "totalMassError": -9.2148511043888e-15,
+    "numericalFloor": 1e-13,
+    "unresolvedFeatureMass": 0
+  },
+  "configSummary": {
+    "reels": 5,
+    "rows": 3,
+    "paylines": 20,
+    "reelLengths": {
+      "base": [
+        40,
+        40,
+        40,
+        40,
+        40
+      ],
+      "free": [
+        38,
+        39,
+        39,
+        39,
+        38
+      ]
+    },
+    "maxWinMultiplier": 5000,
+    "targetRtp": 0.96,
+    "freeSpinsMaxTotal": 50,
+    "retriggerEnabled": true
+  },
+  "rtp": {
+    "total": 0.9600224518329281,
+    "base": 0.7017441406250009,
+    "feature": 0.2582783112079272,
+    "baseLine": 0.6873423828124993,
+    "baseScatter": 0.014401757812500018,
+    "totalUncapped": 0.9600224518329634,
+    "capEffect": 3.530509218307998e-14,
+    "target": 0.96,
+    "deviationFromTarget": 0.000022451832928149784,
+    "expectedPayoutPerUnitStake": 0.9600224518329281,
+    "expectedNetPerUnitStake": -0.039977548167071886
+  },
+  "baseGame": {
+    "combinations": 102400000,
+    "hitFrequency": 0.51680666015625,
+    "lineWinProbability": 0.512625,
+    "expectedWin": 0.701744140625,
+    "sdWin": 1.7481646115978358,
+    "maxWin": 153.75,
+    "winningLinesPmf": [
+      {
+        "lines": 0,
+        "probability": 0.487375
+      },
+      {
+        "lines": 1,
+        "probability": 0.32553125
+      },
+      {
+        "lines": 2,
+        "probability": 0.11309375
+      },
+      {
+        "lines": 3,
+        "probability": 0.042296875
+      },
+      {
+        "lines": 4,
+        "probability": 0.017328125
+      },
+      {
+        "lines": 5,
+        "probability": 0.009140625
+      },
+      {
+        "lines": 6,
+        "probability": 0.003125
+      },
+      {
+        "lines": 7,
+        "probability": 0.001359375
+      },
+      {
+        "lines": 8,
+        "probability": 0.00059375
+      },
+      {
+        "lines": 9,
+        "probability": 0.000109375
+      },
+      {
+        "lines": 10,
+        "probability": 0.000015625
+      },
+      {
+        "lines": 11,
+        "probability": 0.00003125
+      }
+    ],
+    "scatterCountPmf": [
+      {
+        "scatters": 0,
+        "probability": 0.6222800195312516
+      },
+      {
+        "scatters": 1,
+        "probability": 0.3116346679687507
+      },
+      {
+        "scatters": 2,
+        "probability": 0.06016113281250011
+      },
+      {
+        "scatters": 3,
+        "probability": 0.005658398437500008
+      },
+      {
+        "scatters": 4,
+        "probability": 0.00026103515625000025
+      },
+      {
+        "scatters": 5,
+        "probability": 0.000004746093750000002
+      }
+    ],
+    "symbolContributions": [
+      {
+        "symbol": "JADE",
+        "rtp": 0.086176171875
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "rtp": 0.096005859375
+      },
+      {
+        "symbol": "RUBY",
+        "rtp": 0.12478125
+      },
+      {
+        "symbol": "AMETHYST",
+        "rtp": 0.11663398437500001
+      },
+      {
+        "symbol": "COMET",
+        "rtp": 0.07368749999999999
+      },
+      {
+        "symbol": "MOON",
+        "rtp": 0.0832587890625
+      },
+      {
+        "symbol": "PLANET",
+        "rtp": 0.0706875
+      },
+      {
+        "symbol": "SUN",
+        "rtp": 0.0324140625
+      },
+      {
+        "symbol": "WILD",
+        "rtp": 0.003697265625
+      }
+    ],
+    "scatterContribution": 0.014401757812499999,
+    "lineCombinations": [
+      {
+        "symbol": "JADE",
+        "count": 3,
+        "pay": 5,
+        "probabilityPerLine": 0.008025000000000003,
+        "oneInPerLine": 124.61059190031149,
+        "rtpContribution": 0.04012499999999998
+      },
+      {
+        "symbol": "JADE",
+        "count": 4,
+        "pay": 15,
+        "probabilityPerLine": 0.0015548437499999996,
+        "oneInPerLine": 643.1514420661242,
+        "rtpContribution": 0.02332265624999998
+      },
+      {
+        "symbol": "JADE",
+        "count": 5,
+        "pay": 50,
+        "probabilityPerLine": 0.00045457031250000006,
+        "oneInPerLine": 2199.87969407923,
+        "rtpContribution": 0.022728515625
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 3,
+        "pay": 5,
+        "probabilityPerLine": 0.007125000000000004,
+        "oneInPerLine": 140.35087719298238,
+        "rtpContribution": 0.03562500000000001
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 4,
+        "pay": 20,
+        "probabilityPerLine": 0.0013359375000000018,
+        "oneInPerLine": 748.5380116959054,
+        "rtpContribution": 0.026718749999999975
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 5,
+        "pay": 75,
+        "probabilityPerLine": 0.0004488281249999999,
+        "oneInPerLine": 2228.0243690165366,
+        "rtpContribution": 0.03366210937500001
+      },
+      {
+        "symbol": "RUBY",
+        "count": 3,
+        "pay": 10,
+        "probabilityPerLine": 0.006225000000000004,
+        "oneInPerLine": 160.6425702811244,
+        "rtpContribution": 0.062249999999999986
+      },
+      {
+        "symbol": "RUBY",
+        "count": 4,
+        "pay": 25,
+        "probabilityPerLine": 0.0012449999999999998,
+        "oneInPerLine": 803.2128514056226,
+        "rtpContribution": 0.031124999999999996
+      },
+      {
+        "symbol": "RUBY",
+        "count": 5,
+        "pay": 100,
+        "probabilityPerLine": 0.0003140625,
+        "oneInPerLine": 3184.07960199005,
+        "rtpContribution": 0.03140624999999998
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 3,
+        "pay": 10,
+        "probabilityPerLine": 0.005524999999999999,
+        "oneInPerLine": 180.9954751131222,
+        "rtpContribution": 0.05525
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 4,
+        "pay": 30,
+        "probabilityPerLine": 0.0011740625,
+        "oneInPerLine": 851.7434122970456,
+        "rtpContribution": 0.035221875000000034
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 5,
+        "pay": 125,
+        "probabilityPerLine": 0.00020929687499999993,
+        "oneInPerLine": 4777.902202314298,
+        "rtpContribution": 0.02616210937500001
+      },
+      {
+        "symbol": "COMET",
+        "count": 3,
+        "pay": 15,
+        "probabilityPerLine": 0.00239765625,
+        "oneInPerLine": 417.07396546106224,
+        "rtpContribution": 0.03596484375
+      },
+      {
+        "symbol": "COMET",
+        "count": 4,
+        "pay": 50,
+        "probabilityPerLine": 0.0004422656250000003,
+        "oneInPerLine": 2261.084614025789,
+        "rtpContribution": 0.022113281250000002
+      },
+      {
+        "symbol": "COMET",
+        "count": 5,
+        "pay": 200,
+        "probabilityPerLine": 0.00007804687500000002,
+        "oneInPerLine": 12812.81281281281,
+        "rtpContribution": 0.015609375000000003
+      },
+      {
+        "symbol": "MOON",
+        "count": 3,
+        "pay": 20,
+        "probabilityPerLine": 0.0021515625000000016,
+        "oneInPerLine": 464.7785039941899,
+        "rtpContribution": 0.04303124999999999
+      },
+      {
+        "symbol": "MOON",
+        "count": 4,
+        "pay": 75,
+        "probabilityPerLine": 0.0003404296875,
+        "oneInPerLine": 2937.4641422834193,
+        "rtpContribution": 0.02553222656249999
+      },
+      {
+        "symbol": "MOON",
+        "count": 5,
+        "pay": 300,
+        "probabilityPerLine": 0.00004898437500000002,
+        "oneInPerLine": 20414.673046251988,
+        "rtpContribution": 0.014695312500000005
+      },
+      {
+        "symbol": "PLANET",
+        "count": 3,
+        "pay": 25,
+        "probabilityPerLine": 0.0015585937500000003,
+        "oneInPerLine": 641.6040100250625,
+        "rtpContribution": 0.03896484375000001
+      },
+      {
+        "symbol": "PLANET",
+        "count": 4,
+        "pay": 100,
+        "probabilityPerLine": 0.00020097656250000006,
+        "oneInPerLine": 4975.704567541301,
+        "rtpContribution": 0.02009765624999999
+      },
+      {
+        "symbol": "PLANET",
+        "count": 5,
+        "pay": 400,
+        "probabilityPerLine": 0.00002906250000000001,
+        "oneInPerLine": 34408.60215053763,
+        "rtpContribution": 0.011625
+      },
+      {
+        "symbol": "SUN",
+        "count": 3,
+        "pay": 50,
+        "probabilityPerLine": 0.0004335937500000002,
+        "oneInPerLine": 2306.306306306305,
+        "rtpContribution": 0.021679687499999992
+      },
+      {
+        "symbol": "SUN",
+        "count": 4,
+        "pay": 200,
+        "probabilityPerLine": 0.000033749999999999967,
+        "oneInPerLine": 29629.62962962966,
+        "rtpContribution": 0.0067499999999999965
+      },
+      {
+        "symbol": "SUN",
+        "count": 5,
+        "pay": 1000,
+        "probabilityPerLine": 0.000003984375000000002,
+        "oneInPerLine": 250980.39215686262,
+        "rtpContribution": 0.003984375000000003
+      },
+      {
+        "symbol": "WILD",
+        "count": 3,
+        "pay": 50,
+        "probabilityPerLine": 0.000046992187499999976,
+        "oneInPerLine": 21280.133000831265,
+        "rtpContribution": 0.0023496093749999997
+      },
+      {
+        "symbol": "WILD",
+        "count": 4,
+        "pay": 250,
+        "probabilityPerLine": 0.000003515625000000001,
+        "oneInPerLine": 284444.4444444443,
+        "rtpContribution": 0.0008789062500000003
+      },
+      {
+        "symbol": "WILD",
+        "count": 5,
+        "pay": 2000,
+        "probabilityPerLine": 2.343750000000001e-7,
+        "oneInPerLine": 4266666.666666664,
+        "rtpContribution": 0.0004687500000000003
+      }
+    ],
+    "lineHitProbabilityByLine": [
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026,
+      0.04140625000000026
+    ]
+  },
+  "freeGame": {
+    "combinations": 85656636,
+    "hitFrequency": 0.5129740560906455,
+    "lineWinProbability": 0.5104155853143707,
+    "expectedWin": 4.178116030613203,
+    "sdWin": 10.99864566119523,
+    "maxWin": 615,
+    "winningLinesPmf": [
+      {
+        "lines": 0,
+        "probability": 0.48958441468562924
+      },
+      {
+        "lines": 1,
+        "probability": 0.27924841690023877
+      },
+      {
+        "lines": 2,
+        "probability": 0.1155922350254334
+      },
+      {
+        "lines": 3,
+        "probability": 0.05628222429841863
+      },
+      {
+        "lines": 4,
+        "probability": 0.030191356102287275
+      },
+      {
+        "lines": 5,
+        "probability": 0.015260043600124572
+      },
+      {
+        "lines": 6,
+        "probability": 0.007526211979653275
+      },
+      {
+        "lines": 7,
+        "probability": 0.00375445517145922
+      },
+      {
+        "lines": 8,
+        "probability": 0.0016090522163396657
+      },
+      {
+        "lines": 9,
+        "probability": 0.0007266687428630748
+      },
+      {
+        "lines": 10,
+        "probability": 0.00013841309387868092
+      },
+      {
+        "lines": 11,
+        "probability": 0.00003460327346967023
+      },
+      {
+        "lines": 12,
+        "probability": 0.000051904910204505343
+      }
+    ],
+    "scatterCountPmf": [
+      {
+        "scatters": 0,
+        "probability": 0.6672407727989692
+      },
+      {
+        "scatters": 1,
+        "probability": 0.2811943256795656
+      },
+      {
+        "scatters": 2,
+        "probability": 0.04739905965954582
+      },
+      {
+        "scatters": 3,
+        "probability": 0.003994681743046739
+      },
+      {
+        "scatters": 4,
+        "probability": 0.00016832321082513676
+      },
+      {
+        "scatters": 5,
+        "probability": 0.0000028369080476146647
+      }
+    ],
+    "symbolContributions": [
+      {
+        "symbol": "JADE",
+        "rtp": 0.22304109631389216
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "rtp": 0.27270216402147757
+      },
+      {
+        "symbol": "RUBY",
+        "rtp": 0.42344471711450354
+      },
+      {
+        "symbol": "AMETHYST",
+        "rtp": 0.473105784822089
+      },
+      {
+        "symbol": "COMET",
+        "rtp": 0.7523223302862372
+      },
+      {
+        "symbol": "MOON",
+        "rtp": 0.6516660308723774
+      },
+      {
+        "symbol": "PLANET",
+        "rtp": 0.845795531825462
+      },
+      {
+        "symbol": "SUN",
+        "rtp": 0.46199339418372676
+      },
+      {
+        "symbol": "WILD",
+        "rtp": 0.054132408375225004
+      }
+    ],
+    "scatterContribution": 0.01991257279821262,
+    "lineCombinations": [
+      {
+        "symbol": "JADE",
+        "count": 3,
+        "pay": 5,
+        "probabilityPerLine": 0.005913610709624413,
+        "oneInPerLine": 169.1014253563391,
+        "rtpContribution": 0.10108148538544046
+      },
+      {
+        "symbol": "JADE",
+        "count": 4,
+        "pay": 15,
+        "probabilityPerLine": 0.0012449706757104025,
+        "oneInPerLine": 803.2317704426107,
+        "rtpContribution": 0.0679124265398421
+      },
+      {
+        "symbol": "JADE",
+        "count": 5,
+        "pay": 50,
+        "probabilityPerLine": 0.00028847735743439673,
+        "oneInPerLine": 3466.4765681910135,
+        "rtpContribution": 0.05404718438860943
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 3,
+        "pay": 5,
+        "probabilityPerLine": 0.005913610709624413,
+        "oneInPerLine": 169.1014253563391,
+        "rtpContribution": 0.10108148538544046
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 4,
+        "pay": 20,
+        "probabilityPerLine": 0.0012449706757104025,
+        "oneInPerLine": 803.2317704426107,
+        "rtpContribution": 0.09054990205312283
+      },
+      {
+        "symbol": "SAPPHIRE",
+        "count": 5,
+        "pay": 75,
+        "probabilityPerLine": 0.00028847735743439673,
+        "oneInPerLine": 3466.4765681910135,
+        "rtpContribution": 0.08107077658291416
+      },
+      {
+        "symbol": "RUBY",
+        "count": 3,
+        "pay": 10,
+        "probabilityPerLine": 0.005913610709624413,
+        "oneInPerLine": 169.1014253563391,
+        "rtpContribution": 0.2021629707708809
+      },
+      {
+        "symbol": "RUBY",
+        "count": 4,
+        "pay": 25,
+        "probabilityPerLine": 0.0012449706757104025,
+        "oneInPerLine": 803.2317704426107,
+        "rtpContribution": 0.11318737756640358
+      },
+      {
+        "symbol": "RUBY",
+        "count": 5,
+        "pay": 100,
+        "probabilityPerLine": 0.00028847735743439673,
+        "oneInPerLine": 3466.4765681910135,
+        "rtpContribution": 0.10809436877721885
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 3,
+        "pay": 10,
+        "probabilityPerLine": 0.005913610709624413,
+        "oneInPerLine": 169.1014253563391,
+        "rtpContribution": 0.2021629707708809
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 4,
+        "pay": 30,
+        "probabilityPerLine": 0.0012449706757104025,
+        "oneInPerLine": 803.2317704426107,
+        "rtpContribution": 0.1358248530796842
+      },
+      {
+        "symbol": "AMETHYST",
+        "count": 5,
+        "pay": 125,
+        "probabilityPerLine": 0.00028847735743439673,
+        "oneInPerLine": 3466.4765681910135,
+        "rtpContribution": 0.13511796097152357
+      },
+      {
+        "symbol": "COMET",
+        "count": 3,
+        "pay": 15,
+        "probabilityPerLine": 0.005913610709624413,
+        "oneInPerLine": 169.1014253563391,
+        "rtpContribution": 0.3032444561563218
+      },
+      {
+        "symbol": "COMET",
+        "count": 4,
+        "pay": 50,
+        "probabilityPerLine": 0.0012775425829237564,
+        "oneInPerLine": 782.7527734624873,
+        "rtpContribution": 0.23288913657547786
+      },
+      {
+        "symbol": "COMET",
+        "count": 5,
+        "pay": 200,
+        "probabilityPerLine": 0.00028847735743439673,
+        "oneInPerLine": 3466.4765681910135,
+        "rtpContribution": 0.2161887375544377
+      },
+      {
+        "symbol": "MOON",
+        "count": 3,
+        "pay": 20,
+        "probabilityPerLine": 0.003918155272873429,
+        "oneInPerLine": 255.22214673913044,
+        "rtpContribution": 0.2771101120524975
+      },
+      {
+        "symbol": "MOON",
+        "count": 4,
+        "pay": 75,
+        "probabilityPerLine": 0.0007486635361211237,
+        "oneInPerLine": 1335.713510479043,
+        "rtpContribution": 0.21025341224000454
+      },
+      {
+        "symbol": "MOON",
+        "count": 5,
+        "pay": 300,
+        "probabilityPerLine": 0.00014289610906503494,
+        "oneInPerLine": 6998.09117647059,
+        "rtpContribution": 0.1643025065798755
+      },
+      {
+        "symbol": "PLANET",
+        "count": 3,
+        "pay": 25,
+        "probabilityPerLine": 0.003918155272873429,
+        "oneInPerLine": 255.22214673913044,
+        "rtpContribution": 0.3463876400656221
+      },
+      {
+        "symbol": "PLANET",
+        "count": 4,
+        "pay": 100,
+        "probabilityPerLine": 0.0007486635361211237,
+        "oneInPerLine": 1335.713510479043,
+        "rtpContribution": 0.28033788298667217
+      },
+      {
+        "symbol": "PLANET",
+        "count": 5,
+        "pay": 400,
+        "probabilityPerLine": 0.00014289610906503494,
+        "oneInPerLine": 6998.09117647059,
+        "rtpContribution": 0.21907000877316735
+      },
+      {
+        "symbol": "SUN",
+        "count": 3,
+        "pay": 50,
+        "probabilityPerLine": 0.0012368452106851365,
+        "oneInPerLine": 808.508608321377,
+        "rtpContribution": 0.23530225959375758
+      },
+      {
+        "symbol": "SUN",
+        "count": 4,
+        "pay": 200,
+        "probabilityPerLine": 0.0001770324017861267,
+        "oneInPerLine": 5648.683460828276,
+        "rtpContribution": 0.1390855461566341
+      },
+      {
+        "symbol": "SUN",
+        "count": 5,
+        "pay": 1000,
+        "probabilityPerLine": 0.00002208818940776521,
+        "oneInPerLine": 45273.06342494714,
+        "rtpContribution": 0.08760558843333516
+      },
+      {
+        "symbol": "WILD",
+        "count": 3,
+        "pay": 50,
+        "probabilityPerLine": 0.00013827299965410737,
+        "oneInPerLine": 7232.069908814589,
+        "rtpContribution": 0.027654599930821484
+      },
+      {
+        "symbol": "WILD",
+        "count": 4,
+        "pay": 250,
+        "probabilityPerLine": 0.000016391024275106955,
+        "oneInPerLine": 61008.999999999985,
+        "rtpContribution": 0.01639102427510695
+      },
+      {
+        "symbol": "WILD",
+        "count": 5,
+        "pay": 2000,
+        "probabilityPerLine": 0.0000012608480211620729,
+        "oneInPerLine": 793117.0000000002,
+        "rtpContribution": 0.010086784169296589
+      }
+    ],
+    "lineHitProbabilityByLine": [
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853,
+      0.04847918613100853
+    ],
+    "retriggerProbabilityPerSpin": 0.00416584186191949
+  },
+  "feature": {
+    "triggerProbability": 0.005924179687500008,
+    "expectedBaseSpinsBetweenTriggers": 168.79974152539555,
+    "triggerByScatterCount": [
+      {
+        "scatters": 3,
+        "probability": 0.005658398437500008,
+        "award": 10
+      },
+      {
+        "scatters": 4,
+        "probability": 0.00026103515625000025,
+        "award": 10
+      },
+      {
+        "scatters": 5,
+        "probability": 0.000004746093750000002,
+        "award": 10
+      }
+    ],
+    "expectedFreeSpinsPerTrigger": 10.434682008369562,
+    "expectedFreeSpinsPlayedPerTrigger": 10.434682008369505,
+    "freeSpinsPmf": [
+      {
+        "spins": 10,
+        "probability": 0.9591139096386372
+      },
+      {
+        "spins": 20,
+        "probability": 0.03848186748575014
+      },
+      {
+        "spins": 30,
+        "probability": 0.0022387731633833965
+      },
+      {
+        "spins": 40,
+        "probability": 0.0001530118244848764
+      },
+      {
+        "spins": 50,
+        "probability": 0.000012437887745792848
+      }
+    ],
+    "probabilityAnyRetrigger": 0.04088609036136409,
+    "probabilityAnyRetriggerUncapped": 0.0408860903613642,
+    "expectedRetriggersPerFeature": 0.04346820083695459,
+    "expectedWinUncapped": 43.59731217352004,
+    "expectedWin": 43.597312173513785,
+    "standaloneMeanWin": 43.59731217351334,
+    "sdWin": 36.802031860178325,
+    "quantiles": {
+      "p10": 11.5,
+      "p25": 20,
+      "p50": 33.5,
+      "p75": 56,
+      "p90": 87,
+      "p99": 182
+    },
+    "probabilityWinAtLeast": [
+      {
+        "multiplier": 10,
+        "probability": 0.9264411147738176,
+        "oneIn": 1.0793994178940787,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 31
+      },
+      {
+        "multiplier": 25,
+        "probability": 0.6552169961727692,
+        "oneIn": 1.526211935650579,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 203
+      },
+      {
+        "multiplier": 50,
+        "probability": 0.3031259474430216,
+        "oneIn": 3.298958760988184,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 884
+      },
+      {
+        "multiplier": 100,
+        "probability": 0.06938710565835199,
+        "oneIn": 14.411899595924881,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 5153
+      },
+      {
+        "multiplier": 250,
+        "probability": 0.0028487735011047425,
+        "oneIn": 351.02825816520834,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 134462
+      },
+      {
+        "multiplier": 500,
+        "probability": 0.00010406988480178767,
+        "oneIn": 9608.927711456661,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 3690846
+      },
+      {
+        "multiplier": 1000,
+        "probability": 6.19896676736909e-9,
+        "oneIn": 161317206.16150537,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 61969340170
+      },
+      {
+        "multiplier": 2500,
+        "probability": 0,
+        "oneIn": null,
+        "belowNumericalFloor": true,
+        "roundsFor10PctPrecision": null
+      },
+      {
+        "multiplier": 5000,
+        "probability": 0,
+        "oneIn": null,
+        "belowNumericalFloor": true,
+        "roundsFor10PctPrecision": null
+      }
+    ],
+    "maxPossibleWinUpperBound": 5000
+  },
+  "round": {
+    "hitFrequency": 0.51680666015625,
+    "probabilityNoWin": 0.48319333984375,
+    "probabilityWinBelowStake": 0.307435947265625,
+    "probabilityReturnsStake": 0.04199787109375,
+    "probabilityNetPositive": 0.16737284179687498,
+    "mean": 0.9600224518329281,
+    "variance": 23.274352308251483,
+    "sd": 4.824349936338727,
+    "coefficientOfVariation": 5.02524698993009,
+    "skewness": 22.4490427831704,
+    "excessKurtosis": 873.5795901724379,
+    "quantiles": {
+      "p50": 0.25,
+      "p75": 0.75,
+      "p90": 1.75,
+      "p95": 3.5,
+      "p99": 10.75,
+      "p99.9": 72,
+      "p99.99": 156.25
+    },
+    "bands": [
+      {
+        "label": "0 (no win)",
+        "fromMultiplier": 0,
+        "toMultiplier": 0,
+        "probability": 0.48319333984375,
+        "rtpContribution": 0
+      },
+      {
+        "label": "(0, 1)",
+        "fromMultiplier": 0,
+        "toMultiplier": 1,
+        "probability": 0.307435947265625,
+        "rtpContribution": 0.13745895751953124
+      },
+      {
+        "label": "[1, 2)",
+        "fromMultiplier": 1,
+        "toMultiplier": 2,
+        "probability": 0.1114716015625,
+        "rtpContribution": 0.1413368603515625
+      },
+      {
+        "label": "[2, 5)",
+        "fromMultiplier": 2,
+        "toMultiplier": 5,
+        "probability": 0.06627685815952336,
+        "rtpContribution": 0.19272447791453115
+      },
+      {
+        "label": "[5, 10)",
+        "fromMultiplier": 5,
+        "toMultiplier": 10,
+        "probability": 0.019613200049045702,
+        "rtpContribution": 0.12161809710563548
+      },
+      {
+        "label": "[10, 25)",
+        "fromMultiplier": 10,
+        "toMultiplier": 25,
+        "probability": 0.0072913790722506176,
+        "rtpContribution": 0.10222681203480317
+      },
+      {
+        "label": "[25, 50)",
+        "fromMultiplier": 25,
+        "toMultiplier": 50,
+        "probability": 0.002673172904007425,
+        "rtpContribution": 0.09349048458276994
+      },
+      {
+        "label": "[50, 100)",
+        "fromMultiplier": 50,
+        "toMultiplier": 100,
+        "probability": 0.0015929329687131965,
+        "rtpContribution": 0.10765506652965845
+      },
+      {
+        "label": "[100, 250)",
+        "fromMultiplier": 100,
+        "toMultiplier": 250,
+        "probability": 0.0004335540091469524,
+        "rtpContribution": 0.05799784919624321
+      },
+      {
+        "label": "[250, 500)",
+        "fromMultiplier": 250,
+        "toMultiplier": 500,
+        "probability": 0.00001736065084125219,
+        "rtpContribution": 0.005159294735379328
+      },
+      {
+        "label": "[500, 1000)",
+        "fromMultiplier": 500,
+        "toMultiplier": 1000,
+        "probability": 6.534757522114046e-7,
+        "rtpContribution": 0.00035451117383160927
+      },
+      {
+        "label": "[1000, 2500)",
+        "fromMultiplier": 1000,
+        "toMultiplier": 2500,
+        "probability": 3.884428398732391e-11,
+        "rtpContribution": 4.06890188830072e-8
+      },
+      {
+        "label": "[2500, 5000)",
+        "fromMultiplier": 2500,
+        "toMultiplier": 5000,
+        "probability": 0,
+        "rtpContribution": 0
+      },
+      {
+        "label": ">= 5000",
+        "fromMultiplier": 5000,
+        "toMultiplier": null,
+        "probability": 0,
+        "rtpContribution": 0
+      }
+    ],
+    "thresholds": [
+      {
+        "multiplier": 10,
+        "probability": 0.012009053119555932,
+        "oneIn": 83.27051184173443,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 31604
+      },
+      {
+        "multiplier": 25,
+        "probability": 0.004717674047305313,
+        "oneIn": 211.96886219199263,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 81043
+      },
+      {
+        "multiplier": 50,
+        "probability": 0.0020445011432978894,
+        "oneIn": 489.1168700385008,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 187509
+      },
+      {
+        "multiplier": 100,
+        "probability": 0.0004515681745846939,
+        "oneIn": 2214.5050432743574,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 850309
+      },
+      {
+        "multiplier": 250,
+        "probability": 0.00001801416543774175,
+        "oneIn": 55511.86944830011,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 21324272
+      },
+      {
+        "multiplier": 500,
+        "probability": 6.535145964897969e-7,
+        "oneIn": 1530187.7041022032,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 587814923
+      },
+      {
+        "multiplier": 1000,
+        "probability": 3.884427839415184e-11,
+        "oneIn": 25743817142.206303,
+        "belowNumericalFloor": false,
+        "roundsFor10PctPrecision": 9889381359489
+      },
+      {
+        "multiplier": 2500,
+        "probability": 0,
+        "oneIn": null,
+        "belowNumericalFloor": true,
+        "roundsFor10PctPrecision": null
+      },
+      {
+        "multiplier": 5000,
+        "probability": 0,
+        "oneIn": null,
+        "belowNumericalFloor": true,
+        "roundsFor10PctPrecision": null
+      }
+    ],
+    "capProbability": 0,
+    "capProbabilityBelowFloor": true,
+    "maxPossibleWinUpperBound": 5000,
+    "maxBaseSpinWin": 153.75,
+    "maxFreeSpinWin": 615
+  },
+  "losingStreaks": {
+    "probabilityNoWinRound": 0.48319333984375,
+    "expectedNoWinRoundsBeforeWin": 0.934959583720656,
+    "noWinStreakAtLeast": [
+      {
+        "rounds": 5,
+        "probability": 0.026339328422971826
+      },
+      {
+        "rounds": 10,
+        "probability": 0.0006937602217731715
+      },
+      {
+        "rounds": 20,
+        "probability": 4.813032453147601e-7
+      },
+      {
+        "rounds": 30,
+        "probability": 3.339090462097151e-10
+      },
+      {
+        "rounds": 50,
+        "probability": 1.6071150758069207e-16
+      },
+      {
+        "rounds": 100,
+        "probability": 2.582818866885884e-32
+      }
+    ],
+    "probabilityNetLosingRound": 0.790629287109375,
+    "netLosingStreakAtLeast": [
+      {
+        "rounds": 5,
+        "probability": 0.30893313309560416
+      },
+      {
+        "rounds": 10,
+        "probability": 0.09543968072426628
+      },
+      {
+        "rounds": 20,
+        "probability": 0.009108732656749885
+      },
+      {
+        "rounds": 30,
+        "probability": 0.0008693345365629069
+      },
+      {
+        "rounds": 50,
+        "probability": 0.000007918535882831077
+      },
+      {
+        "rounds": 100,
+        "probability": 6.270321052768335e-11
+      }
+    ],
+    "note": "Rounds are independent, so the number of consecutive no-win rounds before the next win is geometric: P(at least n in a row) = p^n, where p is the probability of a no-win round."
+  },
+  "volatility": {
+    "sdPerUnitStake": 4.824349936338727,
+    "classification": "medium",
+    "scale": "Heuristic scale on the standard deviation of the round return per unit stake: < 3 low, 3-7 medium, 7-15 high, >= 15 very high.",
+    "rtpShareFromRoundsAtLeast": [
+      {
+        "multiplier": 10,
+        "share": 0.3821619569846368
+      },
+      {
+        "multiplier": 50,
+        "share": 0.17829454092171795
+      },
+      {
+        "multiplier": 100,
+        "share": 0.06615646922962615
+      },
+      {
+        "multiplier": 500,
+        "share": 0.0003693162197859878
+      },
+      {
+        "multiplier": 1000,
+        "share": 4.2383372315028907e-8
+      }
+    ],
+    "sessionRtpSd": [
+      {
+        "rounds": 100,
+        "sd": 0.4824349936338727
+      },
+      {
+        "rounds": 1000,
+        "sd": 0.152559340285187
+      },
+      {
+        "rounds": 10000,
+        "sd": 0.048243499363387274
+      },
+      {
+        "rounds": 100000,
+        "sd": 0.015255934028518698
+      }
+    ],
+    "caveats": [
+      "There is no regulatory or industry-standard volatility scale; the thresholds above are a documented convention of this project.",
+      "A single number cannot describe a skewed payout distribution: two games with the same standard deviation can differ greatly in hit frequency and in how much of the RTP comes from rare large wins. Read the classification together with the band table, the RTP share from large wins and the tail probabilities.",
+      "Session RTP spreads use sd/sqrt(n) (central limit theorem). For short sessions the heavy right tail makes the normal approximation optimistic about downside and pessimistic about rare upside.",
+      "A large maximum win alone does not make a game volatile; its probability matters."
+    ]
+  },
+  "crossChecks": {
+    "baseMeanMarginal": 0.7017441406249992,
+    "baseMeanEnumeration": 0.701744140625,
+    "freeMeanMarginal": 4.178116030613203,
+    "freeMeanEnumeration": 4.178116030613203,
+    "maxAbsDifference": 7.105427357601002e-16,
+    "agree": true
+  },
+  "sensitivity": {
+    "currentRtp": 0.9600224518329634,
+    "target": 0.96,
+    "deviation": 0.000022451832963454876,
+    "paytable": [
+      {
+        "kind": "paytable",
+        "description": "JADE x3: 5 -> 6",
+        "rtpAfter": 0.9692971612784866,
+        "delta": 0.009274709445523222
+      },
+      {
+        "kind": "paytable",
+        "description": "SAPPHIRE x3: 5 -> 6",
+        "rtpAfter": 0.9683971612784867,
+        "delta": 0.00837470944552332
+      },
+      {
+        "kind": "paytable",
+        "description": "RUBY x3: 10 -> 11",
+        "rtpAfter": 0.9674971612784854,
+        "delta": 0.0074747094455219765
+      },
+      {
+        "kind": "paytable",
+        "description": "COMET x3: 15 -> 17",
+        "rtpAfter": 0.9673171832240096,
+        "delta": 0.007294731391046194
+      },
+      {
+        "kind": "paytable",
+        "description": "PLANET x3: 25 -> 28",
+        "rtpAfter": 0.967267747592679,
+        "delta": 0.007245295759715553
+      },
+      {
+        "kind": "paytable",
+        "description": "AMETHYST x3: 10 -> 11",
+        "rtpAfter": 0.9667971612784855,
+        "delta": 0.0067747094455220536
+      },
+      {
+        "kind": "scatter-pay",
+        "description": "SCATTER x3: 2 -> 3 (x total bet)",
+        "rtpAfter": 0.9661747282034112,
+        "delta": 0.006152276370447796
+      },
+      {
+        "kind": "paytable",
+        "description": "MOON x3: 20 -> 22",
+        "rtpAfter": 0.966038586506107,
+        "delta": 0.006016134673143547
+      },
+      {
+        "kind": "paytable",
+        "description": "RUBY x4: 25 -> 28",
+        "rtpAfter": 0.9645970793927652,
+        "delta": 0.004574627559801758
+      },
+      {
+        "kind": "paytable",
+        "description": "AMETHYST x4: 30 -> 33",
+        "rtpAfter": 0.9643842668927645,
+        "delta": 0.004361815059801044
+      },
+      {
+        "kind": "paytable",
+        "description": "SAPPHIRE x5: 75 -> 83",
+        "rtpAfter": 0.9641476418055842,
+        "delta": 0.004125189972620791
+      },
+      {
+        "kind": "paytable",
+        "description": "MOON x4: 75 -> 83",
+        "rtpAfter": 0.9641322595429802,
+        "delta": 0.0041098077100167885
+      },
+      {
+        "kind": "paytable",
+        "description": "RUBY x5: 100 -> 110",
+        "rtpAfter": 0.9638312830487392,
+        "delta": 0.0038088312157757986
+      },
+      {
+        "kind": "paytable",
+        "description": "PLANET x4: 100 -> 110",
+        "rtpAfter": 0.9637651802204847,
+        "delta": 0.0037427283875213213
+      },
+      {
+        "kind": "paytable",
+        "description": "JADE x4: 15 -> 17",
+        "rtpAfter": 0.9636918910394963,
+        "delta": 0.003669439206532843
+      },
+      {
+        "kind": "paytable",
+        "description": "COMET x4: 50 -> 55",
+        "rtpAfter": 0.9636734291312441,
+        "delta": 0.0036509772982806776
+      },
+      {
+        "kind": "paytable",
+        "description": "SUN x3: 50 -> 55",
+        "rtpAfter": 0.9636449869422024,
+        "delta": 0.0036225351092389335
+      },
+      {
+        "kind": "paytable",
+        "description": "AMETHYST x5: 125 -> 138",
+        "rtpAfter": 0.9636119792884718,
+        "delta": 0.0035895274555083345
+      },
+      {
+        "kind": "paytable",
+        "description": "SAPPHIRE x4: 20 -> 22",
+        "rtpAfter": 0.9632540785394973,
+        "delta": 0.0032316267065338744
+      },
+      {
+        "kind": "paytable",
+        "description": "COMET x5: 200 -> 220",
+        "rtpAfter": 0.9629198017645149,
+        "delta": 0.0028973499315514406
+      },
+      {
+        "kind": "paytable",
+        "description": "JADE x5: 50 -> 55",
+        "rtpAfter": 0.9626294065033514,
+        "delta": 0.002606954670387962
+      },
+      {
+        "kind": "paytable",
+        "description": "PLANET x5: 400 -> 440",
+        "rtpAfter": 0.9625391753989843,
+        "delta": 0.00251672356602084
+      },
+      {
+        "kind": "paytable",
+        "description": "MOON x5: 300 -> 330",
+        "rtpAfter": 0.9625076507574791,
+        "delta": 0.002485198924515708
+      },
+      {
+        "kind": "paytable",
+        "description": "SUN x4: 200 -> 220",
+        "rtpAfter": 0.9615572359967252,
+        "delta": 0.0015347841637617377
+      },
+      {
+        "kind": "paytable",
+        "description": "SUN x5: 1000 -> 1100",
+        "rtpAfter": 0.9609624401962507,
+        "delta": 0.0009399883632872363
+      },
+      {
+        "kind": "paytable",
+        "description": "WILD x3: 50 -> 55",
+        "rtpAfter": 0.9605433531323305,
+        "delta": 0.0005209012993671047
+      },
+      {
+        "kind": "scatter-pay",
+        "description": "SCATTER x4: 10 -> 11 (x total bet)",
+        "rtpAfter": 0.9603042974378991,
+        "delta": 0.0002818456049357154
+      },
+      {
+        "kind": "paytable",
+        "description": "WILD x4: 250 -> 275",
+        "rtpAfter": 0.9602116667399536,
+        "delta": 0.00018921490699019827
+      },
+      {
+        "kind": "paytable",
+        "description": "WILD x5: 2000 -> 2200",
+        "rtpAfter": 0.9601316802372651,
+        "delta": 0.00010922840430171998
+      },
+      {
+        "kind": "scatter-pay",
+        "description": "SCATTER x5: 100 -> 110 (x total bet)",
+        "rtpAfter": 0.9600734201494554,
+        "delta": 0.000050968316491983856
+      }
+    ],
+    "closestToTarget": [
+      {
+        "kind": "reel-stop",
+        "description": "base reel 5: one JADE -> PLANET",
+        "rtpAfter": 0.9600072174579641,
+        "delta": -0.000015234374999284483
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 2: one PLANET -> MOON",
+        "rtpAfter": 0.9599912018329637,
+        "delta": -0.000031249999999705125
+      },
+      {
+        "kind": "reel-stop",
+        "description": "free reel 2: one MOON -> COMET",
+        "rtpAfter": 0.9599773899514287,
+        "delta": -0.000045061881534746995
+      },
+      {
+        "kind": "reel-stop",
+        "description": "free reel 3: one MOON -> COMET",
+        "rtpAfter": 0.9599773899514287,
+        "delta": -0.000045061881534746995
+      },
+      {
+        "kind": "reel-stop",
+        "description": "free reel 4: one COMET -> MOON",
+        "rtpAfter": 0.9599687874910203,
+        "delta": -0.000053664341943093774
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 2: one SUN -> COMET",
+        "rtpAfter": 0.9599638580829639,
+        "delta": -0.00005859374999950262
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 5: one PLANET -> JADE",
+        "rtpAfter": 0.9600376862079645,
+        "delta": 0.00001523437500106084
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 2: one MOON -> PLANET",
+        "rtpAfter": 0.9600537018329645,
+        "delta": 0.00003125000000103739
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 3: one SUN -> COMET",
+        "rtpAfter": 0.9599443268329637,
+        "delta": -0.0000781249999997069
+      },
+      {
+        "kind": "reel-stop",
+        "description": "base reel 4: one AMETHYST -> RUBY",
+        "rtpAfter": 0.9599419830829623,
+        "delta": -0.00008046875000111697
+      },
+      {
+        "kind": "reel-stop",
+        "description": "free reel 2: one COMET -> MOON",
+        "rtpAfter": 0.960067513714498,
+        "delta": 0.00004506188153463597
+      },
+      {
+        "kind": "reel-stop",
+        "description": "free reel 3: one COMET -> MOON",
+        "rtpAfter": 0.960067513714498,
+        "delta": 0.00004506188153463597
+      }
+    ]
+  }
+}

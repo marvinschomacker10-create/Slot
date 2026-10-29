@@ -1,0 +1,50 @@
+{
+  "name": "gilded-orbit-slot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gilded Orbit: an original 5x3, 20-line play-money video slot prototype with an exact mathematical analysis engine and Monte Carlo simulator. Not a real-money product.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "start": "vite --open",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:math": "vitest run tests/math",
+    "test:e2e": "playwright test",
+    "test:all": "npm run typecheck && npm run test && npm run test:e2e",
+    "validate-config": "tsx scripts/validate-config.ts",
+    "analyze": "tsx scripts/analyze.ts",
+    "simulate": "tsx scripts/simulate.ts",
+    "simulate:100k": "tsx scripts/simulate.ts --preset 100k",
+    "simulate:1m": "tsx scripts/simulate.ts --preset 1m",
+    "simulate:10m": "tsx scripts/simulate.ts --preset 10m",
+    "report": "tsx scripts/export-report.ts",
+    "math:all": "npm run analyze && npm run simulate:100k && npm run simulate:1m && npm run simulate:10m && npm run report"
+  },
+  "dependencies": {
+    "phaser": "3.90.0",
+    "react": "19.2.9",
+    "react-dom": "19.2.9"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.5",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "@vitejs/plugin-react": "5.2.0",
+    "fast-check": "4.10.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vitest": "4.1.12"
+  }
+}

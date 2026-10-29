@@ -1,0 +1,926 @@
+{
+  "schema": "gilded-orbit/simulation-report@1",
+  "game": {
+    "id": "gilded-orbit",
+    "version": "1.0.0",
+    "configHash": "8df5b9f95243fb82ac8cb27ba0ef7324fd64bc5e1213ae0a959cae5bb24f194f"
+  },
+  "meta": {
+    "seed": "preset-100k",
+    "rngKind": "seeded",
+    "chunkSize": 100000,
+    "workers": 4,
+    "elapsedMs": 1111,
+    "preset": "100k",
+    "generatedAt": "2026-10-29T08:13:05.826Z",
+    "rounds": 100000,
+    "roundsPerSecond": 90009,
+    "lineBet": 1,
+    "totalBet": 20
+  },
+  "totals": {
+    "rounds": 100000,
+    "baseSpins": 100000,
+    "freeSpins": 6320,
+    "totalStake": 2000000,
+    "totalPayout": 1920580,
+    "basePayout": 1394340,
+    "featurePayout": 526240,
+    "net": -79420
+  },
+  "rtp": {
+    "estimate": 0.96029,
+    "base": 0.69717,
+    "feature": 0.26312,
+    "standardError": 0.015635157921832198,
+    "ci95": {
+      "low": 0.929645653555907,
+      "high": 0.990934346444093
+    },
+    "ci99": {
+      "low": 0.9200165020140657,
+      "high": 1.0005634979859344
+    },
+    "baseCi95": {
+      "low": 0.6864106360413339,
+      "high": 0.707929363958666
+    },
+    "featureCi95": {
+      "low": 0.23513352486199746,
+      "high": 0.2911064751380026
+    },
+    "batchMeansCi95": {
+      "low": null,
+      "high": null,
+      "batches": 1
+    },
+    "note": "Each complete round (paid spin plus its whole feature) is one independent observation; free spins inside a feature are never treated as independent samples. Intervals use the normal approximation (CLT) on round returns; the batch-means interval is a robustness check."
+  },
+  "roundPayout": {
+    "mean": 0.9602900000000004,
+    "sd": 4.944271060941462,
+    "variance": 24.445816324063212
+  },
+  "hitFrequency": {
+    "count": 51613,
+    "trials": 100000,
+    "estimate": 0.51613,
+    "ci95": {
+      "low": 0.5130320776440026,
+      "high": 0.5192266831489835
+    },
+    "reliable": true,
+    "warning": null
+  },
+  "baseSpinWinProbability": {
+    "count": 51613,
+    "trials": 100000,
+    "estimate": 0.51613,
+    "ci95": {
+      "low": 0.5130320776440026,
+      "high": 0.5192266831489835
+    },
+    "reliable": true,
+    "warning": null
+  },
+  "lineWinProbability": {
+    "count": 51196,
+    "trials": 100000,
+    "estimate": 0.51196,
+    "ci95": {
+      "low": 0.5088615115768524,
+      "high": 0.515057569581493
+    },
+    "reliable": true,
+    "warning": null
+  },
+  "netPositiveProbability": {
+    "count": 16733,
+    "trials": 100000,
+    "estimate": 0.16733,
+    "ci95": {
+      "low": 0.16502927763366815,
+      "high": 0.1696562801466991
+    },
+    "reliable": true,
+    "warning": null
+  },
+  "feature": {
+    "triggers": {
+      "count": 602,
+      "trials": 100000,
+      "estimate": 0.00602,
+      "ci95": {
+        "low": 0.005559168166959949,
+        "high": 0.006518782451808782
+      },
+      "reliable": true,
+      "warning": null
+    },
+    "baseSpinsPerTrigger": 166.11295681063123,
+    "freeSpinsPerTrigger": {
+      "mean": 10.498338870431894,
+      "ci95": {
+        "low": 10.312563736123051,
+        "high": 10.684114004740737
+      }
+    },
+    "retriggerEvents": 30,
+    "retriggerProbabilityPerFreeSpin": {
+      "count": 30,
+      "trials": 6320,
+      "estimate": 0.004746835443037975,
+      "ci95": {
+        "low": 0.003327123238167734,
+        "high": 0.006768237191492871
+      },
+      "reliable": false,
+      "warning": "Retrigger-qualifying free spins: only 30 events observed; the estimate is unreliable (relative standard error about 18%). About 9.18e+4 trials are needed for +/-10% precision at the theoretical probability 4.166e-3."
+    },
+    "featuresWithRetrigger": {
+      "count": 28,
+      "trials": 602,
+      "estimate": 0.046511627906976744,
+      "ci95": {
+        "low": 0.032373321411936454,
+        "high": 0.06640080167756167
+      },
+      "reliable": false,
+      "warning": "Features with at least one retrigger: only 28 events observed; the estimate is unreliable (relative standard error about 19%). About 9.01e+3 trials are needed for +/-10% precision at the theoretical probability 4.089e-2."
+    },
+    "winPerTrigger": {
+      "mean": 43.707641196013306,
+      "sd": 38.6069305040678,
+      "ci95": {
+        "low": 40.62363586876461,
+        "high": 46.791646523262
+      }
+    },
+    "maxFeatureWin": 360
+  },
+  "extremes": {
+    "maxRoundWin": 362,
+    "maxBaseSpinWin": 100,
+    "maxFreeSpinWin": 255,
+    "capHits": {
+      "count": 0,
+      "trials": 100000,
+      "estimate": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.00003841311264497526
+      },
+      "reliable": false,
+      "warning": "Rounds reaching the win cap: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three)."
+    }
+  },
+  "thresholds": [
+    {
+      "multiplier": 10,
+      "count": 1181,
+      "trials": 100000,
+      "estimate": 0.01181,
+      "ci95": {
+        "low": 0.011158937385280027,
+        "high": 0.012498568409644275
+      },
+      "reliable": true,
+      "warning": null
+    },
+    {
+      "multiplier": 25,
+      "count": 460,
+      "trials": 100000,
+      "estimate": 0.0046,
+      "ci95": {
+        "low": 0.0041992089035461765,
+        "high": 0.005038850808462466
+      },
+      "reliable": true,
+      "warning": null
+    },
+    {
+      "multiplier": 50,
+      "count": 216,
+      "trials": 100000,
+      "estimate": 0.00216,
+      "ci95": {
+        "low": 0.0018907508832111779,
+        "high": 0.0024674962847871717
+      },
+      "reliable": true,
+      "warning": null
+    },
+    {
+      "multiplier": 100,
+      "count": 49,
+      "trials": 100000,
+      "estimate": 0.00049,
+      "ci95": {
+        "low": 0.0003706909059920826,
+        "high": 0.0006476845618025006
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 100x bet: only 49 events observed; the estimate is unreliable (relative standard error about 14%). About 8.50e+5 trials are needed for +/-10% precision at the theoretical probability 4.516e-4."
+    },
+    {
+      "multiplier": 250,
+      "count": 3,
+      "trials": 100000,
+      "estimate": 0.00003,
+      "ci95": {
+        "low": 0.000010202758536416196,
+        "high": 0.00008820804932180037
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 250x bet: only 3 events observed; the estimate is unreliable (relative standard error about 58%). About 2.13e+7 trials are needed for +/-10% precision at the theoretical probability 1.801e-5."
+    },
+    {
+      "multiplier": 500,
+      "count": 0,
+      "trials": 100000,
+      "estimate": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.00003841311264497526
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 500x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three). About 5.88e+8 trials are needed for +/-10% precision at the theoretical probability 6.535e-7."
+    },
+    {
+      "multiplier": 1000,
+      "count": 0,
+      "trials": 100000,
+      "estimate": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.00003841311264497526
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 1000x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three). About 9.89e+12 trials are needed for +/-10% precision at the theoretical probability 3.884e-11."
+    },
+    {
+      "multiplier": 2500,
+      "count": 0,
+      "trials": 100000,
+      "estimate": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.00003841311264497526
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 2500x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three)."
+    },
+    {
+      "multiplier": 5000,
+      "count": 0,
+      "trials": 100000,
+      "estimate": 0,
+      "ci95": {
+        "low": 0,
+        "high": 0.00003841311264497526
+      },
+      "reliable": false,
+      "warning": "Rounds paying >= 5000x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three)."
+    }
+  ],
+  "bands": [
+    {
+      "label": "0 (no win)",
+      "count": 48387,
+      "probability": 0.48387,
+      "rtpContribution": 0
+    },
+    {
+      "label": "(0, 1)",
+      "count": 30673,
+      "probability": 0.30673,
+      "rtpContribution": 0.13721
+    },
+    {
+      "label": "[1, 2)",
+      "count": 11148,
+      "probability": 0.11148,
+      "rtpContribution": 0.141165
+    },
+    {
+      "label": "[2, 5)",
+      "count": 6702,
+      "probability": 0.06702,
+      "rtpContribution": 0.194225
+    },
+    {
+      "label": "[5, 10)",
+      "count": 1909,
+      "probability": 0.01909,
+      "rtpContribution": 0.119285
+    },
+    {
+      "label": "[10, 25)",
+      "count": 721,
+      "probability": 0.00721,
+      "rtpContribution": 0.1033875
+    },
+    {
+      "label": "[25, 50)",
+      "count": 244,
+      "probability": 0.00244,
+      "rtpContribution": 0.085365
+    },
+    {
+      "label": "[50, 100)",
+      "count": 167,
+      "probability": 0.00167,
+      "rtpContribution": 0.1083425
+    },
+    {
+      "label": "[100, 250)",
+      "count": 46,
+      "probability": 0.00046,
+      "rtpContribution": 0.062455
+    },
+    {
+      "label": "[250, 500)",
+      "count": 3,
+      "probability": 0.00003,
+      "rtpContribution": 0.008855
+    },
+    {
+      "label": "[500, 1000)",
+      "count": 0,
+      "probability": 0,
+      "rtpContribution": 0
+    },
+    {
+      "label": "[1000, 2500)",
+      "count": 0,
+      "probability": 0,
+      "rtpContribution": 0
+    },
+    {
+      "label": "[2500, 5000)",
+      "count": 0,
+      "probability": 0,
+      "rtpContribution": 0
+    },
+    {
+      "label": ">= 5000",
+      "count": 0,
+      "probability": 0,
+      "rtpContribution": 0
+    }
+  ],
+  "symbolContributions": [
+    {
+      "symbol": "JADE",
+      "base": 0.08609,
+      "free": 0.014125
+    },
+    {
+      "symbol": "SAPPHIRE",
+      "base": 0.0964025,
+      "free": 0.018175
+    },
+    {
+      "symbol": "RUBY",
+      "base": 0.1231425,
+      "free": 0.026725
+    },
+    {
+      "symbol": "AMETHYST",
+      "base": 0.1177675,
+      "free": 0.028535
+    },
+    {
+      "symbol": "COMET",
+      "base": 0.0721425,
+      "free": 0.04805
+    },
+    {
+      "symbol": "MOON",
+      "base": 0.08096,
+      "free": 0.044485
+    },
+    {
+      "symbol": "PLANET",
+      "base": 0.067225,
+      "free": 0.050175
+    },
+    {
+      "symbol": "SUN",
+      "base": 0.03485,
+      "free": 0.02865
+    },
+    {
+      "symbol": "WILD",
+      "base": 0.00365,
+      "free": 0.003
+    }
+  ],
+  "scatterContributions": {
+    "base": 0.01494,
+    "free": 0.0012
+  },
+  "losingStreaks": {
+    "longest": 15,
+    "winsObserved": 51613,
+    "meanNoWinRoundsBeforeWin": 0.9374963671943115,
+    "atLeast": [
+      {
+        "rounds": 5,
+        "observedFraction": 0.026892449576657044
+      },
+      {
+        "rounds": 10,
+        "observedFraction": 0.000678123728518009
+      },
+      {
+        "rounds": 20,
+        "observedFraction": 0
+      },
+      {
+        "rounds": 30,
+        "observedFraction": 0
+      },
+      {
+        "rounds": 50,
+        "observedFraction": 0
+      },
+      {
+        "rounds": 100,
+        "observedFraction": 0
+      }
+    ],
+    "histogram": [
+      26742,
+      12838,
+      6156,
+      2955,
+      1534,
+      729,
+      325,
+      161,
+      96,
+      42,
+      24,
+      8,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "censoredLosses": 0
+  },
+  "warnings": [
+    "Only 1 batch(es): the batch-means interval is not meaningful below 10 batches.",
+    "Retrigger-qualifying free spins: only 30 events observed; the estimate is unreliable (relative standard error about 18%). About 9.18e+4 trials are needed for +/-10% precision at the theoretical probability 4.166e-3.",
+    "Features with at least one retrigger: only 28 events observed; the estimate is unreliable (relative standard error about 19%). About 9.01e+3 trials are needed for +/-10% precision at the theoretical probability 4.089e-2.",
+    "Rounds reaching the win cap: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three).",
+    "Rounds paying >= 100x bet: only 49 events observed; the estimate is unreliable (relative standard error about 14%). About 8.50e+5 trials are needed for +/-10% precision at the theoretical probability 4.516e-4.",
+    "Rounds paying >= 250x bet: only 3 events observed; the estimate is unreliable (relative standard error about 58%). About 2.13e+7 trials are needed for +/-10% precision at the theoretical probability 1.801e-5.",
+    "Rounds paying >= 500x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three). About 5.88e+8 trials are needed for +/-10% precision at the theoretical probability 6.535e-7.",
+    "Rounds paying >= 1000x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three). About 9.89e+12 trials are needed for +/-10% precision at the theoretical probability 3.884e-11.",
+    "Rounds paying >= 2500x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three).",
+    "Rounds paying >= 5000x bet: no events in 100,000 trials; the 95% upper bound is about 3.00e-5 (rule of three).",
+    "With 100,000 rounds the 95% RTP interval is +/-3.06 percentage points; at least 10 million rounds are typically needed to resolve RTP to about +/-0.3 points for this payout dispersion."
+  ],
+  "comparison": [
+    {
+      "metric": "Total RTP",
+      "theoretical": 0.9600224518329281,
+      "simulated": 0.96029,
+      "ci95Low": 0.929645653555907,
+      "ci95High": 0.990934346444093,
+      "standardError": 0.015635157921832198,
+      "difference": 0.0002675481670718627,
+      "z": 0.01711195808890878,
+      "pValue": 0.9863472628156371,
+      "withinCi95": true,
+      "events": null,
+      "reliable": true
+    },
+    {
+      "metric": "Base-game RTP",
+      "theoretical": 0.7017441406250009,
+      "simulated": 0.69717,
+      "ci95Low": 0.6864106360413339,
+      "ci95High": 0.707929363958666,
+      "standardError": 0.005489572279661539,
+      "difference": -0.004574140625000944,
+      "z": -0.8332417157431006,
+      "pValue": 0.404708414964567,
+      "withinCi95": true,
+      "events": null,
+      "reliable": true
+    },
+    {
+      "metric": "Free-spins RTP contribution",
+      "theoretical": 0.2582783112079272,
+      "simulated": 0.26312,
+      "ci95Low": 0.23513352486199746,
+      "ci95High": 0.2911064751380026,
+      "standardError": 0.01427907622729617,
+      "difference": 0.004841688792072807,
+      "z": 0.33907577177978343,
+      "pValue": 0.7345526595493279,
+      "withinCi95": true,
+      "events": null,
+      "reliable": true
+    },
+    {
+      "metric": "Hit frequency (round pays > 0)",
+      "theoretical": 0.51680666015625,
+      "simulated": 0.51613,
+      "ci95Low": 0.5130320776440026,
+      "ci95High": 0.5192266831489835,
+      "standardError": 0.0015802453485911367,
+      "difference": -0.0006766601562500085,
+      "z": -0.42819942919198145,
+      "pValue": 0.6685059058577569,
+      "withinCi95": true,
+      "events": 51613,
+      "reliable": true
+    },
+    {
+      "metric": "Base spin with a line win",
+      "theoretical": 0.512625,
+      "simulated": 0.51196,
+      "ci95Low": 0.5088615115768524,
+      "ci95High": 0.515057569581493,
+      "standardError": 0.001580634712307053,
+      "difference": -0.0006650000000000267,
+      "z": -0.4207170668986575,
+      "pValue": 0.673961673664512,
+      "withinCi95": true,
+      "events": 51196,
+      "reliable": true
+    },
+    {
+      "metric": "Net-positive round",
+      "theoretical": 0.16737284179687498,
+      "simulated": 0.16733,
+      "ci95Low": 0.16502927763366815,
+      "ci95High": 0.1696562801466991,
+      "standardError": 0.001180504864986643,
+      "difference": -0.000042841796874970584,
+      "z": -0.036291080321346515,
+      "pValue": 0.9710501891642886,
+      "withinCi95": true,
+      "events": 16733,
+      "reliable": true
+    },
+    {
+      "metric": "Free-spins trigger",
+      "theoretical": 0.005924179687500008,
+      "simulated": 0.00602,
+      "ci95Low": 0.005559168166959949,
+      "ci95High": 0.006518782451808782,
+      "standardError": 0.00024267434521453273,
+      "difference": 0.00009582031249999196,
+      "z": 0.3948514311032071,
+      "pValue": 0.6929525222286101,
+      "withinCi95": true,
+      "events": 602,
+      "reliable": true
+    },
+    {
+      "metric": "Retrigger per free spin",
+      "theoretical": 0.00416584186191949,
+      "simulated": 0.004746835443037975,
+      "ci95Low": 0.003327123238167734,
+      "ci95High": 0.006768237191492871,
+      "standardError": 0.0008101890332146521,
+      "difference": 0.0005809935811184851,
+      "z": 0.7171086713099907,
+      "pValue": 0.473307017762957,
+      "withinCi95": true,
+      "events": 30,
+      "reliable": false
+    },
+    {
+      "metric": "Feature with >= 1 retrigger",
+      "theoretical": 0.0408860903613642,
+      "simulated": 0.046511627906976744,
+      "ci95Low": 0.032373321411936454,
+      "ci95High": 0.06640080167756167,
+      "standardError": 0.008070949708464038,
+      "difference": 0.005625537545612541,
+      "z": 0.6970106057919078,
+      "pValue": 0.4857961246719855,
+      "withinCi95": true,
+      "events": 28,
+      "reliable": false
+    },
+    {
+      "metric": "Free spins per trigger",
+      "theoretical": 10.434682008369562,
+      "simulated": 10.498338870431894,
+      "ci95Low": 10.312563736123051,
+      "ci95High": 10.684114004740737,
+      "standardError": 0.09478497348635653,
+      "difference": 0.06365686206233256,
+      "z": 0.6715923391748948,
+      "pValue": 0.5018432201020993,
+      "withinCi95": true,
+      "events": null,
+      "reliable": true
+    },
+    {
+      "metric": "Feature win per trigger (x bet)",
+      "theoretical": 43.59731217351334,
+      "simulated": 43.707641196013306,
+      "ci95Low": 40.62363586876461,
+      "ci95High": 46.791646523262,
+      "standardError": 1.5735010191896064,
+      "difference": 0.11032902249996823,
+      "z": 0.07011690564826613,
+      "pValue": 0.9441005318698916,
+      "withinCi95": true,
+      "events": null,
+      "reliable": true
+    },
+    {
+      "metric": "Round pays >= 10x bet",
+      "theoretical": 0.012009053119555932,
+      "simulated": 0.01181,
+      "ci95Low": 0.011158937385280027,
+      "ci95High": 0.012498568409644275,
+      "standardError": 0.00034445370897593215,
+      "difference": -0.00019905311955593225,
+      "z": -0.5778806102791612,
+      "pValue": 0.5633446794235284,
+      "withinCi95": true,
+      "events": 1181,
+      "reliable": true
+    },
+    {
+      "metric": "Round pays >= 25x bet",
+      "theoretical": 0.004717674047305313,
+      "simulated": 0.0046,
+      "ci95Low": 0.0041992089035461765,
+      "ci95High": 0.005038850808462466,
+      "standardError": 0.00021668912291318858,
+      "difference": -0.00011767404730531322,
+      "z": -0.5430547030847348,
+      "pValue": 0.5870920914107205,
+      "withinCi95": true,
+      "events": 460,
+      "reliable": true
+    },
+    {
+      "metric": "Round pays >= 50x bet",
+      "theoretical": 0.0020445011432978894,
+      "simulated": 0.00216,
+      "ci95Low": 0.0018907508832111779,
+      "ci95High": 0.0024674962847871717,
+      "standardError": 0.0001428398109202383,
+      "difference": 0.00011549885670211063,
+      "z": 0.8085900979426887,
+      "pValue": 0.41875095272026575,
+      "withinCi95": true,
+      "events": 216,
+      "reliable": true
+    },
+    {
+      "metric": "Round pays >= 100x bet",
+      "theoretical": 0.0004515681745846939,
+      "simulated": 0.00049,
+      "ci95Low": 0.0003706909059920826,
+      "ci95High": 0.0006476845618025006,
+      "standardError": 0.00006718364836538696,
+      "difference": 0.000038431825415306104,
+      "z": 0.572041357538216,
+      "pValue": 0.5672939085907243,
+      "withinCi95": true,
+      "events": 49,
+      "reliable": false
+    },
+    {
+      "metric": "Round pays >= 250x bet",
+      "theoretical": 0.00001801416543774175,
+      "simulated": 0.00003,
+      "ci95Low": 0.000010202758536416196,
+      "ci95High": 0.00008820804932180037,
+      "standardError": 0.000013421565082949652,
+      "difference": 0.00001198583456225825,
+      "z": 0.8930280848903897,
+      "pValue": 0.37184213718541814,
+      "withinCi95": true,
+      "events": 3,
+      "reliable": false
+    },
+    {
+      "metric": "Round pays >= 500x bet",
+      "theoretical": 6.535145964897969e-7,
+      "simulated": 0,
+      "ci95Low": 0,
+      "ci95High": 0.00003841311264497526,
+      "standardError": 0.000002556392320064487,
+      "difference": -6.535145964897969e-7,
+      "z": -0.2556393990705274,
+      "pValue": 0.7982293278048052,
+      "withinCi95": true,
+      "events": 0,
+      "reliable": false
+    },
+    {
+      "metric": "Round pays >= 1000x bet",
+      "theoretical": 3.884427839415184e-11,
+      "simulated": 0,
+      "ci95Low": 0,
+      "ci95High": 0.00003841311264497526,
+      "standardError": 1.9708951872852843e-8,
+      "difference": -3.884427839415184e-11,
+      "z": -0.0019708951873618425,
+      "pValue": 0.9984274745173178,
+      "withinCi95": true,
+      "events": 0,
+      "reliable": false
+    }
+  ]
+}
